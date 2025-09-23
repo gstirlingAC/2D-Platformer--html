@@ -1,0 +1,64 @@
+<!DOCTYPE html>
+<html lang="en"><head><meta charset="UTF-8">
+<title>2D Platformer — Player Scene</title>
+<style>
+  body { background:#1e1e1e; color:#f0f0f0; font-family:'Segoe UI',sans-serif;
+         max-width:960px; margin:auto; padding:2rem; line-height:1.6; }
+  h1,h2,h3 { color:#4FC3F7; border-bottom:1px solid #333; padding-bottom:.3rem; }
+  p { margin:.7rem 0; }
+  ul { padding-left:1.3rem; }
+  li { margin:.35rem 0; }
+  figure { background:#2b2b2b; border:1px solid #555; border-left:5px solid #81D4FA;
+           padding:1rem; margin:1.1rem 0; }
+  img { max-width:100%; height:auto; display:block; margin:auto; }
+  figcaption { color:#cfcfcf; font-size:.95rem; margin-top:.45rem; }
+</style></head><body>
+
+<h1>Player Scene</h1>
+<p>In this lesson, you will be guided through the process of setting up your player character, which will serve as the main interactive element in your game. By the end of this tutorial, you will have a player character that can move and jump within a platformer-style environment.</p>
+
+<h2>Understanding the Player Scene</h2>
+<p>The player scene is a crucial component of your game, as it defines the physical object that the player will control. This scene will include various nodes that determine the player’s appearance, collision detection, and other properties.</p>
+
+<h2>Creating the Player Scene</h2>
+<p>To begin, we need to determine the root node of our player. For platformer games and characters in general, Godot provides a specialized node called <strong>CharacterBody2D</strong>. This node is highly useful because it includes built-in features such as collision detection, ground detection, and velocity modification.</p>
+
+<h3>Steps to Create the Player Scene</h3>
+<ol>
+  <li>Create a new CharacterBody2D node and rename it to “Player”.</li>
+  <li>Save the scene by right-clicking on the node and selecting “Save Branch as Scene”, or by dragging the node to the scenes folder and saving it as <code>Player.tscn</code>.</li>
+  <li>Add a sprite to the player node to visualize the character. You can do this by dragging a sprite from your sprites folder into the player node.</li>
+  <li>Rename the sprite node to “Sprite” for easy reference.</li>
+  <li>Center the sprite by setting its position to (0, 0) in the transform properties.</li>
+  <li>Adjust the offset of the sprite so that the origin is at the character’s feet. This is done by setting the Y offset to a negative value (e.g., -12).</li>
+  <li>Add a collision shape to the player node by right-clicking on the player node, selecting “Add Child Node”, and choosing “CollisionShape2D”.</li>
+  <li>Set the shape of the collision shape to “CapsuleShape2D” to ensure smooth movement over bumps.</li>
+  <li>Adjust the collision shape to fit the sprite’s dimensions, ensuring it touches the base of the character’s feet.</li>
+</ol>
+
+<h2>Setting Up the Camera</h2>
+<ol>
+  <li>Add a Camera2D node as a child of the player node.</li>
+  <li>Adjust the zoom property of the camera to ensure it is focused on the player. A zoom value of (3, 3) is a good starting point.</li>
+  <li>Position the camera slightly above the player to provide a better view of the game world.</li>
+</ol>
+
+<h2>Adding Additional Nodes</h2>
+<p>To prepare for future lessons, we will add two more nodes to the player scene:</p>
+<ul>
+  <li><strong>AnimationPlayer</strong>: This node will handle the character’s movement animations.</li>
+  <li><strong>AudioStreamPlayer</strong>: This node will manage sound effects for the character.</li>
+</ul>
+
+<h2>Fixing Common Errors</h2>
+<p>You may encounter errors related to the tile set atlas. To fix these errors, follow these steps:</p>
+<ol>
+  <li>Open your tile set and look for any yellow exclamation warning signs.</li>
+  <li>Click on the three dots and select “Remove Tiles Outside the Texture”.</li>
+  <li>Also, select “Remove Tiles in Fully Transparent Texture Regions”.</li>
+</ol>
+
+<p>By following these steps, you will have a fully functional player scene ready for further development. In future lessons, we will explore input handling and scripting to make the player character interactive.</p>
+<p>Congratulations on completing this tutorial! You are now one step closer to creating your own platformer game in Godot.</p>
+
+</body></html>
