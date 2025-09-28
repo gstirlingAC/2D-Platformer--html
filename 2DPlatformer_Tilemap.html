@@ -26,9 +26,13 @@
            padding:1rem; margin:1.1rem 0; border-radius:.5rem; }
   img { max-width:100%; height:auto; display:block; margin:auto; }
   figcaption { color:#c7ced7; font-size:.95rem; margin-top:.45rem; }
-  code, pre code { font-family: "Courier New", Courier, monospace; background:#10151d; color:#dfe7f1; border:1px solid #1f2a3a; }
-  code { padding:.15rem .35rem; border-radius:4px; }
-  pre { background:#10151d; border:1px solid #1f2a3a; padding:1rem; border-radius:6px; overflow:auto; }
+  /* Lists */
+  ol{list-style:decimal;margin-left:1.5rem;padding-left:1rem}
+  ul{list-style:disc;margin-left:1.5rem;padding-left:1rem}
+  li{margin:.25rem 0}
+  /* Code theme w/o colours */
+  pre { background: #1b1f2a; border: 1px solid #2a3345; border-radius: 6px; padding:1rem; }
+  code.gdscript { font-family: "JetBrains Mono", "Fira Code", "Courier New", monospace; font-size: 0.95rem; color: #e6edf3; tab-size: 4; }
   .footer { color:#c7ced7; font-size:.9rem; margin:2rem 0 0; }
   .pager { display:flex; gap:.75rem; justify-content:space-between; margin-top:2rem; }
   .pager a { flex:1; text-align:center; background:#151a22; border:1px solid var(--border); color:var(--link); padding:.75rem; border-radius:.6rem; text-decoration:none; }
@@ -43,101 +47,78 @@
     <div class="title">2D Platformer</div>
     <div class="search"><input type="search" id="navSearch" placeholder="Search tutorials…"></div>
     <h2>Contents</h2>
-    <div class="links" id="navLinks"><a href="2DPlatformer_Introduction.html"><span class="num">01</span><span>Introduction</span></a><a href="2DPlatformer_GameDesign.html"><span class="num">02</span><span>Game Design</span></a><a href="2DPlatformer_ProjectSetup.html"><span class="num">03</span><span>Project Setup</span></a><a href="2DPlatformer_Tilemap.html" style="background:#1b2230;border-color:#2b3b51;"><span class="num">04</span><span>Tilemap</span></a><a href="2DPlatformer_PlayerScene.html"><span class="num">05</span><span>Player Scene</span></a><a href="2DPlatformer_InputMap.html"><span class="num">06</span><span>Input Map</span></a><a href="2DPlatformer_PlayerMovement.html"><span class="num">07</span><span>Player Movement</span></a><a href="2DPlatformer_FlippingthePlayerSprite.html"><span class="num">08</span><span>Flippingthe Player Sprite</span></a><a href="2DPlatformer_PlayerAnimation.html"><span class="num">09</span><span>Player Animation</span></a></div>
+    <div class="links" id="navLinks"><a href="2DPlatformer_Introduction.html"><span class="num">01</span><span>Introduction</span></a><a href="2DPlatformer_GameDesign.html"><span class="num">02</span><span>Game Design</span></a><a href="2DPlatformer_ProjectSetup.html"><span class="num">03</span><span>Project Setup</span></a><a href="2DPlatformer_Tilemap.html" style="background:#1b2230;border-color:#2b3b51;"><span class="num">04</span><span>Tilemap</span></a><a href="2DPlatformer_PlayerScene.html"><span class="num">05</span><span>Player Scene</span></a><a href="2DPlatformer_InputMap.html"><span class="num">06</span><span>Input Map</span></a><a href="2DPlatformer_PlayerMovement.html"><span class="num">07</span><span>Player Movement</span></a><a href="2DPlatformer_FlippingthePlayerSprite.html"><span class="num">08</span><span>Flipping the Player Sprite</span></a><a href="2DPlatformer_PlayerAnimation.html"><span class="num">09</span><span>Player Animation</span></a></div>
     <script>
       const q = document.getElementById('navSearch');
-      const linksEls = Array.from(document.querySelectorAll('#navLinks a'));
+      const links = Array.from(document.querySelectorAll('#navLinks a'));
       q?.addEventListener('input', () => {
         const t = q.value.toLowerCase();
-        linksEls.forEach(a => {
-          const label = a.innerText.toLowerCase();
-          a.style.display = label.includes(t) ? '' : 'none';
-        });
+        links.forEach(a => a.style.display = a.innerText.toLowerCase().includes(t) ? '' : 'none');
       });
     </script>
     </nav>
     <main>
       <h1>Tilemap</h1>
 <p>n this lesson, we will focus on creating a tile map and background for your game level. A tile map is essentially a grid where you can paint individual tiles such as grass, dirt, etc., allowing you to lay out your levels as you see fit.</p>
-<figure><img src="images/image-18.png" alt="Tilemap — Image 18"><figcaption>Tilemap — Image 18</figcaption></figure>
 <p><strong>Creating a Tile Map Layer</strong></p>
-<figure><img src="images/image-19.png" alt="Tilemap — Image 19"><figcaption>Tilemap — Image 19</figcaption></figure>
 <p>To start, we need to create a tile map layer. This node is where we will paint our tile map. Click on the plus icon at the top left corner of the Godot interface.</p>
-<figure><img src="images/image-20.png" alt="Tilemap — Image 20"><figcaption>Tilemap — Image 20</figcaption></figure>
-<p></p>
-<figure><img src="images/image-21.png" alt="Tilemap — Image 21"><figcaption>Tilemap — Image 21</figcaption></figure>
+<figure><img src="images/image-18.png" alt="Tilemap — Image 18"><figcaption>Tilemap — Image 18</figcaption></figure>
 <p>In the ‘Create New Node’ window, search for and select ‘<strong>TileMapLayer</strong>‘ and hit Create. Note that ‘<strong>TileMap</strong>‘ is a deprecated node used in older versions of Godot – so don’t use it!</p>
-<figure><img src="images/image-22.png" alt="Tilemap — Image 22"><figcaption>Tilemap — Image 22</figcaption></figure>
-<p></p>
-<figure><img src="images/image-23.png" alt="Tilemap — Image 23"><figcaption>Tilemap — Image 23</figcaption></figure>
+<figure><img src="images/image-19.png" alt="Tilemap — Image 19"><figcaption>Tilemap — Image 19</figcaption></figure>
 <p><strong>Setting Up the Tile Set</strong></p>
-<figure><img src="images/image-24.png" alt="Tilemap — Image 24"><figcaption>Tilemap — Image 24</figcaption></figure>
 <p>Next, we need to define a tile set, which specifies the tiles we can use. To begin, open the file system and navigate to the ‘Sprites’ folder, then to the ‘Tiles’ folder. Right-click on the ‘Tiles’ folder and select Create New &gt; Resource.</p>
-<figure><img src="images/image-25.png" alt="Tilemap — Image 25"><figcaption>Tilemap — Image 25</figcaption></figure>
-<p></p>
-<figure><img src="images/image-26.png" alt="Tilemap — Image 26"><figcaption>Tilemap — Image 26</figcaption></figure>
+<figure><img src="images/image-20.png" alt="Tilemap — Image 20"><figcaption>Tilemap — Image 20</figcaption></figure>
 <p>In the ‘Create New Resource’ window, search for and select the TileSet option.</p>
-<figure><img src="images/image-27.png" alt="Tilemap — Image 27"><figcaption>Tilemap — Image 27</figcaption></figure>
-<p></p>
-<figure><img src="images/image-28.png" alt="Tilemap — Image 28"><figcaption>Tilemap — Image 28</figcaption></figure>
+<figure><img src="images/image-21.png" alt="Tilemap — Image 21"><figcaption>Tilemap — Image 21</figcaption></figure>
 <p>Name your tile set and save it.</p>
-<figure><img src="images/image-29.png" alt="Tilemap — Image 29"><figcaption>Tilemap — Image 29</figcaption></figure>
-<p></p>
-<figure><img src="images/image-30.png" alt="Tilemap — Image 30"><figcaption>Tilemap — Image 30</figcaption></figure>
+<figure><img src="images/image-22.png" alt="Tilemap — Image 22"><figcaption>Tilemap — Image 22</figcaption></figure>
 <p>Double-click the tile set to open it in the bottom window. Click the ‘TileSet’ tab button to the left of the TileMap. Then, drag your PNG file (e.g., ’tiles_packed’ tile map) into the ‘Tile Sources’ section.</p>
-<figure><img src="images/image-31.png" alt="Tilemap — Image 31"><figcaption>Tilemap — Image 31</figcaption></figure>
-<p></p>
-<figure><img src="images/image-32.png" alt="Tilemap — Image 32"><figcaption>Tilemap — Image 32</figcaption></figure>
+<figure><img src="images/image-23.png" alt="Tilemap — Image 23"><figcaption>Tilemap — Image 23</figcaption></figure>
 <p>Confirm the creation of a new atlas for these sprites.</p>
-<figure><img src="images/image-33.png" alt="Tilemap — Image 33"><figcaption>Tilemap — Image 33</figcaption></figure>
-<p></p>
-<figure><img src="images/image-34.png" alt="Tilemap — Image 34"><figcaption>Tilemap — Image 34</figcaption></figure>
+<figure><img src="images/image-24.png" alt="Tilemap — Image 24"><figcaption>Tilemap — Image 24</figcaption></figure>
 <p><strong>Note</strong>: The Tile Set can also be created directly in the Inspector, and it can be saved to disk by expanding the options and clicking on “Save” or “Save as”:</p>
-<figure><img src="images/image-35.png" alt="Tilemap — Image 35"><figcaption>Tilemap — Image 35</figcaption></figure>
-<p></p>
-<figure><img src="images/image-36.png" alt="Tilemap — Image 36"><figcaption>Tilemap — Image 36</figcaption></figure>
+<figure><img src="images/image-25.png" alt="Tilemap — Image 25"><figcaption>Tilemap — Image 25</figcaption></figure>
 <p><strong>Adjusting Tile Dimensions</strong></p>
-<figure><img src="images/image-37.png" alt="Tilemap — Image 37"><figcaption>Tilemap — Image 37</figcaption></figure>
 <p>You might notice that the tiles are not the correct dimensions. To fix this, go to the ‘Texture Region Size’ in the tile set settings. From here, you can change the dimensions from 16×16 pixels to 18×18 pixels.</p>
-<figure><img src="images/image-38.png" alt="Tilemap — Image 38"><figcaption>Tilemap — Image 38</figcaption></figure>
-<p></p>
+<figure><img src="images/image-26.png" alt="Tilemap — Image 26"><figcaption>Tilemap — Image 26</figcaption></figure>
 <p>Ensure the tile set property in the inspector is also set to 18×18 pixels.</p>
-<p></p>
+<figure><img src="images/image-27.png" alt="Tilemap — Image 27"><figcaption>Tilemap — Image 27</figcaption></figure>
 <p><strong>Adding Collision Properties</strong></p>
 <p>Next, we need to add collisions to our tiles. To do so, in the TileSet window, select Paint. Then, from the ‘property editor’ dropdown, select <strong>Physics Layer 0</strong>.</p>
-<p></p>
+<figure><img src="images/image-28.png" alt="Tilemap — Image 28"><figcaption>Tilemap — Image 28</figcaption></figure>
 <p>Now, we can use the paint tool to apply the physics layer to the tiles that need collision. When painting physics polygons onto the tiles, the polygon on the left-hand side of the window is what is applied to the clicked tiles (1 in the image below).</p>
 <p>If you accidentally click on a tile and would like to erase it, you can click on the 3-dot menu (2 in the image below) and click on ‘Clear’ to clear the shape. Then you can click on tiles to apply the empty shape.</p>
 <p>Once you are done, you can use the ‘Reset to default tile shape’ option in the same menu to continue applying shapes to other tiles. </p>
-<p></p>
+<figure><img src="images/image-29.png" alt="Tilemap — Image 29"><figcaption>Tilemap — Image 29</figcaption></figure>
 <p><strong>Painting Tiles in the Scene</strong></p>
 <p>Now, with our tile set setup, let’s paint the tiles in our scene. First, select the ‘TileMapLayer’ node.</p>
-<p></p>
+<figure><img src="images/image-30.png" alt="Tilemap — Image 30"><figcaption>Tilemap — Image 30</figcaption></figure>
 <p>In the Inspector, drag your tile set into the ‘Tile Set’ property.</p>
-<p></p>
+<figure><img src="images/image-31.png" alt="Tilemap — Image 31"><figcaption>Tilemap — Image 31</figcaption></figure>
 <p>Use the ‘TileMap’ window at the bottom to select and paint tiles in your scene. Use the eraser tool (shortcut: E) to erase tiles if needed. You can also use the rect tool to paint large areas and the line tool to draw lines between points.</p>
-<p></p>
+<figure><img src="images/image-32.png" alt="Tilemap — Image 32"><figcaption>Tilemap — Image 32</figcaption></figure>
 <p><strong>Fixing Blurry Sprites</strong></p>
 <p>You may notice while painting that your sprites probably look blurry.</p>
-<p></p>
+<figure><img src="images/image-33.png" alt="Tilemap — Image 33"><figcaption>Tilemap — Image 33</figcaption></figure>
 <p>To fix this, you need to adjust the texture filter settings. Go to ‘Project’ &gt; ‘Project Settings’.</p>
-<p></p>
+<figure><img src="images/image-34.png" alt="Tilemap — Image 34"><figcaption>Tilemap — Image 34</figcaption></figure>
 <p>Navigate to ‘Rendering’ &gt; ‘Textures’, and change the ‘Default Texture Filter’ from ‘Linear’ to ‘Nearest’.</p>
-<p></p>
+<figure><img src="images/image-35.png" alt="Tilemap — Image 35"><figcaption>Tilemap — Image 35</figcaption></figure>
 <p><strong>Design Your Level</strong></p>
 <p>At this point, go forward and design your level however you wish. There are no right or wrong answers!</p>
 <p>For example, our level looks like the image below:</p>
-<p></p>
+<figure><img src="images/image-36.png" alt="Tilemap — Image 36"><figcaption>Tilemap — Image 36</figcaption></figure>
 <p><strong>Setting Up the Background</strong></p>
 <p>Finally, let’s add a background to our scene. Drag your background image (e.g., ‘ backgroundForest’) into the scene.</p>
-<p></p>
+<figure><img src="images/image-37.png" alt="Tilemap — Image 37"><figcaption>Tilemap — Image 37</figcaption></figure>
 <p>For organization, rename the background node to ‘BackgroundSprite’.</p>
-<p></p>
+<figure><img src="images/image-38.png" alt="Tilemap — Image 38"><figcaption>Tilemap — Image 38</figcaption></figure>
 <p>Congratulations! You have now set up your tile map and background. In the next lesson, we will start creating our player.</p>
-<p></p>
+<p>
+</p>
       <div class="chips"></div>
       <div class="pager"><a href="2DPlatformer_ProjectSetup.html">← Project Setup</a><a href="2DPlatformer_PlayerScene.html">Player Scene →</a></div>
-      <p class="footer">Images are relative (images/). Code blocks are grouped and formatted as GDScript.</p>
+      <p class="footer">Plain code blocks (no JS/CSS colouring). Indentation (tabs) preserved.</p>
     </main>
   </div>
 </body>

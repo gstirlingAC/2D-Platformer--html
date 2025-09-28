@@ -30,16 +30,9 @@
   ol{list-style:decimal;margin-left:1.5rem;padding-left:1rem}
   ul{list-style:disc;margin-left:1.5rem;padding-left:1rem}
   li{margin:.25rem 0}
-  /* Code theme (Godot-like) */
-  pre { background: #1b1f2a; border: 1px solid #2a3345; border-radius: 6px; }
+  /* Code theme w/o colours */
+  pre { background: #1b1f2a; border: 1px solid #2a3345; border-radius: 6px; padding:1rem; }
   code.gdscript { font-family: "JetBrains Mono", "Fira Code", "Courier New", monospace; font-size: 0.95rem; color: #e6edf3; tab-size: 4; }
-  .gd-k    { color: #7aa2f7; }
-  .gd-b    { color: #9ece6a; }
-  .gd-t    { color: #bb9af7; }
-  .gd-c    { color: #565f89; font-style: italic; }
-  .gd-s    { color: #e0af68; }
-  .gd-n    { color: #2ac3de; }
-  .gd-cn   { color: #f7768e; }
   .footer { color:#c7ced7; font-size:.9rem; margin:2rem 0 0; }
   .pager { display:flex; gap:.75rem; justify-content:space-between; margin-top:2rem; }
   .pager a { flex:1; text-align:center; background:#151a22; border:1px solid var(--border); color:var(--link); padding:.75rem; border-radius:.6rem; text-decoration:none; }
@@ -54,7 +47,7 @@
     <div class="title">2D Platformer</div>
     <div class="search"><input type="search" id="navSearch" placeholder="Search tutorials…"></div>
     <h2>Contents</h2>
-    <div class="links" id="navLinks"><a href="2DPlatformer_Introduction.html"><span class="num">01</span><span>Introduction</span></a><a href="2DPlatformer_GameDesign.html"><span class="num">02</span><span>Game Design</span></a><a href="2DPlatformer_ProjectSetup.html"><span class="num">03</span><span>Project Setup</span></a><a href="2DPlatformer_Tilemap.html"><span class="num">04</span><span>Tilemap</span></a><a href="2DPlatformer_PlayerScene.html"><span class="num">05</span><span>Player Scene</span></a><a href="2DPlatformer_InputMap.html" style="background:#1b2230;border-color:#2b3b51;"><span class="num">06</span><span>Input Map</span></a><a href="2DPlatformer_PlayerMovement.html"><span class="num">07</span><span>Player Movement</span></a><a href="2DPlatformer_FlippingthePlayerSprite.html"><span class="num">08</span><span>Flippingthe Player Sprite</span></a><a href="2DPlatformer_PlayerAnimation.html"><span class="num">09</span><span>Player Animation</span></a></div>
+    <div class="links" id="navLinks"><a href="2DPlatformer_Introduction.html"><span class="num">01</span><span>Introduction</span></a><a href="2DPlatformer_GameDesign.html"><span class="num">02</span><span>Game Design</span></a><a href="2DPlatformer_ProjectSetup.html"><span class="num">03</span><span>Project Setup</span></a><a href="2DPlatformer_Tilemap.html"><span class="num">04</span><span>Tilemap</span></a><a href="2DPlatformer_PlayerScene.html"><span class="num">05</span><span>Player Scene</span></a><a href="2DPlatformer_InputMap.html" style="background:#1b2230;border-color:#2b3b51;"><span class="num">06</span><span>Input Map</span></a><a href="2DPlatformer_PlayerMovement.html"><span class="num">07</span><span>Player Movement</span></a><a href="2DPlatformer_FlippingthePlayerSprite.html"><span class="num">08</span><span>Flipping the Player Sprite</span></a><a href="2DPlatformer_PlayerAnimation.html"><span class="num">09</span><span>Player Animation</span></a></div>
     <script>
       const q = document.getElementById('navSearch');
       const links = Array.from(document.querySelectorAll('#navLinks a'));
@@ -71,66 +64,28 @@
 <ul><li>Abstracts the input method from the script logic.</li><li>Allows for multiple keys to trigger the same action.</li><li>Makes it easier to add or change input methods, such as adding a controller.</li></ul>
 <p><strong>Setting Up Input Actions</strong></p>
 <ol>
-	<li>Navigate to the input map:</li>
-		<ul>
-			<li>Go to Project in the top menu.</li>
-			<li>Select Project Settings.</li>
-			<li>Click on the Input Map tab.</li>
-		</ul>
-	<li>Create a new action:</li>
-		<ul>
-			<li>Scroll down to Add New Action.</li>
-			<li>Name your action (e.g., move_left) and press Enter.</li>
-		</ul>
-	<li>Assign keys to the action:</li>
-		<ul>
-			<li>Click the plus icon on the right.</li>
-			<li>Search for the desired key or click on ‘Listening for input’ and press the key.</li>
-			<li>Click OK to assign the key.</li>
-			<li>To add multiple keys, repeat the process.</li>
-		</ul>
-	<li>Repeat the process for other actions (e.g., move_right, jump).</li>
-</ol>
+<li>Navigate to the input map:</li>
+	<ul><li>Go to Project in the top menu.</li>
+	<li>Select Project Settings.</li>
+	<li>Click on the Input Map tab.</li></ul>
+<li>Create a new action:</li>
+	<ul><li>Scroll down to Add New Action.</li>
+	<li>Name your action (e.g., move_left) and press Enter.</li></ul>
+<li>Assign keys to the action:</li>
+	<ul><li>Click the plus icon on the right.</li>
+	<li>Search for the desired key or click on ‘Listening for input’ and press the key.</li>
+	<li>Click OK to assign the key.</li>
+	<li>To add multiple keys, repeat the process.</li></ul>
+<li>Repeat the process for other actions (e.g., move_right, jump).</li></ol>
 <p><strong>Example of Input Actions</strong></p>
 <ul><li>move_left: Left Arrow Key, A Key</li><li>move_right: Right Arrow Key, D Key</li><li>jump: Up Arrow Key, Spacebar, W Key</li></ul>
 <p>By setting up your inputs in this way, you can easily manage and update your input methods without changing your script logic. This separation makes your code cleaner and more maintainable.</p>
 <p><strong>Next Steps</strong></p>
-<p>Do not move on until you have completed <a href="https://student.ayrshire.ac.uk/mod/quiz/view.php?id=320507">Quiz 1 - Game Setup</a>. Now that we have our input actions set up and our player scene ready, the next lesson will focus on creating our player script. This script will handle movement, jumping, and other functionalities. Stay tuned for more!</p>
+<p>Before moving on, ensure you complete <a href="https://student.ayrshire.ac.uk/mod/quiz/view.php?id=320507">Quiz 2 - Player</a>. Now that we have our input actions set up and our player scene ready, the next lesson will focus on creating our player script. This script will handle movement, jumping, and other functionalities. Stay tuned for more!</p>
       <div class="chips"></div>
       <div class="pager"><a href="2DPlatformer_PlayerScene.html">← Player Scene</a><a href="2DPlatformer_PlayerMovement.html">Player Movement →</a></div>
-      <p class="footer">Images placed exactly as in the DOCX. Code uses Godot-like theme; indentation uses tabs (Godot default).</p>
+      <p class="footer">Plain code blocks (no JS/CSS colouring). Indentation (tabs) preserved.</p>
     </main>
   </div>
-
-<script>
-(function(){
-  function hilite(code){
-    let s = code;
-    const STR = /("[^"]*"|'[^']*')/g;
-    const COMM = /(#[^\n]*)/g;
-    const KW = /\b(class_name|extends|class|func|var|const|enum|signal|static|onready|@export|@onready|@tool|if|elif|else|for|while|match|in|return|break|continue|pass|await)\b/g;
-    const TYPES = /\b(Vector2|Vector3|String|int|float|bool|Array|Dictionary|PackedScene|Node|Node2D|CharacterBody2D|Sprite2D|AnimationPlayer|Timer|Callable|Color|RID)\b/g;
-    const BUILT = /\b(print|push_error|push_warning|preload|load|randi|randf|move_and_slide|move_and_collide|queue_free|get_node|add_child|emit_signal|connect|Input|get_axis|get_action_strength)\b/g;
-    const CONSTS = /\b(true|false|PI|TAU|INF|NAN|null)\b/g;
-    const NUM = /(?<![\w_])(\d+\.\d+|\d+)/g;
-    s = s.replace(STR, '<span class="gd-s">$1</span>');
-    s = s.replace(COMM, '<span class="gd-c">$1</span>');
-    s = s.replace(KW, '<span class="gd-k">$1</span>');
-    s = s.replace(TYPES, '<span class="gd-t">$1</span>');
-    s = s.replace(BUILT, '<span class="gd-b">$1</span>');
-    s = s.replace(CONSTS, '<span class="gd-cn">$1</span>');
-    s = s.replace(NUM, '<span class="gd-n">$1</span>');
-    return s;
-  }
-  document.querySelectorAll('pre > code.gdscript').forEach(function(el){
-    const raw = el.textContent;
-    el.innerHTML = hilite(raw);
-  });
-  document.querySelectorAll('p code.gdscript').forEach(function(el){
-    el.innerHTML = hilite(el.textContent);
-  });
-})();
-</script>
-
 </body>
 </html>

@@ -26,9 +26,13 @@
            padding:1rem; margin:1.1rem 0; border-radius:.5rem; }
   img { max-width:100%; height:auto; display:block; margin:auto; }
   figcaption { color:#c7ced7; font-size:.95rem; margin-top:.45rem; }
-  code, pre code { font-family: "Courier New", Courier, monospace; background:#10151d; color:#dfe7f1; border:1px solid #1f2a3a; }
-  code { padding:.15rem .35rem; border-radius:4px; }
-  pre { background:#10151d; border:1px solid #1f2a3a; padding:1rem; border-radius:6px; overflow:auto; }
+  /* Lists */
+  ol{list-style:decimal;margin-left:1.5rem;padding-left:1rem}
+  ul{list-style:disc;margin-left:1.5rem;padding-left:1rem}
+  li{margin:.25rem 0}
+  /* Code theme w/o colours */
+  pre { background: #1b1f2a; border: 1px solid #2a3345; border-radius: 6px; padding:1rem; }
+  code.gdscript { font-family: "JetBrains Mono", "Fira Code", "Courier New", monospace; font-size: 0.95rem; color: #e6edf3; tab-size: 4; }
   .footer { color:#c7ced7; font-size:.9rem; margin:2rem 0 0; }
   .pager { display:flex; gap:.75rem; justify-content:space-between; margin-top:2rem; }
   .pager a { flex:1; text-align:center; background:#151a22; border:1px solid var(--border); color:var(--link); padding:.75rem; border-radius:.6rem; text-decoration:none; }
@@ -43,16 +47,13 @@
     <div class="title">2D Platformer</div>
     <div class="search"><input type="search" id="navSearch" placeholder="Search tutorials…"></div>
     <h2>Contents</h2>
-    <div class="links" id="navLinks"><a href="2DPlatformer_Introduction.html" style="background:#1b2230;border-color:#2b3b51;"><span class="num">01</span><span>Introduction</span></a><a href="2DPlatformer_GameDesign.html"><span class="num">02</span><span>Game Design</span></a><a href="2DPlatformer_ProjectSetup.html"><span class="num">03</span><span>Project Setup</span></a><a href="2DPlatformer_Tilemap.html"><span class="num">04</span><span>Tilemap</span></a><a href="2DPlatformer_PlayerScene.html"><span class="num">05</span><span>Player Scene</span></a><a href="2DPlatformer_InputMap.html"><span class="num">06</span><span>Input Map</span></a><a href="2DPlatformer_PlayerMovement.html"><span class="num">07</span><span>Player Movement</span></a><a href="2DPlatformer_FlippingthePlayerSprite.html"><span class="num">08</span><span>Flippingthe Player Sprite</span></a><a href="2DPlatformer_PlayerAnimation.html"><span class="num">09</span><span>Player Animation</span></a></div>
+    <div class="links" id="navLinks"><a href="2DPlatformer_Introduction.html" style="background:#1b2230;border-color:#2b3b51;"><span class="num">01</span><span>Introduction</span></a><a href="2DPlatformer_GameDesign.html"><span class="num">02</span><span>Game Design</span></a><a href="2DPlatformer_ProjectSetup.html"><span class="num">03</span><span>Project Setup</span></a><a href="2DPlatformer_Tilemap.html"><span class="num">04</span><span>Tilemap</span></a><a href="2DPlatformer_PlayerScene.html"><span class="num">05</span><span>Player Scene</span></a><a href="2DPlatformer_InputMap.html"><span class="num">06</span><span>Input Map</span></a><a href="2DPlatformer_PlayerMovement.html"><span class="num">07</span><span>Player Movement</span></a><a href="2DPlatformer_FlippingthePlayerSprite.html"><span class="num">08</span><span>Flipping the Player Sprite</span></a><a href="2DPlatformer_PlayerAnimation.html"><span class="num">09</span><span>Player Animation</span></a></div>
     <script>
       const q = document.getElementById('navSearch');
-      const linksEls = Array.from(document.querySelectorAll('#navLinks a'));
+      const links = Array.from(document.querySelectorAll('#navLinks a'));
       q?.addEventListener('input', () => {
         const t = q.value.toLowerCase();
-        linksEls.forEach(a => {
-          const label = a.innerText.toLowerCase();
-          a.style.display = label.includes(t) ? '' : 'none';
-        });
+        links.forEach(a => a.style.display = a.innerText.toLowerCase().includes(t) ? '' : 'none');
       });
     </script>
     </nav>
@@ -65,10 +66,11 @@
 <p><strong>Game Mechanics</strong></p>
 <p>The game will feature the following mechanics:</p>
 <ul><li><strong>Player Movement:</strong> The player will be able to move using the arrow keys and jump using the up arrow or spacebar.</li><li><strong>Enemy AI:</strong> Enemies will move back and forth between two positions, and the player must avoid them to prevent taking damage.</li><li><strong>Health System:</strong> The player will have a limited number of hearts, representing their health.</li><li><strong>Coin Collection:</strong> Coins will be scattered throughout the level and collecting them will increase the player’s score.</li><li><strong>Persistent Data:</strong> We will manage data transfer across scenes, such as the player’s score.</li><li><strong>End Flags:</strong> These will teleport the player to the next level upon contact.</li></ul>
-<p></p>
+<p>
+</p>
       <div class="chips"></div>
       <div class="pager"><span></span><a href="2DPlatformer_GameDesign.html">Game Design →</a></div>
-      <p class="footer">Images are relative (images/). Code blocks are grouped and formatted as GDScript.</p>
+      <p class="footer">Plain code blocks (no JS/CSS colouring). Indentation (tabs) preserved.</p>
     </main>
   </div>
 </body>

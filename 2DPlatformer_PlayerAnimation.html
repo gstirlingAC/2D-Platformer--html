@@ -2,7 +2,6 @@
 <html lang="en">
 <head><meta charset="utf-8"><title>2D Platformer – Player Animation</title>
 <style>
-  
   :root {
     --bg:#0f1217; --panel:#151a22; --muted:#9aa4b2; --text:#e9edf2; --accent:#4FC3F7; --border:#243040;
     --link:#81D4FA; --chip:#1b2230;
@@ -27,9 +26,13 @@
            padding:1rem; margin:1.1rem 0; border-radius:.5rem; }
   img { max-width:100%; height:auto; display:block; margin:auto; }
   figcaption { color:#c7ced7; font-size:.95rem; margin-top:.45rem; }
-  code, pre code { font-family: "Courier New", Courier, monospace; background:#10151d; color:#dfe7f1; border:1px solid #1f2a3a; }
-  code { padding:.15rem .35rem; border-radius:4px; }
-  pre { background:#10151d; border:1px solid #1f2a3a; padding:1rem; border-radius:6px; overflow:auto; }
+  /* Lists */
+  ol{list-style:decimal;margin-left:1.5rem;padding-left:1rem}
+  ul{list-style:disc;margin-left:1.5rem;padding-left:1rem}
+  li{margin:.25rem 0}
+  /* Code theme w/o colours */
+  pre { background: #1b1f2a; border: 1px solid #2a3345; border-radius: 6px; padding:1rem; }
+  code.gdscript { font-family: "JetBrains Mono", "Fira Code", "Courier New", monospace; font-size: 0.95rem; color: #e6edf3; tab-size: 4; }
   .footer { color:#c7ced7; font-size:.9rem; margin:2rem 0 0; }
   .pager { display:flex; gap:.75rem; justify-content:space-between; margin-top:2rem; }
   .pager a { flex:1; text-align:center; background:#151a22; border:1px solid var(--border); color:var(--link); padding:.75rem; border-radius:.6rem; text-decoration:none; }
@@ -37,12 +40,6 @@
   .chips { display:flex; flex-wrap:wrap; gap:.35rem; margin:.6rem 0 0; }
   .chip { font-size:.8rem; background:#1b2230; color:#9aa4b2; padding:.1rem .5rem; border-radius:999px; border:1px solid var(--border); }
   @media (max-width: 920px) { .layout{grid-template-columns:1fr} nav{position:static;height:auto} }
-
-  .wrap{max-width:1100px;margin:0 auto;padding:2rem}
-  .grid{display:grid;grid-template-columns:repeat(auto-fill,minmax(260px,1fr));gap:14px;margin-top:1rem}
-  .card{display:flex;gap:.6rem;align-items:center;background:#151a22;border:1px solid var(--border);border-left:4px solid var(--accent);padding:1rem;border-radius:.6rem;color:var(--text);text-decoration:none}
-  .card:hover{background:#1b2230;border-color:#2b3b51}
-  .card .num{background:#1b2230;color:#9aa4b2;font-size:.9rem;padding:.05rem .45rem;border-radius:.4rem;border:1px solid var(--border)}
 </style></head>
 <body>
   <div class="layout">
@@ -50,27 +47,18 @@
     <div class="title">2D Platformer</div>
     <div class="search"><input type="search" id="navSearch" placeholder="Search tutorials…"></div>
     <h2>Contents</h2>
-    <div class="links" id="navLinks"><a href="2DPlatformer_Introduction.html"><span class="num">01</span><span>Introduction</span></a><a href="2DPlatformer_GameDesign.html"><span class="num">02</span><span>Game Design</span></a><a href="2DPlatformer_ProjectSetup.html"><span class="num">03</span><span>Project Setup</span></a><a href="2DPlatformer_Tilemap.html"><span class="num">04</span><span>Tilemap</span></a><a href="2DPlatformer_PlayerScene.html"><span class="num">05</span><span>Player Scene</span></a><a href="2DPlatformer_InputMap.html"><span class="num">06</span><span>Input Map</span></a><a href="2DPlatformer_PlayerMovement.html"><span class="num">07</span><span>Player Movement</span></a><a href="2DPlatformer_FlippingthePlayerSprite.html"><span class="num">08</span><span>Flippingthe Player Sprite</span></a><a href="2DPlatformer_PlayerAnimation.html" style="background:#1b2230;border-color:#2b3b51;"><span class="num">09</span><span>Player Animation</span></a></div>
+    <div class="links" id="navLinks"><a href="2DPlatformer_Introduction.html"><span class="num">01</span><span>Introduction</span></a><a href="2DPlatformer_GameDesign.html"><span class="num">02</span><span>Game Design</span></a><a href="2DPlatformer_ProjectSetup.html"><span class="num">03</span><span>Project Setup</span></a><a href="2DPlatformer_Tilemap.html"><span class="num">04</span><span>Tilemap</span></a><a href="2DPlatformer_PlayerScene.html"><span class="num">05</span><span>Player Scene</span></a><a href="2DPlatformer_InputMap.html"><span class="num">06</span><span>Input Map</span></a><a href="2DPlatformer_PlayerMovement.html"><span class="num">07</span><span>Player Movement</span></a><a href="2DPlatformer_FlippingthePlayerSprite.html"><span class="num">08</span><span>Flipping the Player Sprite</span></a><a href="2DPlatformer_PlayerAnimation.html" style="background:#1b2230;border-color:#2b3b51;"><span class="num">09</span><span>Player Animation</span></a></div>
     <script>
       const q = document.getElementById('navSearch');
-      const linksEls = Array.from(document.querySelectorAll('#navLinks a'));
+      const links = Array.from(document.querySelectorAll('#navLinks a'));
       q?.addEventListener('input', () => {
         const t = q.value.toLowerCase();
-        linksEls.forEach(a => {
-          const label = a.innerText.toLowerCase();
-          a.style.display = label.includes(t) ? '' : 'none';
-        });
+        links.forEach(a => a.style.display = a.innerText.toLowerCase().includes(t) ? '' : 'none');
       });
     </script>
     </nav>
     <main>
-      <style>
-/* Ensure list markers visible and properly indented */
-ol{list-style:decimal;margin-left:1.5rem;padding-left:1rem}
-ul{list-style:disc;margin-left:1.5rem;padding-left:1rem}
-li{margin:.25rem 0}
-pre code.gdscript{tab-size:4}
-</style><h1>Player Animation</h1>
+      <h1>Player Animation</h1>
 <p>In this lesson, we will begin setting up animations for our player character in Godot. Animations are crucial for bringing your game characters to life. For this first part, we will focus on creating three essential animations: <em>idle</em>, <em>moving</em>, and <em>jumping</em>. Let’s dive right in!</p>
 <h2>Understanding Animations in Godot</h2>
 <p>In Godot, an animation is essentially a timeline that starts from 0 seconds and ends at a specified duration. Along this timeline, you can add <strong>keyframes</strong> that change the properties of your sprite or any other node. For our player, we will be animating the texture property to switch between different sprites.</p>
@@ -117,12 +105,12 @@ pre code.gdscript{tab-size:4}
 <ol><li>Open the <strong>Script</strong> folder and go to the <strong>Script</strong> window.</li><li>In the <code inert class="gdscript">player.gd</code> script, create a new function called <code inert class="gdscript">_</code><code inert class="gdscript">manage_animation</code>.</li></ol>
 <p>Here is the code for the <code inert class="gdscript">_</code><code inert class="gdscript">manage_animation</code> function:</p>
 <pre><code inert class='gdscript'>func _manage_animation():
-if not is_on_floor():
-anim.play(&quot;jump&quot;)
-elif move_input != 0:
-anim.play(&quot;move&quot;)
-else:
-anim.play(&quot;idle&quot;)
+	if not is_on_floor():
+		anim.play(&quot;jump&quot;)
+	elif move_input != 0:
+		anim.play(&quot;move&quot;)
+	else:
+		anim.play(&quot;idle&quot;)
 </code></pre>
 <p>This function checks the player’s state and plays the appropriate animation:</p>
 <ul><li>If the player is not on the floor (i.e., jumping or falling), it plays the jump animation.</li><li>If the player is moving, it plays the move animation.</li><li>Otherwise, it plays the idle animation.</li></ul>
@@ -133,19 +121,19 @@ anim.play(&quot;idle&quot;)
 <h2>Calling the Animation Function</h2>
 <p>Finally, call the <code inert class="gdscript">_</code><code inert class="gdscript">manage_animation</code> function inside the <code inert class="gdscript">_process</code> function to ensure the animations are updated every frame:</p>
 <pre><code inert class='gdscript'>func _process(delta):
-if velocity.x != 0:
-sprite.flip_h = velocity.x &gt; 0
+	if velocity.x != 0:
+		sprite.flip_h = velocity.x &gt; 0
 
-_manage_animation()
+	_manage_animation()
 </code></pre>
 <p><strong>Testing the Game</strong></p>
 <p>Now, let’s test the game:</p>
 <ol><li>Go back to your level scene.</li><li>Press the play button.</li><li>Observe the player character. By default, it should display the idle animation. When you move the character, it should play the move animation. When you jump, the jump animation should play.</li></ol>
 <p>If everything is working correctly, your player character should seamlessly transition between the idle, move, and jump animations based on its state. This adds a layer of realism and engagement to your game.</p>
-<p>Congratulations! You have successfully created and managed animations for your player character in Godot. In the next lessons, we will continue to enhance our game by adding more features and functionality.</p>
+<p>Congratulations! You have successfully created and managed animations for your player character in Godot. In the next lessons, we will continue to enhance our game by adding more features and functionality. Before moving on, ensure you complete <a href="https://student.ayrshire.ac.uk/mod/quiz/view.php?id=320933">Quiz 2 - Player</a>.</p>
       <div class="chips"><span class="chip">Understanding Animations in Godot</span><span class="chip">Setting Up the Animation Player</span><span class="chip">Creating the Idle Animation</span><span class="chip">Creating the Move Animation</span><span class="chip">Creating the Jump Animation</span><span class="chip">Understanding Reset Tracks</span></div>
-      <div class="pager"><a href="2DPlatformer_FlippingthePlayerSprite.html">← Flippingthe Player Sprite</a><span></span></div>
-      <p class="footer">Code blocks keep indentation (tabs→4 spaces). Images appear exactly where the DOCX places them.</p>
+      <div class="pager"><a href="2DPlatformer_FlippingthePlayerSprite.html">← Flipping the Player Sprite</a><span></span></div>
+      <p class="footer">Plain code blocks (no JS/CSS colouring). Indentation (tabs) preserved.</p>
     </main>
   </div>
 </body>

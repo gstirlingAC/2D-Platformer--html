@@ -26,9 +26,13 @@
            padding:1rem; margin:1.1rem 0; border-radius:.5rem; }
   img { max-width:100%; height:auto; display:block; margin:auto; }
   figcaption { color:#c7ced7; font-size:.95rem; margin-top:.45rem; }
-  code, pre code { font-family: "Courier New", Courier, monospace; background:#10151d; color:#dfe7f1; border:1px solid #1f2a3a; }
-  code { padding:.15rem .35rem; border-radius:4px; }
-  pre { background:#10151d; border:1px solid #1f2a3a; padding:1rem; border-radius:6px; overflow:auto; }
+  /* Lists */
+  ol{list-style:decimal;margin-left:1.5rem;padding-left:1rem}
+  ul{list-style:disc;margin-left:1.5rem;padding-left:1rem}
+  li{margin:.25rem 0}
+  /* Code theme w/o colours */
+  pre { background: #1b1f2a; border: 1px solid #2a3345; border-radius: 6px; padding:1rem; }
+  code.gdscript { font-family: "JetBrains Mono", "Fira Code", "Courier New", monospace; font-size: 0.95rem; color: #e6edf3; tab-size: 4; }
   .footer { color:#c7ced7; font-size:.9rem; margin:2rem 0 0; }
   .pager { display:flex; gap:.75rem; justify-content:space-between; margin-top:2rem; }
   .pager a { flex:1; text-align:center; background:#151a22; border:1px solid var(--border); color:var(--link); padding:.75rem; border-radius:.6rem; text-decoration:none; }
@@ -43,58 +47,50 @@
     <div class="title">2D Platformer</div>
     <div class="search"><input type="search" id="navSearch" placeholder="Search tutorials…"></div>
     <h2>Contents</h2>
-    <div class="links" id="navLinks"><a href="2DPlatformer_Introduction.html"><span class="num">01</span><span>Introduction</span></a><a href="2DPlatformer_GameDesign.html" style="background:#1b2230;border-color:#2b3b51;"><span class="num">02</span><span>Game Design</span></a><a href="2DPlatformer_ProjectSetup.html"><span class="num">03</span><span>Project Setup</span></a><a href="2DPlatformer_Tilemap.html"><span class="num">04</span><span>Tilemap</span></a><a href="2DPlatformer_PlayerScene.html"><span class="num">05</span><span>Player Scene</span></a><a href="2DPlatformer_InputMap.html"><span class="num">06</span><span>Input Map</span></a><a href="2DPlatformer_PlayerMovement.html"><span class="num">07</span><span>Player Movement</span></a><a href="2DPlatformer_FlippingthePlayerSprite.html"><span class="num">08</span><span>Flippingthe Player Sprite</span></a><a href="2DPlatformer_PlayerAnimation.html"><span class="num">09</span><span>Player Animation</span></a></div>
+    <div class="links" id="navLinks"><a href="2DPlatformer_Introduction.html"><span class="num">01</span><span>Introduction</span></a><a href="2DPlatformer_GameDesign.html" style="background:#1b2230;border-color:#2b3b51;"><span class="num">02</span><span>Game Design</span></a><a href="2DPlatformer_ProjectSetup.html"><span class="num">03</span><span>Project Setup</span></a><a href="2DPlatformer_Tilemap.html"><span class="num">04</span><span>Tilemap</span></a><a href="2DPlatformer_PlayerScene.html"><span class="num">05</span><span>Player Scene</span></a><a href="2DPlatformer_InputMap.html"><span class="num">06</span><span>Input Map</span></a><a href="2DPlatformer_PlayerMovement.html"><span class="num">07</span><span>Player Movement</span></a><a href="2DPlatformer_FlippingthePlayerSprite.html"><span class="num">08</span><span>Flipping the Player Sprite</span></a><a href="2DPlatformer_PlayerAnimation.html"><span class="num">09</span><span>Player Animation</span></a></div>
     <script>
       const q = document.getElementById('navSearch');
-      const linksEls = Array.from(document.querySelectorAll('#navLinks a'));
+      const links = Array.from(document.querySelectorAll('#navLinks a'));
       q?.addEventListener('input', () => {
         const t = q.value.toLowerCase();
-        linksEls.forEach(a => {
-          const label = a.innerText.toLowerCase();
-          a.style.display = label.includes(t) ? '' : 'none';
-        });
+        links.forEach(a => a.style.display = a.innerText.toLowerCase().includes(t) ? '' : 'none');
       });
     </script>
     </nav>
     <main>
       <h1>Game Design</h1>
 <p>Welcome to this beginner-friendly guide on creating a 2D platformer game using Godot. Before we dive into the actual game creation process, it’s essential to understand what we will be building. This game will feature a player who collects coins and avoids enemies while navigating through various platforms. The primary goal is to reach the end flag of each level.</p>
-<figure><img src="images/image-1.png" alt="Game Design — Image 1"><figcaption>Game Design — Image 1</figcaption></figure>
 <p><strong>Player Controls and Movement</strong></p>
-<figure><img src="images/image-2.png" alt="Game Design — Image 2"><figcaption>Game Design — Image 2</figcaption></figure>
 <p>The player will be controlled using the keyboard, with the following main controls:</p>
-<figure><img src="images/image-3.png" alt="Game Design — Image 3"><figcaption>Game Design — Image 3</figcaption></figure>
 <ul><li>Movement: Left and right</li><li>Jumping</li></ul>
-<figure><img src="images/image-4.png" alt="Game Design — Image 4"><figcaption>Game Design — Image 4</figcaption></figure>
 <p>To enhance the movement experience, we will incorporate:</p>
-<figure><img src="images/image-5.png" alt="Game Design — Image 5"><figcaption>Game Design — Image 5</figcaption></figure>
 <ul><li><strong>Acceleration:</strong> When the player starts moving</li><li><strong>Braking:</strong> When the player releases the movement keys</li></ul>
-<figure><img src="images/image-6.png" alt="Game Design — Image 6"><figcaption>Game Design — Image 6</figcaption></figure>
 <p>These additions will create a more natural and smoother movement, improving the overall feel of the game compared to basic, jittery pixel-perfect movement.</p>
-<p></p>
+<figure><img src="images/image-1.png" alt="Game Design — Image 1"><figcaption>Game Design — Image 1</figcaption></figure>
 <p><strong>Enemies and Damage System</strong></p>
 <p>The game will include enemies that move back and forth between two positions. These parameters can be defined:</p>
 <ul><li>Distance of movement</li><li>Angle of movement</li></ul>
-<p></p>
+<figure><img src="images/image-2.png" alt="Game Design — Image 2"><figcaption>Game Design — Image 2</figcaption></figure>
 <p>When an enemy collides with the player, the following damage system will be triggered:</p>
 <ol><li>Player’s health decreases by one</li><li>A visual UI with hearts displays the health reduction</li><li>The screen flashes red briefly</li><li>A screen shake effect is applied</li><li>A damage sound effect plays</li></ol>
-<p></p>
+<figure><img src="images/image-3.png" alt="Game Design — Image 3"><figcaption>Game Design — Image 3</figcaption></figure>
 <p><strong>Coins and Collectibles</strong></p>
 <p>Coins will be placed throughout the levels as collectibles. When collected, the player’s score increases by one. Additionally, coins will have the following visual and auditory effects:</p>
 <ul><li><strong>Rotating Effect:</strong> The coin appears to spin, achieved by changing its width over time using a sine wave</li><li><strong>Bobbing Effect:</strong> The coin moves up and down to enhance its visibility</li><li><strong>Sound Effect:</strong> Plays when the coin is collected</li></ul>
-<p></p>
+<figure><img src="images/image-4.png" alt="Game Design — Image 4"><figcaption>Game Design — Image 4</figcaption></figure>
 <p><strong>End Flag and Level Transition</strong></p>
 <p>At the end of each level, an end flag will serve as a portal to the next level. When the player reaches the end flag, they will be teleported to the subsequent level (e.g., from Level 1 to Level 2).</p>
-<p></p>
+<figure><img src="images/image-5.png" alt="Game Design — Image 5"><figcaption>Game Design — Image 5</figcaption></figure>
 <p><strong>Menu Scene</strong></p>
 <p>The game will feature a simple menu scene with the following buttons:</p>
 <ul><li>Play Button: Starts the game</li><li>Quit Button: Exits the game</li></ul>
-<p></p>
+<figure><img src="images/image-6.png" alt="Game Design — Image 6"><figcaption>Game Design — Image 6</figcaption></figure>
 <p>Now that we have a clear understanding of the game’s components and mechanics, let’s proceed with the first lesson and begin creating our 2D platformer game in Godot.</p>
-<p></p>
+<p>
+</p>
       <div class="chips"></div>
       <div class="pager"><a href="2DPlatformer_Introduction.html">← Introduction</a><a href="2DPlatformer_ProjectSetup.html">Project Setup →</a></div>
-      <p class="footer">Images are relative (images/). Code blocks are grouped and formatted as GDScript.</p>
+      <p class="footer">Plain code blocks (no JS/CSS colouring). Indentation (tabs) preserved.</p>
     </main>
   </div>
 </body>

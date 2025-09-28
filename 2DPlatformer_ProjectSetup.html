@@ -26,9 +26,13 @@
            padding:1rem; margin:1.1rem 0; border-radius:.5rem; }
   img { max-width:100%; height:auto; display:block; margin:auto; }
   figcaption { color:#c7ced7; font-size:.95rem; margin-top:.45rem; }
-  code, pre code { font-family: "Courier New", Courier, monospace; background:#10151d; color:#dfe7f1; border:1px solid #1f2a3a; }
-  code { padding:.15rem .35rem; border-radius:4px; }
-  pre { background:#10151d; border:1px solid #1f2a3a; padding:1rem; border-radius:6px; overflow:auto; }
+  /* Lists */
+  ol{list-style:decimal;margin-left:1.5rem;padding-left:1rem}
+  ul{list-style:disc;margin-left:1.5rem;padding-left:1rem}
+  li{margin:.25rem 0}
+  /* Code theme w/o colours */
+  pre { background: #1b1f2a; border: 1px solid #2a3345; border-radius: 6px; padding:1rem; }
+  code.gdscript { font-family: "JetBrains Mono", "Fira Code", "Courier New", monospace; font-size: 0.95rem; color: #e6edf3; tab-size: 4; }
   .footer { color:#c7ced7; font-size:.9rem; margin:2rem 0 0; }
   .pager { display:flex; gap:.75rem; justify-content:space-between; margin-top:2rem; }
   .pager a { flex:1; text-align:center; background:#151a22; border:1px solid var(--border); color:var(--link); padding:.75rem; border-radius:.6rem; text-decoration:none; }
@@ -43,66 +47,53 @@
     <div class="title">2D Platformer</div>
     <div class="search"><input type="search" id="navSearch" placeholder="Search tutorials…"></div>
     <h2>Contents</h2>
-    <div class="links" id="navLinks"><a href="2DPlatformer_Introduction.html"><span class="num">01</span><span>Introduction</span></a><a href="2DPlatformer_GameDesign.html"><span class="num">02</span><span>Game Design</span></a><a href="2DPlatformer_ProjectSetup.html" style="background:#1b2230;border-color:#2b3b51;"><span class="num">03</span><span>Project Setup</span></a><a href="2DPlatformer_Tilemap.html"><span class="num">04</span><span>Tilemap</span></a><a href="2DPlatformer_PlayerScene.html"><span class="num">05</span><span>Player Scene</span></a><a href="2DPlatformer_InputMap.html"><span class="num">06</span><span>Input Map</span></a><a href="2DPlatformer_PlayerMovement.html"><span class="num">07</span><span>Player Movement</span></a><a href="2DPlatformer_FlippingthePlayerSprite.html"><span class="num">08</span><span>Flippingthe Player Sprite</span></a><a href="2DPlatformer_PlayerAnimation.html"><span class="num">09</span><span>Player Animation</span></a></div>
+    <div class="links" id="navLinks"><a href="2DPlatformer_Introduction.html"><span class="num">01</span><span>Introduction</span></a><a href="2DPlatformer_GameDesign.html"><span class="num">02</span><span>Game Design</span></a><a href="2DPlatformer_ProjectSetup.html" style="background:#1b2230;border-color:#2b3b51;"><span class="num">03</span><span>Project Setup</span></a><a href="2DPlatformer_Tilemap.html"><span class="num">04</span><span>Tilemap</span></a><a href="2DPlatformer_PlayerScene.html"><span class="num">05</span><span>Player Scene</span></a><a href="2DPlatformer_InputMap.html"><span class="num">06</span><span>Input Map</span></a><a href="2DPlatformer_PlayerMovement.html"><span class="num">07</span><span>Player Movement</span></a><a href="2DPlatformer_FlippingthePlayerSprite.html"><span class="num">08</span><span>Flipping the Player Sprite</span></a><a href="2DPlatformer_PlayerAnimation.html"><span class="num">09</span><span>Player Animation</span></a></div>
     <script>
       const q = document.getElementById('navSearch');
-      const linksEls = Array.from(document.querySelectorAll('#navLinks a'));
+      const links = Array.from(document.querySelectorAll('#navLinks a'));
       q?.addEventListener('input', () => {
         const t = q.value.toLowerCase();
-        linksEls.forEach(a => {
-          const label = a.innerText.toLowerCase();
-          a.style.display = label.includes(t) ? '' : 'none';
-        });
+        links.forEach(a => a.style.display = a.innerText.toLowerCase().includes(t) ? '' : 'none');
       });
     </script>
     </nav>
     <main>
       <h1>Project Setup</h1>
 <p>In this lesson, we will walk through the initial steps of creating a new project, organizing your file system, and setting up your first scene. To begin, open Godot and create a new project. The first task is to set up your file system, which involves importing assets and creating the necessary folders for your project.</p>
-<figure><img src="images/image-7.png" alt="Project Setup — Image 7"><figcaption>Project Setup — Image 7</figcaption></figure>
 <p><strong>Importing Assets</strong></p>
-<figure><img src="images/image-8.png" alt="Project Setup — Image 8"><figcaption>Project Setup — Image 8</figcaption></figure>
 <p>Let’s begin by importing our assets. First, navigate to the MyLearning of this course and download the provided zip file. Then, extract the zip file to your computer.</p>
-<figure><img src="images/image-9.png" alt="Project Setup — Image 9"><figcaption>Project Setup — Image 9</figcaption></figure>
-<p></p>
-<figure><img src="images/image-10.png" alt="Project Setup — Image 10"><figcaption>Project Setup — Image 10</figcaption></figure>
+<figure><img src="images/image-7.png" alt="Project Setup — Image 7"><figcaption>Project Setup — Image 7</figcaption></figure>
 <p>You should see two folders: Audio and Sprites. The Audio folder contains sound effects for picking up coins and taking damage. The Sprites folder includes subfolders for backgrounds, characters, objects, and tiles.</p>
-<figure><img src="images/image-11.png" alt="Project Setup — Image 11"><figcaption>Project Setup — Image 11</figcaption></figure>
-<p></p>
-<figure><img src="images/image-12.png" alt="Project Setup — Image 12"><figcaption>Project Setup — Image 12</figcaption></figure>
+<figure><img src="images/image-8.png" alt="Project Setup — Image 8"><figcaption>Project Setup — Image 8</figcaption></figure>
 <p>To import these assets into your Godot project, click and drag the Audio and Sprites folders into the FileSystem dock in Godot.</p>
-<figure><img src="images/image-13.png" alt="Project Setup — Image 13"><figcaption>Project Setup — Image 13</figcaption></figure>
-<p></p>
-<figure><img src="images/image-14.png" alt="Project Setup — Image 14"><figcaption>Project Setup — Image 14</figcaption></figure>
+<figure><img src="images/image-9.png" alt="Project Setup — Image 9"><figcaption>Project Setup — Image 9</figcaption></figure>
 <p>Ensure that the folders are correctly imported and contain the respective files.</p>
-<figure><img src="images/image-15.png" alt="Project Setup — Image 15"><figcaption>Project Setup — Image 15</figcaption></figure>
-<p></p>
-<figure><img src="images/image-16.png" alt="Project Setup — Image 16"><figcaption>Project Setup — Image 16</figcaption></figure>
+<figure><img src="images/image-10.png" alt="Project Setup — Image 10"><figcaption>Project Setup — Image 10</figcaption></figure>
 <p><strong>Creating Necessary Folders</strong></p>
-<figure><img src="images/image-17.png" alt="Project Setup — Image 17"><figcaption>Project Setup — Image 17</figcaption></figure>
 <p>Next, create two additional folders for your project:</p>
 <ul><li>Scripts: This folder will store all your code files.</li><li>Scenes: This folder will store various scenes, such as the player scene, coin scene, enemy scene, levels, menu, and end flag.</li></ul>
 <p>To create these folders, right-click in the FileSystem dock and select New Folder.</p>
-<p></p>
+<figure><img src="images/image-11.png" alt="Project Setup — Image 11"><figcaption>Project Setup — Image 11</figcaption></figure>
 <p>Name the folder and click <strong>OK </strong>to create it.</p>
-<p></p>
+<figure><img src="images/image-12.png" alt="Project Setup — Image 12"><figcaption>Project Setup — Image 12</figcaption></figure>
 <p>Per the above, create two folders. Name the first folderScripts, and the second Scenes.</p>
-<p></p>
+<figure><img src="images/image-13.png" alt="Project Setup — Image 13"><figcaption>Project Setup — Image 13</figcaption></figure>
 <p><strong>Setting Up Your First Scene</strong></p>
 <p>Now, let’s create your first scene, which will be for Level 1. In the top left corner, open the Scene dock. Since this is a new project, choose 2D Scene as the root node for your scene.</p>
-<p></p>
+<figure><img src="images/image-14.png" alt="Project Setup — Image 14"><figcaption>Project Setup — Image 14</figcaption></figure>
 <p>Name the root node Main for consistency.</p>
-<p></p>
+<figure><img src="images/image-15.png" alt="Project Setup — Image 15"><figcaption>Project Setup — Image 15</figcaption></figure>
 <p>Save the scene by pressing Ctrl + S or going to Scene &gt; Save Scene. Navigate to the Scenes folder and save the scene as level_1.tscn.</p>
-<p></p>
+<figure><img src="images/image-16.png" alt="Project Setup — Image 16"><figcaption>Project Setup — Image 16</figcaption></figure>
 <p>If you need to reopen your scene at any point now, simply navigate to the Scenes folder in the FileSystem dock. Then, double-click on level_1.tscn to open it.</p>
-<p></p>
+<figure><img src="images/image-17.png" alt="Project Setup — Image 17"><figcaption>Project Setup — Image 17</figcaption></figure>
 <p><strong>Next Steps</strong></p>
 <p>In the next lesson, we will set up the environment for Level 1. This includes adding a background and setting up the tile map level. We will then proceed to add the player, enemies, coins, end flag, and other necessary elements for your game.</p>
-<p></p>
+<p>
+</p>
       <div class="chips"></div>
       <div class="pager"><a href="2DPlatformer_GameDesign.html">← Game Design</a><a href="2DPlatformer_Tilemap.html">Tilemap →</a></div>
-      <p class="footer">Images are relative (images/). Code blocks are grouped and formatted as GDScript.</p>
+      <p class="footer">Plain code blocks (no JS/CSS colouring). Indentation (tabs) preserved.</p>
     </main>
   </div>
 </body>
