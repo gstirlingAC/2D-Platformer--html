@@ -1,0 +1,93 @@
+<!doctype html>
+<html lang="en">
+<head><meta charset="utf-8"><title>2D Platformer – Flippingthe Player Sprite</title>
+<style>
+  :root {
+    --bg:#0f1217; --panel:#151a22; --muted:#9aa4b2; --text:#e9edf2; --accent:#4FC3F7; --border:#243040;
+    --link:#81D4FA; --chip:#1b2230;
+  }
+  *{box-sizing:border-box}
+  html,body{height:100%}
+  body { margin:0; background:var(--bg); color:var(--text);
+         font-family: "Segoe UI", system-ui, -apple-system, Roboto, Arial, sans-serif; line-height:1.6; }
+  .layout { display:grid; grid-template-columns: 300px 1fr; min-height:100vh; }
+  nav { background:var(--panel); border-right:1px solid var(--border); padding:1rem 1rem 2rem; position:sticky; top:0; height:100vh; overflow:auto; }
+  nav .title { font-weight:800; color:var(--accent); padding:.5rem .4rem .2rem; letter-spacing:.4px; }
+  nav .search { position:sticky; top:0; background:var(--panel); padding:.4rem 0 .8rem; }
+  nav .search input { width:100%; padding:.6rem .7rem; border-radius:10px; border:1px solid var(--border); background:#0f141d; color:var(--text); outline:none; }
+  nav h2 { color:var(--accent); margin:.8rem .4rem .4rem; font-size:1rem; font-weight:700; letter-spacing:.4px; }
+  nav .links a { display:flex; gap:.5rem; align-items:center; padding:.5rem .6rem; margin:.2rem 0; color:var(--text); text-decoration:none; border-radius:.6rem; border:1px solid transparent; }
+  nav .links a:hover { background:#1b2230; border-color:#2b3b51; }
+  nav .links a .num { background:var(--chip); color:var(--muted); font-size:.8rem; padding:.05rem .4rem; border-radius:.4rem; border:1px solid var(--border); }
+  main { padding:2rem; max-width: 980px; width:100%; }
+  main h1 { color:var(--accent); border-bottom:1px solid var(--border); padding-bottom:.35rem; margin-top:0; }
+  main h2, main h3 { color:var(--accent); margin-top:1.2rem; }
+  figure { background:#151a22; border:1px solid var(--border); border-left:4px solid var(--accent);
+           padding:1rem; margin:1.1rem 0; border-radius:.5rem; }
+  img { max-width:100%; height:auto; display:block; margin:auto; }
+  figcaption { color:#c7ced7; font-size:.95rem; margin-top:.45rem; }
+  code, pre code { font-family: "Courier New", Courier, monospace; background:#10151d; color:#dfe7f1; border:1px solid #1f2a3a; }
+  code { padding:.15rem .35rem; border-radius:4px; }
+  pre { background:#10151d; border:1px solid #1f2a3a; padding:1rem; border-radius:6px; overflow:auto; }
+  .footer { color:#c7ced7; font-size:.9rem; margin:2rem 0 0; }
+  .pager { display:flex; gap:.75rem; justify-content:space-between; margin-top:2rem; }
+  .pager a { flex:1; text-align:center; background:#151a22; border:1px solid var(--border); color:var(--link); padding:.75rem; border-radius:.6rem; text-decoration:none; }
+  .pager a:hover { background:#1b2230; border-color:#2b3b51; }
+  .chips { display:flex; flex-wrap:wrap; gap:.35rem; margin:.6rem 0 0; }
+  .chip { font-size:.8rem; background:#1b2230; color:#9aa4b2; padding:.1rem .5rem; border-radius:999px; border:1px solid var(--border); }
+  @media (max-width: 920px) { .layout{grid-template-columns:1fr} nav{position:static;height:auto} }
+</style></head>
+<body>
+  <div class="layout">
+    <nav>
+    <div class="title">2D Platformer</div>
+    <div class="search"><input type="search" id="navSearch" placeholder="Search tutorials…"></div>
+    <h2>Contents</h2>
+    <div class="links" id="navLinks"><a href="2DPlatformer_Introduction.html"><span class="num">01</span><span>Introduction</span></a><a href="2DPlatformer_GameDesign.html"><span class="num">02</span><span>Game Design</span></a><a href="2DPlatformer_ProjectSetup.html"><span class="num">03</span><span>Project Setup</span></a><a href="2DPlatformer_Tilemap.html"><span class="num">04</span><span>Tilemap</span></a><a href="2DPlatformer_PlayerScene.html"><span class="num">05</span><span>Player Scene</span></a><a href="2DPlatformer_InputMap.html"><span class="num">06</span><span>Input Map</span></a><a href="2DPlatformer_PlayerMovement.html"><span class="num">07</span><span>Player Movement</span></a><a href="2DPlatformer_FlippingthePlayerSprite.html" style="background:#1b2230;border-color:#2b3b51;"><span class="num">08</span><span>Flippingthe Player Sprite</span></a><a href="2DPlatformer_PlayerAnimation.html"><span class="num">09</span><span>Player Animation</span></a></div>
+    <script>
+      const q = document.getElementById('navSearch');
+      const linksEls = Array.from(document.querySelectorAll('#navLinks a'));
+      q?.addEventListener('input', () => {
+        const t = q.value.toLowerCase();
+        linksEls.forEach(a => {
+          const label = a.innerText.toLowerCase();
+          a.style.display = label.includes(t) ? '' : 'none';
+        });
+      });
+    </script>
+    </nav>
+    <main>
+      <h1>Flipping the Player Sprite</h1>
+<p>In this lesson, we will begin setting up our player’s animations. This process involves two main parts: animating the player with different sprites for various actions (such as moving and jumping) and ensuring the sprite faces the direction of movement. Let’s dive into the details.</p>
+<figure><img src="images/image-45.png" alt="Flipping the Player Sprite — Image 45"><figcaption>Flipping the Player Sprite — Image 45</figcaption></figure>
+<h2>Setting Up the Player Sprite</h2>
+<p>To start, we need to ensure that our player sprite faces the direction of movement. This involves flipping the sprite horizontally based on the player’s velocity. Here’s how we can achieve this:</p>
+<figure><img src="images/image-46.png" alt="Flipping the Player Sprite — Image 46"><figcaption>Flipping the Player Sprite — Image 46</figcaption></figure>
+<ol><li><strong>Create a Reference to the Sprite Node:</strong> First, we need to create a variable to reference the sprite node in our player script. This allows us to manipulate the sprite properties easily.</li><li><strong>Flip the Sprite Based on Velocity:</strong> We will use the <code inert class="gdscript">flip_h</code> property of the sprite to flip it horizontally based on the player’s movement direction.</li></ol>
+<figure><img src="images/image-47.png" alt="Flipping the Player Sprite — Image 47"><figcaption>Flipping the Player Sprite — Image 47</figcaption></figure>
+<p></p>
+<h2>Step-by-Step Implementation</h2>
+<ol><li><strong>Open the Player Script:</strong> Navigate to your player script. This is where we will add the code to handle the sprite flipping.</li><li><strong>Create a Variable for the Sprite Node:</strong> At the top of your script, create a variable to reference the sprite node. Use the <code inert class="gdscript">@onready</code> keyword to initialize this variable when the node is ready.</li></ol>
+<pre><code inert class='gdscript'>extends CharacterBody2D
+@onready var sprite : Sprite2D = $Sprite</code></pre>
+<ol><li><strong>Flip the Sprite in the _process Function:</strong> In the _process function, add the code to flip the sprite based on the player’s velocity. The <code inert class="gdscript">_process</code> function is called every frame, making it ideal for updating the sprite’s orientation.</li></ol>
+<pre><code inert class='gdscript'>func _process(delta):
+sprite.flip_h = velocity.x &gt; 0</code></pre>
+<p>This code checks the player’s velocity in the x-direction. If the velocity is greater than 0 (meaning the player is moving to the right), the sprite will flip horizontally to face right. If the velocity is less than 0 (meaning the player is moving to the left), the sprite will face left.</p>
+<h2>Handling Edge Cases</h2>
+<p>Depending on the default orientation of your sprite, you might need to adjust the condition. If your sprite defaults to facing right, you should flip it when the velocity is less than 0. Additionally, to prevent the sprite from flipping back to its original orientation when the player stops moving, you can add an if statement to only flip the sprite when the player is moving:</p>
+<pre><code inert class='gdscript'>func _process(delta):
+if velocity.x != 0:
+sprite.flip_h = velocity.x &gt; 0</code></pre>
+<p>This ensures that the sprite only flips when the player is actively moving, preventing any unwanted flipping when the player is idle. You should be able to test the game now and see the sprite flipped based on how you’re moving.</p>
+<p></p>
+<h2>Next Steps</h2>
+<p>In the next lesson, we will begin setting up our animations using the <code inert class="gdscript">AnimationPlayer</code> node. We will create animations for idle, moving, and jumping states and switch between them based on the player’s current state.</p>
+<p></p>
+      <div class="chips"><span class="chip">Setting Up the Player Sprite</span><span class="chip">Step-by-Step Implementation</span><span class="chip">Handling Edge Cases</span><span class="chip">Next Steps</span></div>
+      <div class="pager"><a href="2DPlatformer_PlayerMovement.html">← Player Movement</a><a href="2DPlatformer_PlayerAnimation.html">Player Animation →</a></div>
+      <p class="footer">Images are relative (images/). Code blocks are grouped and formatted as GDScript.</p>
+    </main>
+  </div>
+</body>
+</html>

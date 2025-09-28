@@ -1,62 +1,101 @@
-<!DOCTYPE html>
-<html lang="en"><head><meta charset="UTF-8">
-<base href="https://gstirlingAC.github.io/2D-Platformer--html">
-<title>2D Platformer — Game Design</title>
+<!doctype html>
+<html lang="en">
+<head><meta charset="utf-8"><title>2D Platformer – Game Design</title>
 <style>
-  body { background:#1e1e1e; color:#f0f0f0; font-family:'Segoe UI',sans-serif;
-         max-width:960px; margin:auto; padding:2rem; line-height:1.6; }
-  h1,h2,h3 { color:#4FC3F7; border-bottom:1px solid #333; padding-bottom:.3rem; }
-  p { margin:.7rem 0; }
-  ul { padding-left:1.3rem; }
-  li { margin:.35rem 0; }
-  figure { background:#2b2b2b; border:1px solid #555; border-left:5px solid #81D4FA;
-           padding:1rem; margin:1.1rem 0; }
+  :root {
+    --bg:#0f1217; --panel:#151a22; --muted:#9aa4b2; --text:#e9edf2; --accent:#4FC3F7; --border:#243040;
+    --link:#81D4FA; --chip:#1b2230;
+  }
+  *{box-sizing:border-box}
+  html,body{height:100%}
+  body { margin:0; background:var(--bg); color:var(--text);
+         font-family: "Segoe UI", system-ui, -apple-system, Roboto, Arial, sans-serif; line-height:1.6; }
+  .layout { display:grid; grid-template-columns: 300px 1fr; min-height:100vh; }
+  nav { background:var(--panel); border-right:1px solid var(--border); padding:1rem 1rem 2rem; position:sticky; top:0; height:100vh; overflow:auto; }
+  nav .title { font-weight:800; color:var(--accent); padding:.5rem .4rem .2rem; letter-spacing:.4px; }
+  nav .search { position:sticky; top:0; background:var(--panel); padding:.4rem 0 .8rem; }
+  nav .search input { width:100%; padding:.6rem .7rem; border-radius:10px; border:1px solid var(--border); background:#0f141d; color:var(--text); outline:none; }
+  nav h2 { color:var(--accent); margin:.8rem .4rem .4rem; font-size:1rem; font-weight:700; letter-spacing:.4px; }
+  nav .links a { display:flex; gap:.5rem; align-items:center; padding:.5rem .6rem; margin:.2rem 0; color:var(--text); text-decoration:none; border-radius:.6rem; border:1px solid transparent; }
+  nav .links a:hover { background:#1b2230; border-color:#2b3b51; }
+  nav .links a .num { background:var(--chip); color:var(--muted); font-size:.8rem; padding:.05rem .4rem; border-radius:.4rem; border:1px solid var(--border); }
+  main { padding:2rem; max-width: 980px; width:100%; }
+  main h1 { color:var(--accent); border-bottom:1px solid var(--border); padding-bottom:.35rem; margin-top:0; }
+  main h2, main h3 { color:var(--accent); margin-top:1.2rem; }
+  figure { background:#151a22; border:1px solid var(--border); border-left:4px solid var(--accent);
+           padding:1rem; margin:1.1rem 0; border-radius:.5rem; }
   img { max-width:100%; height:auto; display:block; margin:auto; }
-  figcaption { color:#cfcfcf; font-size:.95rem; margin-top:.45rem; }
-</style></head><body>
-
-<h1>Game Design</h1>
+  figcaption { color:#c7ced7; font-size:.95rem; margin-top:.45rem; }
+  code, pre code { font-family: "Courier New", Courier, monospace; background:#10151d; color:#dfe7f1; border:1px solid #1f2a3a; }
+  code { padding:.15rem .35rem; border-radius:4px; }
+  pre { background:#10151d; border:1px solid #1f2a3a; padding:1rem; border-radius:6px; overflow:auto; }
+  .footer { color:#c7ced7; font-size:.9rem; margin:2rem 0 0; }
+  .pager { display:flex; gap:.75rem; justify-content:space-between; margin-top:2rem; }
+  .pager a { flex:1; text-align:center; background:#151a22; border:1px solid var(--border); color:var(--link); padding:.75rem; border-radius:.6rem; text-decoration:none; }
+  .pager a:hover { background:#1b2230; border-color:#2b3b51; }
+  .chips { display:flex; flex-wrap:wrap; gap:.35rem; margin:.6rem 0 0; }
+  .chip { font-size:.8rem; background:#1b2230; color:#9aa4b2; padding:.1rem .5rem; border-radius:999px; border:1px solid var(--border); }
+  @media (max-width: 920px) { .layout{grid-template-columns:1fr} nav{position:static;height:auto} }
+</style></head>
+<body>
+  <div class="layout">
+    <nav>
+    <div class="title">2D Platformer</div>
+    <div class="search"><input type="search" id="navSearch" placeholder="Search tutorials…"></div>
+    <h2>Contents</h2>
+    <div class="links" id="navLinks"><a href="2DPlatformer_Introduction.html"><span class="num">01</span><span>Introduction</span></a><a href="2DPlatformer_GameDesign.html" style="background:#1b2230;border-color:#2b3b51;"><span class="num">02</span><span>Game Design</span></a><a href="2DPlatformer_ProjectSetup.html"><span class="num">03</span><span>Project Setup</span></a><a href="2DPlatformer_Tilemap.html"><span class="num">04</span><span>Tilemap</span></a><a href="2DPlatformer_PlayerScene.html"><span class="num">05</span><span>Player Scene</span></a><a href="2DPlatformer_InputMap.html"><span class="num">06</span><span>Input Map</span></a><a href="2DPlatformer_PlayerMovement.html"><span class="num">07</span><span>Player Movement</span></a><a href="2DPlatformer_FlippingthePlayerSprite.html"><span class="num">08</span><span>Flippingthe Player Sprite</span></a><a href="2DPlatformer_PlayerAnimation.html"><span class="num">09</span><span>Player Animation</span></a></div>
+    <script>
+      const q = document.getElementById('navSearch');
+      const linksEls = Array.from(document.querySelectorAll('#navLinks a'));
+      q?.addEventListener('input', () => {
+        const t = q.value.toLowerCase();
+        linksEls.forEach(a => {
+          const label = a.innerText.toLowerCase();
+          a.style.display = label.includes(t) ? '' : 'none';
+        });
+      });
+    </script>
+    </nav>
+    <main>
+      <h1>Game Design</h1>
 <p>Welcome to this beginner-friendly guide on creating a 2D platformer game using Godot. Before we dive into the actual game creation process, it’s essential to understand what we will be building. This game will feature a player who collects coins and avoids enemies while navigating through various platforms. The primary goal is to reach the end flag of each level.</p>
-<figure><img src="./images/image-1.png" alt="Player and end flag example"><figcaption>Player and end flag example</figcaption></figure>
-<h2>Player Controls and Movement</h2>
+<figure><img src="images/image-1.png" alt="Game Design — Image 1"><figcaption>Game Design — Image 1</figcaption></figure>
+<p><strong>Player Controls and Movement</strong></p>
+<figure><img src="images/image-2.png" alt="Game Design — Image 2"><figcaption>Game Design — Image 2</figcaption></figure>
 <p>The player will be controlled using the keyboard, with the following main controls:</p>
+<figure><img src="images/image-3.png" alt="Game Design — Image 3"><figcaption>Game Design — Image 3</figcaption></figure>
 <ul><li>Movement: Left and right</li><li>Jumping</li></ul>
+<figure><img src="images/image-4.png" alt="Game Design — Image 4"><figcaption>Game Design — Image 4</figcaption></figure>
 <p>To enhance the movement experience, we will incorporate:</p>
+<figure><img src="images/image-5.png" alt="Game Design — Image 5"><figcaption>Game Design — Image 5</figcaption></figure>
 <ul><li><strong>Acceleration:</strong> When the player starts moving</li><li><strong>Braking:</strong> When the player releases the movement keys</li></ul>
+<figure><img src="images/image-6.png" alt="Game Design — Image 6"><figcaption>Game Design — Image 6</figcaption></figure>
 <p>These additions will create a more natural and smoother movement, improving the overall feel of the game compared to basic, jittery pixel-perfect movement.</p>
-<figure><img src="./images/image-3.png" alt="Platforms with enemy and coin"><figcaption>Platforms with enemy and coin</figcaption></figure>
-
-<h2>Enemies and Damage System</h2>
+<p></p>
+<p><strong>Enemies and Damage System</strong></p>
 <p>The game will include enemies that move back and forth between two positions. These parameters can be defined:</p>
 <ul><li>Distance of movement</li><li>Angle of movement</li></ul>
-<figure><img src="./images/image-4.png" alt="Enemy vertical movement range"><figcaption>Enemy vertical movement range</figcaption></figure>
+<p></p>
 <p>When an enemy collides with the player, the following damage system will be triggered:</p>
-<ul>
-  <li>Player’s health decreases by one</li>
-  <li>A visual UI with hearts displays the health reduction</li>
-  <li>The screen flashes red briefly</li>
-  <li>A screen shake effect is applied</li>
-  <li>A damage sound effect plays</li>
-</ul>
-<figure><img src="images/image-5.png" alt="Hearts UI and score"><figcaption>Hearts UI and score</figcaption></figure>
-
-<h2>Coins and Collectibles</h2>
+<ol><li>Player’s health decreases by one</li><li>A visual UI with hearts displays the health reduction</li><li>The screen flashes red briefly</li><li>A screen shake effect is applied</li><li>A damage sound effect plays</li></ol>
+<p></p>
+<p><strong>Coins and Collectibles</strong></p>
 <p>Coins will be placed throughout the levels as collectibles. When collected, the player’s score increases by one. Additionally, coins will have the following visual and auditory effects:</p>
-<ul>
-  <li><strong>Rotating Effect:</strong> The coin appears to spin, achieved by changing its width over time using a sine wave</li>
-  <li><strong>Bobbing Effect:</strong> The coin moves up and down to enhance its visibility</li>
-  <li><strong>Sound Effect:</strong> Plays when the coin is collected</li>
-</ul>
-<figure><img src="./images/image-6.png" alt="Coin collectible"><figcaption>Coin collectible</figcaption></figure>
-
-<h2>End Flag and Level Transition</h2>
+<ul><li><strong>Rotating Effect:</strong> The coin appears to spin, achieved by changing its width over time using a sine wave</li><li><strong>Bobbing Effect:</strong> The coin moves up and down to enhance its visibility</li><li><strong>Sound Effect:</strong> Plays when the coin is collected</li></ul>
+<p></p>
+<p><strong>End Flag and Level Transition</strong></p>
 <p>At the end of each level, an end flag will serve as a portal to the next level. When the player reaches the end flag, they will be teleported to the subsequent level (e.g., from Level 1 to Level 2).</p>
-<figure><img src="./images/image-2.png" alt="Simple Menu with Play and Quit"><figcaption>Simple Menu with Play and Quit</figcaption></figure>
-<h2>Menu Scene</h2>
-<ul>
-  <li><strong>Play Button:</strong> Starts the game</li>
-  <li><strong>Quit Button:</strong> Exits the game</li>
-</ul>
+<p></p>
+<p><strong>Menu Scene</strong></p>
+<p>The game will feature a simple menu scene with the following buttons:</p>
+<ul><li>Play Button: Starts the game</li><li>Quit Button: Exits the game</li></ul>
+<p></p>
 <p>Now that we have a clear understanding of the game’s components and mechanics, let’s proceed with the first lesson and begin creating our 2D platformer game in Godot.</p>
-
-</body></html>
+<p></p>
+      <div class="chips"></div>
+      <div class="pager"><a href="2DPlatformer_Introduction.html">← Introduction</a><a href="2DPlatformer_ProjectSetup.html">Project Setup →</a></div>
+      <p class="footer">Images are relative (images/). Code blocks are grouped and formatted as GDScript.</p>
+    </main>
+  </div>
+</body>
+</html>

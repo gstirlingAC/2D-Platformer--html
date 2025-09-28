@@ -1,65 +1,87 @@
-<!DOCTYPE html>
-<html lang="en"><head><meta charset="UTF-8">
-<base href="https://gstirlingAC.github.io/2D-Platformer--html">
-<title>2D Platformer — Player Scene</title>
+<!doctype html>
+<html lang="en">
+<head><meta charset="utf-8"><title>2D Platformer – Player Scene</title>
 <style>
-  body { background:#1e1e1e; color:#f0f0f0; font-family:'Segoe UI',sans-serif;
-         max-width:960px; margin:auto; padding:2rem; line-height:1.6; }
-  h1,h2,h3 { color:#4FC3F7; border-bottom:1px solid #333; padding-bottom:.3rem; }
-  p { margin:.7rem 0; }
-  ul { padding-left:1.3rem; }
-  li { margin:.35rem 0; }
-  figure { background:#2b2b2b; border:1px solid #555; border-left:5px solid #81D4FA;
-           padding:1rem; margin:1.1rem 0; }
+  :root {
+    --bg:#0f1217; --panel:#151a22; --muted:#9aa4b2; --text:#e9edf2; --accent:#4FC3F7; --border:#243040;
+    --link:#81D4FA; --chip:#1b2230;
+  }
+  *{box-sizing:border-box}
+  html,body{height:100%}
+  body { margin:0; background:var(--bg); color:var(--text);
+         font-family: "Segoe UI", system-ui, -apple-system, Roboto, Arial, sans-serif; line-height:1.6; }
+  .layout { display:grid; grid-template-columns: 300px 1fr; min-height:100vh; }
+  nav { background:var(--panel); border-right:1px solid var(--border); padding:1rem 1rem 2rem; position:sticky; top:0; height:100vh; overflow:auto; }
+  nav .title { font-weight:800; color:var(--accent); padding:.5rem .4rem .2rem; letter-spacing:.4px; }
+  nav .search { position:sticky; top:0; background:var(--panel); padding:.4rem 0 .8rem; }
+  nav .search input { width:100%; padding:.6rem .7rem; border-radius:10px; border:1px solid var(--border); background:#0f141d; color:var(--text); outline:none; }
+  nav h2 { color:var(--accent); margin:.8rem .4rem .4rem; font-size:1rem; font-weight:700; letter-spacing:.4px; }
+  nav .links a { display:flex; gap:.5rem; align-items:center; padding:.5rem .6rem; margin:.2rem 0; color:var(--text); text-decoration:none; border-radius:.6rem; border:1px solid transparent; }
+  nav .links a:hover { background:#1b2230; border-color:#2b3b51; }
+  nav .links a .num { background:var(--chip); color:var(--muted); font-size:.8rem; padding:.05rem .4rem; border-radius:.4rem; border:1px solid var(--border); }
+  main { padding:2rem; max-width: 980px; width:100%; }
+  main h1 { color:var(--accent); border-bottom:1px solid var(--border); padding-bottom:.35rem; margin-top:0; }
+  main h2, main h3 { color:var(--accent); margin-top:1.2rem; }
+  figure { background:#151a22; border:1px solid var(--border); border-left:4px solid var(--accent);
+           padding:1rem; margin:1.1rem 0; border-radius:.5rem; }
   img { max-width:100%; height:auto; display:block; margin:auto; }
-  figcaption { color:#cfcfcf; font-size:.95rem; margin-top:.45rem; }
-</style></head><body>
-
-<h1>Player Scene</h1>
+  figcaption { color:#c7ced7; font-size:.95rem; margin-top:.45rem; }
+  code, pre code { font-family: "Courier New", Courier, monospace; background:#10151d; color:#dfe7f1; border:1px solid #1f2a3a; }
+  code { padding:.15rem .35rem; border-radius:4px; }
+  pre { background:#10151d; border:1px solid #1f2a3a; padding:1rem; border-radius:6px; overflow:auto; }
+  .footer { color:#c7ced7; font-size:.9rem; margin:2rem 0 0; }
+  .pager { display:flex; gap:.75rem; justify-content:space-between; margin-top:2rem; }
+  .pager a { flex:1; text-align:center; background:#151a22; border:1px solid var(--border); color:var(--link); padding:.75rem; border-radius:.6rem; text-decoration:none; }
+  .pager a:hover { background:#1b2230; border-color:#2b3b51; }
+  .chips { display:flex; flex-wrap:wrap; gap:.35rem; margin:.6rem 0 0; }
+  .chip { font-size:.8rem; background:#1b2230; color:#9aa4b2; padding:.1rem .5rem; border-radius:999px; border:1px solid var(--border); }
+  @media (max-width: 920px) { .layout{grid-template-columns:1fr} nav{position:static;height:auto} }
+</style></head>
+<body>
+  <div class="layout">
+    <nav>
+    <div class="title">2D Platformer</div>
+    <div class="search"><input type="search" id="navSearch" placeholder="Search tutorials…"></div>
+    <h2>Contents</h2>
+    <div class="links" id="navLinks"><a href="2DPlatformer_Introduction.html"><span class="num">01</span><span>Introduction</span></a><a href="2DPlatformer_GameDesign.html"><span class="num">02</span><span>Game Design</span></a><a href="2DPlatformer_ProjectSetup.html"><span class="num">03</span><span>Project Setup</span></a><a href="2DPlatformer_Tilemap.html"><span class="num">04</span><span>Tilemap</span></a><a href="2DPlatformer_PlayerScene.html" style="background:#1b2230;border-color:#2b3b51;"><span class="num">05</span><span>Player Scene</span></a><a href="2DPlatformer_InputMap.html"><span class="num">06</span><span>Input Map</span></a><a href="2DPlatformer_PlayerMovement.html"><span class="num">07</span><span>Player Movement</span></a><a href="2DPlatformer_FlippingthePlayerSprite.html"><span class="num">08</span><span>Flippingthe Player Sprite</span></a><a href="2DPlatformer_PlayerAnimation.html"><span class="num">09</span><span>Player Animation</span></a></div>
+    <script>
+      const q = document.getElementById('navSearch');
+      const linksEls = Array.from(document.querySelectorAll('#navLinks a'));
+      q?.addEventListener('input', () => {
+        const t = q.value.toLowerCase();
+        linksEls.forEach(a => {
+          const label = a.innerText.toLowerCase();
+          a.style.display = label.includes(t) ? '' : 'none';
+        });
+      });
+    </script>
+    </nav>
+    <main>
+      <h1>Player Scene</h1>
 <p>In this lesson, you will be guided through the process of setting up your player character, which will serve as the main interactive element in your game. By the end of this tutorial, you will have a player character that can move and jump within a platformer-style environment.</p>
-
-<h2>Understanding the Player Scene</h2>
+<p><strong>Understanding the Player Scene</strong></p>
 <p>The player scene is a crucial component of your game, as it defines the physical object that the player will control. This scene will include various nodes that determine the player’s appearance, collision detection, and other properties.</p>
-
-<h2>Creating the Player Scene</h2>
-<p>To begin, we need to determine the root node of our player. For platformer games and characters in general, Godot provides a specialized node called <strong>CharacterBody2D</strong>. This node is highly useful because it includes built-in features such as collision detection, ground detection, and velocity modification.</p>
-
-<h3>Steps to Create the Player Scene</h3>
-<ol>
-  <li>Create a new CharacterBody2D node and rename it to “Player”.</li>
-  <li>Save the scene by right-clicking on the node and selecting “Save Branch as Scene”, or by dragging the node to the scenes folder and saving it as <code>Player.tscn</code>.</li>
-  <li>Add a sprite to the player node to visualize the character. You can do this by dragging a sprite from your sprites folder into the player node.</li>
-  <li>Rename the sprite node to “Sprite” for easy reference.</li>
-  <li>Center the sprite by setting its position to (0, 0) in the transform properties.</li>
-  <li>Adjust the offset of the sprite so that the origin is at the character’s feet. This is done by setting the Y offset to a negative value (e.g., -12).</li>
-  <li>Add a collision shape to the player node by right-clicking on the player node, selecting “Add Child Node”, and choosing “CollisionShape2D”.</li>
-  <li>Set the shape of the collision shape to “CapsuleShape2D” to ensure smooth movement over bumps.</li>
-  <li>Adjust the collision shape to fit the sprite’s dimensions, ensuring it touches the base of the character’s feet.</li>
-</ol>
-
-<h2>Setting Up the Camera</h2>
-<ol>
-  <li>Add a Camera2D node as a child of the player node.</li>
-  <li>Adjust the zoom property of the camera to ensure it is focused on the player. A zoom value of (3, 3) is a good starting point.</li>
-  <li>Position the camera slightly above the player to provide a better view of the game world.</li>
-</ol>
-
-<h2>Adding Additional Nodes</h2>
+<p><strong>Creating the Player Scene</strong></p>
+<p>To begin, we need to determine the root node of our player. For platformer games and characters in general, Godot provides a specialized node called CharacterBody2D. This node is highly useful because it includes built-in features such as collision detection, ground detection, and velocity modification.</p>
+<p><strong>Steps to Create the Player Scene</strong></p>
+<ol><li>Create a new CharacterBody2D node and rename it to “Player”.</li><li>Save the scene by right-clicking on the node and selecting “Save Branch as Scene”, or by dragging the node to the scenes folder and saving it as Player.tscn.</li><li>Add a sprite to the player node to visualize the character. You can do this by dragging a sprite from your sprites folder into the player node.</li><li>Rename the sprite node to “Sprite” for easy reference.</li><li>Center the sprite by setting its position to (0, 0) in the transform properties.</li><li>Adjust the offset of the sprite so that the origin is at the character’s feet. This is done by setting the Y offset to a negative value (e.g., -12).</li><li>Add a collision shape to the player node by right-clicking on the player node, selecting “Add Child Node”, and choosing “CollisionShape2D”.</li><li>Set the shape of the collision shape to “CapsuleShape2D” to ensure smooth movement over bumps.</li><li>Adjust the collision shape to fit the sprite’s dimensions, ensuring it touches the base of the character’s feet.</li></ol>
+<p><strong>Setting Up the Camera</strong></p>
+<p>After creating the player scene, you need to set up a camera that follows the player. This ensures that the player remains in view as they move through the game world.</p>
+<p><strong>Steps to Set Up the Camera</strong></p>
+<ol><li>Add a Camera2D node as a child of the player node.</li><li>Adjust the zoom property of the camera to ensure it is focused on the player. A zoom value of (3, 3) is a good starting point.</li><li>Position the camera slightly above the player to provide a better view of the game world.</li></ol>
+<p><strong>Adding Additional Nodes</strong></p>
 <p>To prepare for future lessons, we will add two more nodes to the player scene:</p>
-<ul>
-  <li><strong>AnimationPlayer</strong>: This node will handle the character’s movement animations.</li>
-  <li><strong>AudioStreamPlayer</strong>: This node will manage sound effects for the character.</li>
-</ul>
-
-<h2>Fixing Common Errors</h2>
+<ul><li>AnimationPlayer: This node will handle the character’s movement animations.</li><li>AudioStreamPlayer: This node will manage sound effects for the character.</li></ul>
+<p><strong>Fixing Common Errors</strong></p>
 <p>You may encounter errors related to the tile set atlas. To fix these errors, follow these steps:</p>
-<ol>
-  <li>Open your tile set and look for any yellow exclamation warning signs.</li>
-  <li>Click on the three dots and select “Remove Tiles Outside the Texture”.</li>
-  <li>Also, select “Remove Tiles in Fully Transparent Texture Regions”.</li>
-</ol>
-
+<ol><li>Open your tile set and look for any yellow exclamation warning signs.</li><li>Click on the three dots and select “Remove Tiles Outside the Texture”.</li><li>Also, select “Remove Tiles in Fully Transparent Texture Regions”.</li></ol>
 <p>By following these steps, you will have a fully functional player scene ready for further development. In future lessons, we will explore input handling and scripting to make the player character interactive.</p>
 <p>Congratulations on completing this tutorial! You are now one step closer to creating your own platformer game in Godot.</p>
-
-</body></html>
+<p></p>
+      <div class="chips"></div>
+      <div class="pager"><a href="2DPlatformer_Tilemap.html">← Tilemap</a><a href="2DPlatformer_InputMap.html">Input Map →</a></div>
+      <p class="footer">Images are relative (images/). Code blocks are grouped and formatted as GDScript.</p>
+    </main>
+  </div>
+</body>
+</html>

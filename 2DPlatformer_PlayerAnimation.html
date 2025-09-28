@@ -1,0 +1,152 @@
+<!doctype html>
+<html lang="en">
+<head><meta charset="utf-8"><title>2D Platformer – Player Animation</title>
+<style>
+  
+  :root {
+    --bg:#0f1217; --panel:#151a22; --muted:#9aa4b2; --text:#e9edf2; --accent:#4FC3F7; --border:#243040;
+    --link:#81D4FA; --chip:#1b2230;
+  }
+  *{box-sizing:border-box}
+  html,body{height:100%}
+  body { margin:0; background:var(--bg); color:var(--text);
+         font-family: "Segoe UI", system-ui, -apple-system, Roboto, Arial, sans-serif; line-height:1.6; }
+  .layout { display:grid; grid-template-columns: 300px 1fr; min-height:100vh; }
+  nav { background:var(--panel); border-right:1px solid var(--border); padding:1rem 1rem 2rem; position:sticky; top:0; height:100vh; overflow:auto; }
+  nav .title { font-weight:800; color:var(--accent); padding:.5rem .4rem .2rem; letter-spacing:.4px; }
+  nav .search { position:sticky; top:0; background:var(--panel); padding:.4rem 0 .8rem; }
+  nav .search input { width:100%; padding:.6rem .7rem; border-radius:10px; border:1px solid var(--border); background:#0f141d; color:var(--text); outline:none; }
+  nav h2 { color:var(--accent); margin:.8rem .4rem .4rem; font-size:1rem; font-weight:700; letter-spacing:.4px; }
+  nav .links a { display:flex; gap:.5rem; align-items:center; padding:.5rem .6rem; margin:.2rem 0; color:var(--text); text-decoration:none; border-radius:.6rem; border:1px solid transparent; }
+  nav .links a:hover { background:#1b2230; border-color:#2b3b51; }
+  nav .links a .num { background:var(--chip); color:var(--muted); font-size:.8rem; padding:.05rem .4rem; border-radius:.4rem; border:1px solid var(--border); }
+  main { padding:2rem; max-width: 980px; width:100%; }
+  main h1 { color:var(--accent); border-bottom:1px solid var(--border); padding-bottom:.35rem; margin-top:0; }
+  main h2, main h3 { color:var(--accent); margin-top:1.2rem; }
+  figure { background:#151a22; border:1px solid var(--border); border-left:4px solid var(--accent);
+           padding:1rem; margin:1.1rem 0; border-radius:.5rem; }
+  img { max-width:100%; height:auto; display:block; margin:auto; }
+  figcaption { color:#c7ced7; font-size:.95rem; margin-top:.45rem; }
+  code, pre code { font-family: "Courier New", Courier, monospace; background:#10151d; color:#dfe7f1; border:1px solid #1f2a3a; }
+  code { padding:.15rem .35rem; border-radius:4px; }
+  pre { background:#10151d; border:1px solid #1f2a3a; padding:1rem; border-radius:6px; overflow:auto; }
+  .footer { color:#c7ced7; font-size:.9rem; margin:2rem 0 0; }
+  .pager { display:flex; gap:.75rem; justify-content:space-between; margin-top:2rem; }
+  .pager a { flex:1; text-align:center; background:#151a22; border:1px solid var(--border); color:var(--link); padding:.75rem; border-radius:.6rem; text-decoration:none; }
+  .pager a:hover { background:#1b2230; border-color:#2b3b51; }
+  .chips { display:flex; flex-wrap:wrap; gap:.35rem; margin:.6rem 0 0; }
+  .chip { font-size:.8rem; background:#1b2230; color:#9aa4b2; padding:.1rem .5rem; border-radius:999px; border:1px solid var(--border); }
+  @media (max-width: 920px) { .layout{grid-template-columns:1fr} nav{position:static;height:auto} }
+
+  .wrap{max-width:1100px;margin:0 auto;padding:2rem}
+  .grid{display:grid;grid-template-columns:repeat(auto-fill,minmax(260px,1fr));gap:14px;margin-top:1rem}
+  .card{display:flex;gap:.6rem;align-items:center;background:#151a22;border:1px solid var(--border);border-left:4px solid var(--accent);padding:1rem;border-radius:.6rem;color:var(--text);text-decoration:none}
+  .card:hover{background:#1b2230;border-color:#2b3b51}
+  .card .num{background:#1b2230;color:#9aa4b2;font-size:.9rem;padding:.05rem .45rem;border-radius:.4rem;border:1px solid var(--border)}
+</style></head>
+<body>
+  <div class="layout">
+    <nav>
+    <div class="title">2D Platformer</div>
+    <div class="search"><input type="search" id="navSearch" placeholder="Search tutorials…"></div>
+    <h2>Contents</h2>
+    <div class="links" id="navLinks"><a href="2DPlatformer_Introduction.html"><span class="num">01</span><span>Introduction</span></a><a href="2DPlatformer_GameDesign.html"><span class="num">02</span><span>Game Design</span></a><a href="2DPlatformer_ProjectSetup.html"><span class="num">03</span><span>Project Setup</span></a><a href="2DPlatformer_Tilemap.html"><span class="num">04</span><span>Tilemap</span></a><a href="2DPlatformer_PlayerScene.html"><span class="num">05</span><span>Player Scene</span></a><a href="2DPlatformer_InputMap.html"><span class="num">06</span><span>Input Map</span></a><a href="2DPlatformer_PlayerMovement.html"><span class="num">07</span><span>Player Movement</span></a><a href="2DPlatformer_FlippingthePlayerSprite.html"><span class="num">08</span><span>Flippingthe Player Sprite</span></a><a href="2DPlatformer_PlayerAnimation.html" style="background:#1b2230;border-color:#2b3b51;"><span class="num">09</span><span>Player Animation</span></a></div>
+    <script>
+      const q = document.getElementById('navSearch');
+      const linksEls = Array.from(document.querySelectorAll('#navLinks a'));
+      q?.addEventListener('input', () => {
+        const t = q.value.toLowerCase();
+        linksEls.forEach(a => {
+          const label = a.innerText.toLowerCase();
+          a.style.display = label.includes(t) ? '' : 'none';
+        });
+      });
+    </script>
+    </nav>
+    <main>
+      <style>
+/* Ensure list markers visible and properly indented */
+ol{list-style:decimal;margin-left:1.5rem;padding-left:1rem}
+ul{list-style:disc;margin-left:1.5rem;padding-left:1rem}
+li{margin:.25rem 0}
+pre code.gdscript{tab-size:4}
+</style><h1>Player Animation</h1>
+<p>In this lesson, we will begin setting up animations for our player character in Godot. Animations are crucial for bringing your game characters to life. For this first part, we will focus on creating three essential animations: <em>idle</em>, <em>moving</em>, and <em>jumping</em>. Let’s dive right in!</p>
+<h2>Understanding Animations in Godot</h2>
+<p>In Godot, an animation is essentially a timeline that starts from 0 seconds and ends at a specified duration. Along this timeline, you can add <strong>keyframes</strong> that change the properties of your sprite or any other node. For our player, we will be animating the texture property to switch between different sprites.</p>
+<h2>Setting Up the Animation Player</h2>
+<p>To begin, ensure you have an <strong>AnimationPlayer</strong> node in your player scene. If not, create one.</p>
+<figure><img src="images/image-48.png" alt="Player Animation — Image 48"><figcaption>Player Animation — Image 48</figcaption></figure>
+<p>When you select the AnimationPlayer node, you should see the animation window at the bottom of the editor.</p>
+<figure><img src="images/image-49.png" alt="Player Animation — Image 49"><figcaption>Player Animation — Image 49</figcaption></figure>
+<h2>Creating the Idle Animation</h2>
+<p>Let’s start by creating the Idle animation. In the animation window, click on<strong> Animation &gt; New</strong>.</p>
+<figure><img src="images/image-50.png" alt="Player Animation — Image 50"><figcaption>Player Animation — Image 50</figcaption></figure>
+<p>Name the animation “idle”.</p>
+<figure><img src="images/image-51.png" alt="Player Animation — Image 51"><figcaption>Player Animation — Image 51</figcaption></figure>
+<p>Zoom in on the timeline using the magnifying glass icon to work in smaller increments.</p>
+<figure><img src="images/image-52.png" alt="Player Animation — Image 52"><figcaption>Player Animation — Image 52</figcaption></figure>
+<p>By default, most animations are set to last one second. We only want this animation to last half a second. To do this, click the duration field near the top right and alter the value to be 0.5.</p>
+<figure><img src="images/image-53.png" alt="Player Animation — Image 53"><figcaption>Player Animation — Image 53</figcaption></figure>
+<p>In order to animate anything, we need to configure the animation to access tracks, which control the properties of our objects. Keeping the animation window open, select your sprite node. Click the key icon next to the <strong>Texture</strong> property to add a new track.</p>
+<figure><img src="images/image-54.png" alt="Player Animation — Image 54"><figcaption>Player Animation — Image 54</figcaption></figure>
+<p>On the pop-up window, hit “Create” to confirm the creation of the track. Ensure <strong>Create Reset Tracks</strong> is enabled.</p>
+<figure><img src="images/image-55.png" alt="Player Animation — Image 55"><figcaption>Player Animation — Image 55</figcaption></figure>
+<p>On the Animation timeline, you should now see the track for the Sprite’s texture property.</p>
+<figure><img src="images/image-56.png" alt="Player Animation — Image 56"><figcaption>Player Animation — Image 56</figcaption></figure>
+<p>Now that we can access the texture property in the timeline, we need to create keyframes. Keyframes control the key points in the animation where something needs to happen. In this case, we’ll be changing the texture in each keyframe.</p>
+<p>You can see at the 0.0 mark; we already have a keyframe for the current sprite texture created automatically.</p>
+<figure><img src="images/image-57.png" alt="Player Animation — Image 57"><figcaption>Player Animation — Image 57</figcaption></figure>
+<p>For the idle animation, we don’t need any other keyframes. You can test the idle animation using the play, reverse, and pause buttons in the animation window.</p>
+<h2>Creating the Move Animation</h2>
+<ol><li>Click on <strong>Animation</strong> and select <strong>New</strong>. Name this animation “move”.</li><li>Add the texture property track as before.</li><li>Set the first keyframe to the sprite where the character’s legs are up.</li><li>Move to about halfway on the timeline, right-click on the track, and select <strong>Insert Key</strong>.</li><li>Set the second keyframe to the sprite where the character’s legs are down.</li><li>Enable animation looping by clicking the loop icon on the right.</li><li>Adjust the animation duration to speed up the movement.</li></ol>
+<p>You can further tweak the keyframes to achieve the desired running effect.</p>
+<h2>Creating the Jump Animation</h2>
+<p>As a challenge, try creating the jump animation using the sprite with the character’s legs in the air. Follow these steps:</p>
+<ol><li>Create a new animation named “jump”.</li><li>Add the texture property track.</li><li>Set the keyframe to the jumping sprite.</li></ol>
+<p>This animation will be a static pose with one leg in the air, indicating that the character is jumping.</p>
+<h2>Understanding Reset Tracks</h2>
+<p>Reset tracks are essential for returning your character to its default state after an animation. Here’s how to use them:</p>
+<ul><li>The reset animation contains default values for all modified properties.</li><li>It ensures that any changes made during an animation can be reset to their original state.</li><li>You can find the reset animation in the dropdown menu next to the animation button.</li></ul>
+<h2>Creating the Jump Animation</h2>
+<p>Let’s start by creating the jump animation:</p>
+<ol><li>Click on the <strong>Animation</strong> button in the Godot editor.</li><li>Select <strong>New</strong> and name the animation jump.</li><li>Since the jump animation will be played and stopped as needed, we do not need to set a duration for it.</li><li>Add a track by selecting our sprite, clicking on the key icon, and then clicking <strong>Create</strong>.</li><li>Select the first keyframe and change its sprite to the one with its legs in the air.</li><li>Save the animation.</li></ol>
+<p>Ensure that you have all three animations: <em>idle</em>, <em>jump</em>, and <em>move</em>. Next, we will script the logic to play these animations based on the player’s state.</p>
+<p><strong>Scripting the Animation Logic</strong></p>
+<p>To play the animations in our script, follow these steps:</p>
+<ol><li>Open the <strong>Script</strong> folder and go to the <strong>Script</strong> window.</li><li>In the <code inert class="gdscript">player.gd</code> script, create a new function called <code inert class="gdscript">_</code><code inert class="gdscript">manage_animation</code>.</li></ol>
+<p>Here is the code for the <code inert class="gdscript">_</code><code inert class="gdscript">manage_animation</code> function:</p>
+<pre><code inert class='gdscript'>func _manage_animation():
+if not is_on_floor():
+anim.play(&quot;jump&quot;)
+elif move_input != 0:
+anim.play(&quot;move&quot;)
+else:
+anim.play(&quot;idle&quot;)
+</code></pre>
+<p>This function checks the player’s state and plays the appropriate animation:</p>
+<ul><li>If the player is not on the floor (i.e., jumping or falling), it plays the jump animation.</li><li>If the player is moving, it plays the move animation.</li><li>Otherwise, it plays the idle animation.</li></ul>
+<h2>Adding the AnimationPlayer Reference</h2>
+<p>To reference the <code inert class="gdscript">AnimationPlayer</code> node, add the following variable at the top of your script:</p>
+<pre><code inert class='gdscript'>@onready var anim : AnimationPlayer = $AnimationPlayer
+</code></pre>
+<h2>Calling the Animation Function</h2>
+<p>Finally, call the <code inert class="gdscript">_</code><code inert class="gdscript">manage_animation</code> function inside the <code inert class="gdscript">_process</code> function to ensure the animations are updated every frame:</p>
+<pre><code inert class='gdscript'>func _process(delta):
+if velocity.x != 0:
+sprite.flip_h = velocity.x &gt; 0
+
+_manage_animation()
+</code></pre>
+<p><strong>Testing the Game</strong></p>
+<p>Now, let’s test the game:</p>
+<ol><li>Go back to your level scene.</li><li>Press the play button.</li><li>Observe the player character. By default, it should display the idle animation. When you move the character, it should play the move animation. When you jump, the jump animation should play.</li></ol>
+<p>If everything is working correctly, your player character should seamlessly transition between the idle, move, and jump animations based on its state. This adds a layer of realism and engagement to your game.</p>
+<p>Congratulations! You have successfully created and managed animations for your player character in Godot. In the next lessons, we will continue to enhance our game by adding more features and functionality.</p>
+      <div class="chips"><span class="chip">Understanding Animations in Godot</span><span class="chip">Setting Up the Animation Player</span><span class="chip">Creating the Idle Animation</span><span class="chip">Creating the Move Animation</span><span class="chip">Creating the Jump Animation</span><span class="chip">Understanding Reset Tracks</span></div>
+      <div class="pager"><a href="2DPlatformer_FlippingthePlayerSprite.html">← Flippingthe Player Sprite</a><span></span></div>
+      <p class="footer">Code blocks keep indentation (tabs→4 spaces). Images appear exactly where the DOCX places them.</p>
+    </main>
+  </div>
+</body>
+</html>

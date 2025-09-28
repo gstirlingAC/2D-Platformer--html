@@ -1,51 +1,109 @@
-<!DOCTYPE html>
-<html lang="en"><head><meta charset="UTF-8">
-<base href="https://gstirlingAC.github.io/2D-Platformer--html">
-<title>2D Platformer — Project Setup</title>
+<!doctype html>
+<html lang="en">
+<head><meta charset="utf-8"><title>2D Platformer – Project Setup</title>
 <style>
-  body { background:#1e1e1e; color:#f0f0f0; font-family:'Segoe UI',sans-serif;
-         max-width:960px; margin:auto; padding:2rem; line-height:1.6; }
-  h1,h2,h3 { color:#4FC3F7; border-bottom:1px solid #333; padding-bottom:.3rem; }
-  p { margin:.7rem 0; }
-  ul { padding-left:1.3rem; }
-  li { margin:.35rem 0; }
-  figure { background:#2b2b2b; border:1px solid #555; border-left:5px solid #81D4FA;
-           padding:1rem; margin:1.1rem 0; }
+  :root {
+    --bg:#0f1217; --panel:#151a22; --muted:#9aa4b2; --text:#e9edf2; --accent:#4FC3F7; --border:#243040;
+    --link:#81D4FA; --chip:#1b2230;
+  }
+  *{box-sizing:border-box}
+  html,body{height:100%}
+  body { margin:0; background:var(--bg); color:var(--text);
+         font-family: "Segoe UI", system-ui, -apple-system, Roboto, Arial, sans-serif; line-height:1.6; }
+  .layout { display:grid; grid-template-columns: 300px 1fr; min-height:100vh; }
+  nav { background:var(--panel); border-right:1px solid var(--border); padding:1rem 1rem 2rem; position:sticky; top:0; height:100vh; overflow:auto; }
+  nav .title { font-weight:800; color:var(--accent); padding:.5rem .4rem .2rem; letter-spacing:.4px; }
+  nav .search { position:sticky; top:0; background:var(--panel); padding:.4rem 0 .8rem; }
+  nav .search input { width:100%; padding:.6rem .7rem; border-radius:10px; border:1px solid var(--border); background:#0f141d; color:var(--text); outline:none; }
+  nav h2 { color:var(--accent); margin:.8rem .4rem .4rem; font-size:1rem; font-weight:700; letter-spacing:.4px; }
+  nav .links a { display:flex; gap:.5rem; align-items:center; padding:.5rem .6rem; margin:.2rem 0; color:var(--text); text-decoration:none; border-radius:.6rem; border:1px solid transparent; }
+  nav .links a:hover { background:#1b2230; border-color:#2b3b51; }
+  nav .links a .num { background:var(--chip); color:var(--muted); font-size:.8rem; padding:.05rem .4rem; border-radius:.4rem; border:1px solid var(--border); }
+  main { padding:2rem; max-width: 980px; width:100%; }
+  main h1 { color:var(--accent); border-bottom:1px solid var(--border); padding-bottom:.35rem; margin-top:0; }
+  main h2, main h3 { color:var(--accent); margin-top:1.2rem; }
+  figure { background:#151a22; border:1px solid var(--border); border-left:4px solid var(--accent);
+           padding:1rem; margin:1.1rem 0; border-radius:.5rem; }
   img { max-width:100%; height:auto; display:block; margin:auto; }
-  figcaption { color:#cfcfcf; font-size:.95rem; margin-top:.45rem; }
-</style></head><body>
-
-<h1>Project Setup</h1>
+  figcaption { color:#c7ced7; font-size:.95rem; margin-top:.45rem; }
+  code, pre code { font-family: "Courier New", Courier, monospace; background:#10151d; color:#dfe7f1; border:1px solid #1f2a3a; }
+  code { padding:.15rem .35rem; border-radius:4px; }
+  pre { background:#10151d; border:1px solid #1f2a3a; padding:1rem; border-radius:6px; overflow:auto; }
+  .footer { color:#c7ced7; font-size:.9rem; margin:2rem 0 0; }
+  .pager { display:flex; gap:.75rem; justify-content:space-between; margin-top:2rem; }
+  .pager a { flex:1; text-align:center; background:#151a22; border:1px solid var(--border); color:var(--link); padding:.75rem; border-radius:.6rem; text-decoration:none; }
+  .pager a:hover { background:#1b2230; border-color:#2b3b51; }
+  .chips { display:flex; flex-wrap:wrap; gap:.35rem; margin:.6rem 0 0; }
+  .chip { font-size:.8rem; background:#1b2230; color:#9aa4b2; padding:.1rem .5rem; border-radius:999px; border:1px solid var(--border); }
+  @media (max-width: 920px) { .layout{grid-template-columns:1fr} nav{position:static;height:auto} }
+</style></head>
+<body>
+  <div class="layout">
+    <nav>
+    <div class="title">2D Platformer</div>
+    <div class="search"><input type="search" id="navSearch" placeholder="Search tutorials…"></div>
+    <h2>Contents</h2>
+    <div class="links" id="navLinks"><a href="2DPlatformer_Introduction.html"><span class="num">01</span><span>Introduction</span></a><a href="2DPlatformer_GameDesign.html"><span class="num">02</span><span>Game Design</span></a><a href="2DPlatformer_ProjectSetup.html" style="background:#1b2230;border-color:#2b3b51;"><span class="num">03</span><span>Project Setup</span></a><a href="2DPlatformer_Tilemap.html"><span class="num">04</span><span>Tilemap</span></a><a href="2DPlatformer_PlayerScene.html"><span class="num">05</span><span>Player Scene</span></a><a href="2DPlatformer_InputMap.html"><span class="num">06</span><span>Input Map</span></a><a href="2DPlatformer_PlayerMovement.html"><span class="num">07</span><span>Player Movement</span></a><a href="2DPlatformer_FlippingthePlayerSprite.html"><span class="num">08</span><span>Flippingthe Player Sprite</span></a><a href="2DPlatformer_PlayerAnimation.html"><span class="num">09</span><span>Player Animation</span></a></div>
+    <script>
+      const q = document.getElementById('navSearch');
+      const linksEls = Array.from(document.querySelectorAll('#navLinks a'));
+      q?.addEventListener('input', () => {
+        const t = q.value.toLowerCase();
+        linksEls.forEach(a => {
+          const label = a.innerText.toLowerCase();
+          a.style.display = label.includes(t) ? '' : 'none';
+        });
+      });
+    </script>
+    </nav>
+    <main>
+      <h1>Project Setup</h1>
 <p>In this lesson, we will walk through the initial steps of creating a new project, organizing your file system, and setting up your first scene. To begin, open Godot and create a new project. The first task is to set up your file system, which involves importing assets and creating the necessary folders for your project.</p>
-
-<h2>Importing Assets</h2>
+<figure><img src="images/image-7.png" alt="Project Setup — Image 7"><figcaption>Project Setup — Image 7</figcaption></figure>
+<p><strong>Importing Assets</strong></p>
+<figure><img src="images/image-8.png" alt="Project Setup — Image 8"><figcaption>Project Setup — Image 8</figcaption></figure>
 <p>Let’s begin by importing our assets. First, navigate to the MyLearning of this course and download the provided zip file. Then, extract the zip file to your computer.</p>
-<figure><img src="./images/image-7.png" alt="Course VLE: download the assets ZIP"><figcaption>Course VLE: download the assets ZIP</figcaption></figure>
-<p>You should see two folders: <strong>Audio</strong> and <strong>Sprites</strong>. The Audio folder contains sound effects for picking up coins and taking damage. The Sprites folder includes subfolders for backgrounds, characters, objects, and tiles.</p>
-<figure><img src="./images/image-9.png" alt="Extracted folders: Audio and Sprites"><figcaption>Extracted folders: Audio and Sprites</figcaption></figure>
+<figure><img src="images/image-9.png" alt="Project Setup — Image 9"><figcaption>Project Setup — Image 9</figcaption></figure>
+<p></p>
+<figure><img src="images/image-10.png" alt="Project Setup — Image 10"><figcaption>Project Setup — Image 10</figcaption></figure>
+<p>You should see two folders: Audio and Sprites. The Audio folder contains sound effects for picking up coins and taking damage. The Sprites folder includes subfolders for backgrounds, characters, objects, and tiles.</p>
+<figure><img src="images/image-11.png" alt="Project Setup — Image 11"><figcaption>Project Setup — Image 11</figcaption></figure>
+<p></p>
+<figure><img src="images/image-12.png" alt="Project Setup — Image 12"><figcaption>Project Setup — Image 12</figcaption></figure>
 <p>To import these assets into your Godot project, click and drag the Audio and Sprites folders into the FileSystem dock in Godot.</p>
-<figure><img src="./images/image-10.png" alt="Drag and drop assets folders into FileSystem"><figcaption>Drag and drop assets folders into FileSystem</figcaption></figure>
+<figure><img src="images/image-13.png" alt="Project Setup — Image 13"><figcaption>Project Setup — Image 13</figcaption></figure>
+<p></p>
+<figure><img src="images/image-14.png" alt="Project Setup — Image 14"><figcaption>Project Setup — Image 14</figcaption></figure>
 <p>Ensure that the folders are correctly imported and contain the respective files.</p>
-<figure><img src="./images/image-11.png" alt="Audio and Sprites visible in FileSystem"><figcaption>Audio and Sprites visible in FileSystem</figcaption></figure>
-
-<h2>Creating Necessary Folders</h2>
+<figure><img src="images/image-15.png" alt="Project Setup — Image 15"><figcaption>Project Setup — Image 15</figcaption></figure>
+<p></p>
+<figure><img src="images/image-16.png" alt="Project Setup — Image 16"><figcaption>Project Setup — Image 16</figcaption></figure>
+<p><strong>Creating Necessary Folders</strong></p>
+<figure><img src="images/image-17.png" alt="Project Setup — Image 17"><figcaption>Project Setup — Image 17</figcaption></figure>
 <p>Next, create two additional folders for your project:</p>
-<ul><li><strong>Scripts</strong>: This folder will store all your code files.</li>
-<li><strong>Scenes</strong>: This folder will store various scenes, such as the player scene, coin scene, enemy scene, levels, menu, and end flag.</li></ul>
-<p>To create these folders, right-click in the FileSystem dock and select <em>New Folder</em>.</p>
-<figure><img src="./images/image-12.png" alt="Right-click to create a new folder"><figcaption>Right-click to create a new folder</figcaption></figure><figure><img src="./images/image-13.png" alt="Name the new folder and click OK"><figcaption>Name the new folder and click OK</figcaption></figure><figure><img src="./images/image-14.png" alt="Result: Scenes and Scripts folders created"><figcaption>Result: Scenes and Scripts folders created</figcaption></figure>
-
-<h2>Setting Up Your First Scene</h2>
-<p>Now, let’s create your first scene, which will be for Level 1. In the top left corner, open the Scene dock. Since this is a new project, choose <strong>2D Scene</strong> as the root node for your scene.</p>
-<figure><img src="./images/image-15.png" alt="Create new root node: 2D Scene"><figcaption>Create new root node: 2D Scene</figcaption></figure>
-<p>Name the root node <strong>Main</strong> for consistency.</p>
-<figure><img src="./images/image-16.png" alt="Root node renamed to Main"><figcaption>Root node renamed to Main</figcaption></figure>
-<p>Save the scene by pressing <kbd>Ctrl</kbd> + <kbd>S</kbd> or going to <em>Scene &gt; Save Scene</em>. Navigate to the Scenes folder and save the scene as <code>level_1.tscn</code>.</p>
-<figure><img src="./images/image-8.png" alt="Save Scene As: res://Scenes/level_1.tscn"><figcaption>Save Scene As: res://Scenes/level_1.tscn</figcaption></figure>
-<p>If you need to reopen your scene at any point now, simply navigate to the Scenes folder in the FileSystem dock. Then, double-click on <code>level_1.tscn</code> to open it.</p>
-<figure><img src="./images/image-17.png" alt="Scenes folder showing level_1.tscn"><figcaption>Scenes folder showing level_1.tscn</figcaption></figure>
-
-<h2>Next Steps</h2>
+<ul><li>Scripts: This folder will store all your code files.</li><li>Scenes: This folder will store various scenes, such as the player scene, coin scene, enemy scene, levels, menu, and end flag.</li></ul>
+<p>To create these folders, right-click in the FileSystem dock and select New Folder.</p>
+<p></p>
+<p>Name the folder and click <strong>OK </strong>to create it.</p>
+<p></p>
+<p>Per the above, create two folders. Name the first folderScripts, and the second Scenes.</p>
+<p></p>
+<p><strong>Setting Up Your First Scene</strong></p>
+<p>Now, let’s create your first scene, which will be for Level 1. In the top left corner, open the Scene dock. Since this is a new project, choose 2D Scene as the root node for your scene.</p>
+<p></p>
+<p>Name the root node Main for consistency.</p>
+<p></p>
+<p>Save the scene by pressing Ctrl + S or going to Scene &gt; Save Scene. Navigate to the Scenes folder and save the scene as level_1.tscn.</p>
+<p></p>
+<p>If you need to reopen your scene at any point now, simply navigate to the Scenes folder in the FileSystem dock. Then, double-click on level_1.tscn to open it.</p>
+<p></p>
+<p><strong>Next Steps</strong></p>
 <p>In the next lesson, we will set up the environment for Level 1. This includes adding a background and setting up the tile map level. We will then proceed to add the player, enemies, coins, end flag, and other necessary elements for your game.</p>
-
-</body></html>
+<p></p>
+      <div class="chips"></div>
+      <div class="pager"><a href="2DPlatformer_GameDesign.html">← Game Design</a><a href="2DPlatformer_Tilemap.html">Tilemap →</a></div>
+      <p class="footer">Images are relative (images/). Code blocks are grouped and formatted as GDScript.</p>
+    </main>
+  </div>
+</body>
+</html>

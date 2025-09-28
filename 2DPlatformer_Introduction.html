@@ -1,42 +1,75 @@
-<!DOCTYPE html>
-<html lang="en"><head><meta charset="UTF-8">
-<base href="https://gstirlingAC.github.io/2D-Platformer--html">
-<title>2D Platformer — Introduction</title>
+<!doctype html>
+<html lang="en">
+<head><meta charset="utf-8"><title>2D Platformer – Introduction</title>
 <style>
-  body { background:#1e1e1e; color:#f0f0f0; font-family:'Segoe UI',sans-serif;
-         max-width:960px; margin:auto; padding:2rem; line-height:1.6; }
-  h1,h2,h3 { color:#4FC3F7; border-bottom:1px solid #333; padding-bottom:.3rem; }
-  p { margin:.7rem 0; }
-  ul { padding-left:1.3rem; }
-  li { margin:.35rem 0; }
-  figure { background:#2b2b2b; border:1px solid #555; border-left:5px solid #81D4FA;
-           padding:1rem; margin:1.1rem 0; }
+  :root {
+    --bg:#0f1217; --panel:#151a22; --muted:#9aa4b2; --text:#e9edf2; --accent:#4FC3F7; --border:#243040;
+    --link:#81D4FA; --chip:#1b2230;
+  }
+  *{box-sizing:border-box}
+  html,body{height:100%}
+  body { margin:0; background:var(--bg); color:var(--text);
+         font-family: "Segoe UI", system-ui, -apple-system, Roboto, Arial, sans-serif; line-height:1.6; }
+  .layout { display:grid; grid-template-columns: 300px 1fr; min-height:100vh; }
+  nav { background:var(--panel); border-right:1px solid var(--border); padding:1rem 1rem 2rem; position:sticky; top:0; height:100vh; overflow:auto; }
+  nav .title { font-weight:800; color:var(--accent); padding:.5rem .4rem .2rem; letter-spacing:.4px; }
+  nav .search { position:sticky; top:0; background:var(--panel); padding:.4rem 0 .8rem; }
+  nav .search input { width:100%; padding:.6rem .7rem; border-radius:10px; border:1px solid var(--border); background:#0f141d; color:var(--text); outline:none; }
+  nav h2 { color:var(--accent); margin:.8rem .4rem .4rem; font-size:1rem; font-weight:700; letter-spacing:.4px; }
+  nav .links a { display:flex; gap:.5rem; align-items:center; padding:.5rem .6rem; margin:.2rem 0; color:var(--text); text-decoration:none; border-radius:.6rem; border:1px solid transparent; }
+  nav .links a:hover { background:#1b2230; border-color:#2b3b51; }
+  nav .links a .num { background:var(--chip); color:var(--muted); font-size:.8rem; padding:.05rem .4rem; border-radius:.4rem; border:1px solid var(--border); }
+  main { padding:2rem; max-width: 980px; width:100%; }
+  main h1 { color:var(--accent); border-bottom:1px solid var(--border); padding-bottom:.35rem; margin-top:0; }
+  main h2, main h3 { color:var(--accent); margin-top:1.2rem; }
+  figure { background:#151a22; border:1px solid var(--border); border-left:4px solid var(--accent);
+           padding:1rem; margin:1.1rem 0; border-radius:.5rem; }
   img { max-width:100%; height:auto; display:block; margin:auto; }
-  figcaption { color:#cfcfcf; font-size:.95rem; margin-top:.45rem; }
-</style></head><body>
-
-<h1>Introduction</h1>
+  figcaption { color:#c7ced7; font-size:.95rem; margin-top:.45rem; }
+  code, pre code { font-family: "Courier New", Courier, monospace; background:#10151d; color:#dfe7f1; border:1px solid #1f2a3a; }
+  code { padding:.15rem .35rem; border-radius:4px; }
+  pre { background:#10151d; border:1px solid #1f2a3a; padding:1rem; border-radius:6px; overflow:auto; }
+  .footer { color:#c7ced7; font-size:.9rem; margin:2rem 0 0; }
+  .pager { display:flex; gap:.75rem; justify-content:space-between; margin-top:2rem; }
+  .pager a { flex:1; text-align:center; background:#151a22; border:1px solid var(--border); color:var(--link); padding:.75rem; border-radius:.6rem; text-decoration:none; }
+  .pager a:hover { background:#1b2230; border-color:#2b3b51; }
+  .chips { display:flex; flex-wrap:wrap; gap:.35rem; margin:.6rem 0 0; }
+  .chip { font-size:.8rem; background:#1b2230; color:#9aa4b2; padding:.1rem .5rem; border-radius:999px; border:1px solid var(--border); }
+  @media (max-width: 920px) { .layout{grid-template-columns:1fr} nav{position:static;height:auto} }
+</style></head>
+<body>
+  <div class="layout">
+    <nav>
+    <div class="title">2D Platformer</div>
+    <div class="search"><input type="search" id="navSearch" placeholder="Search tutorials…"></div>
+    <h2>Contents</h2>
+    <div class="links" id="navLinks"><a href="2DPlatformer_Introduction.html" style="background:#1b2230;border-color:#2b3b51;"><span class="num">01</span><span>Introduction</span></a><a href="2DPlatformer_GameDesign.html"><span class="num">02</span><span>Game Design</span></a><a href="2DPlatformer_ProjectSetup.html"><span class="num">03</span><span>Project Setup</span></a><a href="2DPlatformer_Tilemap.html"><span class="num">04</span><span>Tilemap</span></a><a href="2DPlatformer_PlayerScene.html"><span class="num">05</span><span>Player Scene</span></a><a href="2DPlatformer_InputMap.html"><span class="num">06</span><span>Input Map</span></a><a href="2DPlatformer_PlayerMovement.html"><span class="num">07</span><span>Player Movement</span></a><a href="2DPlatformer_FlippingthePlayerSprite.html"><span class="num">08</span><span>Flippingthe Player Sprite</span></a><a href="2DPlatformer_PlayerAnimation.html"><span class="num">09</span><span>Player Animation</span></a></div>
+    <script>
+      const q = document.getElementById('navSearch');
+      const linksEls = Array.from(document.querySelectorAll('#navLinks a'));
+      q?.addEventListener('input', () => {
+        const t = q.value.toLowerCase();
+        linksEls.forEach(a => {
+          const label = a.innerText.toLowerCase();
+          a.style.display = label.includes(t) ? '' : 'none';
+        });
+      });
+    </script>
+    </nav>
+    <main>
+      <h1>Introduction</h1>
 <p>Welcome to our beginner-friendly project on creating a 2D platformer game using the Godot engine. Together, we will build a complete 2D platformer game from scratch, incorporating essential game mechanics and polishing elements to make the game engaging and exciting.</p>
-
-<h2>Project Overview</h2>
-<p>Throughout this project, you will learn how to:</p>
-<ul>
-  <li>Set up and control a player character using keyboard inputs.</li>
-  <li>Create enemies with basic AI movements.</li>
-  <li>Implement a health system for the player.</li>
-  <li>Design a coin collection system to increase the player’s score.</li>
-  <li>Manage persistent data to transfer information across different scenes.</li>
-  <li>Set up end flags to teleport the player to the next level.</li>
-</ul>
-
-<h2>Game Mechanics</h2>
-<ul>
-  <li><strong>Player Movement:</strong> The player will be able to move using the arrow keys and jump using the up arrow or spacebar.</li>
-  <li><strong>Enemy AI:</strong> Enemies will move back and forth between two positions, and the player must avoid them to prevent taking damage.</li>
-  <li><strong>Health System:</strong> The player will have a limited number of hearts, representing their health.</li>
-  <li><strong>Coin Collection:</strong> Coins will be scattered throughout the level and collecting them will increase the player’s score.</li>
-  <li><strong>Persistent Data:</strong> We will manage data transfer across scenes, such as the player’s score.</li>
-  <li><strong>End Flags:</strong> These will teleport the player to the next level upon contact.</li>
-</ul>
-
-</body></html>
+<p><strong>Course Overview</strong></p>
+<p>Throughout this course, you will learn how to:</p>
+<ul><li>Set up and control a player character using keyboard inputs.</li><li>Create enemies with basic AI movements.</li><li>Implement a health system for the player.</li><li>Design a coin collection system to increase the player’s score.</li><li>Manage persistent data to transfer information across different scenes.</li><li>Set up end flags to teleport the player to the next level.</li></ul>
+<p><strong>Game Mechanics</strong></p>
+<p>The game will feature the following mechanics:</p>
+<ul><li><strong>Player Movement:</strong> The player will be able to move using the arrow keys and jump using the up arrow or spacebar.</li><li><strong>Enemy AI:</strong> Enemies will move back and forth between two positions, and the player must avoid them to prevent taking damage.</li><li><strong>Health System:</strong> The player will have a limited number of hearts, representing their health.</li><li><strong>Coin Collection:</strong> Coins will be scattered throughout the level and collecting them will increase the player’s score.</li><li><strong>Persistent Data:</strong> We will manage data transfer across scenes, such as the player’s score.</li><li><strong>End Flags:</strong> These will teleport the player to the next level upon contact.</li></ul>
+<p></p>
+      <div class="chips"></div>
+      <div class="pager"><span></span><a href="2DPlatformer_GameDesign.html">Game Design →</a></div>
+      <p class="footer">Images are relative (images/). Code blocks are grouped and formatted as GDScript.</p>
+    </main>
+  </div>
+</body>
+</html>
