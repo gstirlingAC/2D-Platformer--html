@@ -20,57 +20,57 @@
 
 <h2>Creating a Tile Map Layer</h2>
 <p>To start, we need to create a tile map layer. This node is where we will paint our tile map. Click on the plus icon at the top left corner of the Godot interface.</p>
-<figure><img src="images/image-18.png" alt="Add a node"><figcaption>Add a node</figcaption></figure>
+<figure><img src="./images/image-18.png" alt="Add a node"><figcaption>Add a node</figcaption></figure>
 <p>In the ‘Create New Node’ window, search for and select ‘TileMapLayer‘ and hit Create. Note that ‘TileMap‘ is a deprecated node used in older versions of Godot – so don’t use it!</p>
-<figure><img src="images/image-19.png" alt="Create TileMapLayer node"><figcaption>Create TileMapLayer node</figcaption></figure>
+<figure><img src="./images/image-19.png" alt="Create TileMapLayer node"><figcaption>Create TileMapLayer node</figcaption></figure>
 
 <h2>Setting Up the Tile Set</h2>
 <p>Next, we need to define a tile set, which specifies the tiles we can use. To begin, open the file system and navigate to the ‘Sprites’ folder, then to the ‘Tiles’ folder. Right-click on the ‘Tiles’ folder and select Create New &gt; Resource.</p>
-<figure><img src="images/image-20.png" alt="Create New Resource in Sprites/Tiles"><figcaption>Create New Resource in Sprites/Tiles</figcaption></figure>
+<figure><img src="./images/image-20.png" alt="Create New Resource in Sprites/Tiles"><figcaption>Create New Resource in Sprites/Tiles</figcaption></figure>
 <p>In the ‘Create New Resource’ window, search for and select the TileSet option.</p>
-<figure><img src="images/image-21.png" alt="Select TileSet resource"><figcaption>Select TileSet resource</figcaption></figure>
+<figure><img src="./images/image-21.png" alt="Select TileSet resource"><figcaption>Select TileSet resource</figcaption></figure>
 <p>Name your tile set and save it.</p>
-<figure><img src="images/image-22.png" alt="Save the TileSet resource"><figcaption>Save the TileSet resource</figcaption></figure>
+<figure><img src="./images/image-22.png" alt="Save the TileSet resource"><figcaption>Save the TileSet resource</figcaption></figure>
 <p>Double-click the tile set to open it in the bottom window. Click the ‘TileSet’ tab button to the left of the TileMap. Then, drag your PNG file (e.g., ’tiles_packed’ tile map) into the ‘Tile Sources’ section.</p>
-<figure><img src="images/image-23.png" alt="Drag tiles PNG into Tile Sources"><figcaption>Drag tiles PNG into Tile Sources</figcaption></figure>
+<figure><img src="./images/image-23.png" alt="Drag tiles PNG into Tile Sources"><figcaption>Drag tiles PNG into Tile Sources</figcaption></figure>
 <p>Confirm the creation of a new atlas for these sprites.</p>
-<figure><img src="images/image-24.png" alt="Auto-create tiles prompt: Yes"><figcaption>Auto-create tiles prompt: Yes</figcaption></figure>
+<figure><img src="./images/image-24.png" alt="Auto-create tiles prompt: Yes"><figcaption>Auto-create tiles prompt: Yes</figcaption></figure>
 <p><em>Note:</em> The Tile Set can also be created directly in the Inspector, and it can be saved to disk by expanding the options and clicking on “Save” or “Save as”:</p>
-<figure><img src="images/image-25.png" alt="Inspector: save or save-as the TileSet"><figcaption>Inspector: save or save-as the TileSet</figcaption></figure>
+<figure><img src="./images/image-25.png" alt="Inspector: save or save-as the TileSet"><figcaption>Inspector: save or save-as the TileSet</figcaption></figure>
 
 <h2>Adjusting Tile Dimensions</h2>
 <p>You might notice that the tiles are not the correct dimensions. To fix this, go to the ‘Texture Region Size’ in the tile set settings. From here, you can change the dimensions from 16×16 pixels to 18×18 pixels.</p>
-<figure><img src="images/image-26.png" alt="TileSet: Texture Region Size 18x18"><figcaption>TileSet: Texture Region Size 18x18</figcaption></figure>
+<figure><img src="./images/image-26.png" alt="TileSet: Texture Region Size 18x18"><figcaption>TileSet: Texture Region Size 18x18</figcaption></figure>
 <p>Ensure the tile set property in the inspector is also set to 18×18 pixels.</p>
-<figure><img src="images/image-27.png" alt="Inspector: Tile Size 18x18"><figcaption>Inspector: Tile Size 18x18</figcaption></figure>
+<figure><img src="./images/image-27.png" alt="Inspector: Tile Size 18x18"><figcaption>Inspector: Tile Size 18x18</figcaption></figure>
 
 <h2>Adding Collision Properties</h2>
 <p>Next, we need to add collisions to our tiles. To do so, in the TileSet window, select Paint. Then, from the ‘property editor’ dropdown, select Physics Layer 0.</p>
-<figure><img src="images/image-29.png" alt="Paint mode: choose Physics Layer 0"><figcaption>Paint mode: choose Physics Layer 0</figcaption></figure>
+<figure><img src="./images/image-29.png" alt="Paint mode: choose Physics Layer 0"><figcaption>Paint mode: choose Physics Layer 0</figcaption></figure>
 <p>Now, we can use the paint tool to apply the physics layer to the tiles that need collision. When painting physics polygons onto the tiles, the polygon on the left-hand side of the window is what is applied to the clicked tiles (1 in the image below). If you accidentally click on a tile and would like to erase it, you can click on the 3-dot menu (2 in the image below) and click on ‘Clear’ to clear the shape. Then you can click on tiles to apply the empty shape. Once you are done, you can use the ‘Reset to default tile shape’ option in the same menu to continue applying shapes to other tiles.</p>
-<figure><img src="images/image-30.png" alt="Painting physics polygons and clearing shapes"><figcaption>Painting physics polygons and clearing shapes</figcaption></figure>
+<figure><img src="./images/image-30.png" alt="Painting physics polygons and clearing shapes"><figcaption>Painting physics polygons and clearing shapes</figcaption></figure>
 
 <h2>Painting Tiles in the Scene</h2>
 <p>Now, with our tile set setup, let’s paint the tiles in our scene. First, select the ‘TileMapLayer’ node.</p>
-<figure><img src="images/image-31.png" alt="Select TileMapLayer node in Scene"><figcaption>Select TileMapLayer node in Scene</figcaption></figure>
+<figure><img src="./images/image-31.png" alt="Select TileMapLayer node in Scene"><figcaption>Select TileMapLayer node in Scene</figcaption></figure>
 <p>In the Inspector, drag your tile set into the ‘Tile Set’ property.</p>
-<figure><img src="images/image-32.png" alt="Assign TileSet to TileMapLayer"><figcaption>Assign TileSet to TileMapLayer</figcaption></figure>
+<figure><img src="./images/image-32.png" alt="Assign TileSet to TileMapLayer"><figcaption>Assign TileSet to TileMapLayer</figcaption></figure>
 <p>Use the ‘TileMap’ window at the bottom to select and paint tiles in your scene. Use the eraser tool (shortcut: E) to erase tiles if needed. You can also use the rect tool to paint large areas and the line tool to draw lines between points.</p>
-<figure><img src="images/image-33.png" alt="TileMap painting tools toolbar"><figcaption>TileMap painting tools toolbar</figcaption></figure>
+<figure><img src="./images/image-33.png" alt="TileMap painting tools toolbar"><figcaption>TileMap painting tools toolbar</figcaption></figure>
 <p>You may notice while painting that your sprites probably look blurry.</p>
-<figure><img src="images/image-34.png" alt="Example of blurry sprites while painting"><figcaption>Example of blurry sprites while painting</figcaption></figure>
+<figure><img src="./images/image-34.png" alt="Example of blurry sprites while painting"><figcaption>Example of blurry sprites while painting</figcaption></figure>
 <p>To fix this, you need to adjust the texture filter settings. Go to ‘Project’ &gt; ‘Project Settings’.</p>
-<figure><img src="images/image-35.png" alt="Open Project Settings"><figcaption>Open Project Settings</figcaption></figure>
+<figure><img src="./images/image-35.png" alt="Open Project Settings"><figcaption>Open Project Settings</figcaption></figure>
 <p>Navigate to ‘Rendering’ &gt; ‘Textures’, and change the ‘Default Texture Filter’ from ‘Linear’ to ‘Nearest’.</p>
-<figure><img src="images/image-36.png" alt="Set Default Texture Filter to Nearest"><figcaption>Set Default Texture Filter to Nearest</figcaption></figure>
+<figure><img src="./images/image-36.png" alt="Set Default Texture Filter to Nearest"><figcaption>Set Default Texture Filter to Nearest</figcaption></figure>
 <p>At this point, go forward and design your level however you wish. There are no right or wrong answers!</p>
-<figure><img src="images/image-37.png" alt="Example level layout"><figcaption>Example level layout</figcaption></figure>
+<figure><img src="./images/image-37.png" alt="Example level layout"><figcaption>Example level layout</figcaption></figure>
 
 <h2>Setting Up the Background</h2>
 <p>Finally, let’s add a background to our scene. Drag your background image (e.g., ‘backgroundForest’) into the scene.</p>
-<figure><img src="images/image-28.png" alt="Drag background image into the scene"><figcaption>Drag background image into the scene</figcaption></figure>
+<figure><img src="./images/image-28.png" alt="Drag background image into the scene"><figcaption>Drag background image into the scene</figcaption></figure>
 <p>For organization, rename the background node to ‘BackgroundSprite’.</p>
-<figure><img src="images/image-38.png" alt="BackgroundSprite node in the Scene tree"><figcaption>BackgroundSprite node in the Scene tree</figcaption></figure>
+<figure><img src="./images/image-38.png" alt="BackgroundSprite node in the Scene tree"><figcaption>BackgroundSprite node in the Scene tree</figcaption></figure>
 <p>Congratulations! You have now set up your tile map and background. In the next lesson, we will start creating our player.</p>
 
 </body></html>
