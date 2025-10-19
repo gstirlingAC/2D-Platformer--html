@@ -1,0 +1,91 @@
+<!doctype html>
+<html lang="en"><head><meta charset="utf-8"><title>2D Platformer – Scoring</title>
+<style>
+  :root { --bg:#0f1217; --panel:#151a22; --muted:#9aa4b2; --text:#e9edf2; --accent:#4FC3F7; --border:#243040; --link:#81D4FA; --chip:#1b2230; }
+  *{box-sizing:border-box}
+  html,body{height:100%}
+  body { margin:0; background:var(--bg); color:var(--text);
+         font-family: "Segoe UI", system-ui, -apple-system, Roboto, Arial, sans-serif; line-height:1.6; }
+  .layout { display:grid; grid-template-columns: 300px 1fr; min-height:100vh; }
+  nav { background:var(--panel); border-right:1px solid var(--border); padding:1rem 1rem 2rem; position:sticky; top:0; height:100vh; overflow:auto; }
+  nav .title { font-weight:800; color:var(--accent); padding:.5rem .4rem .2rem; letter-spacing:.4px; }
+  nav .search { position:sticky; top:0; background:var(--panel); padding:.4rem 0 .8rem; }
+  nav .search input { width:100%; padding:.6rem .7rem; border-radius:10px; border:1px solid var(--border); background:#0f141d; color:#e9edf2; outline:none; }
+  nav h2 { color:var(--accent); margin:.8rem .4rem .4rem; font-size:1rem; font-weight:700; letter-spacing:.4px; }
+  nav .links a { display:flex; gap:.5rem; align-items:center; padding:.5rem .6rem; margin:.2rem 0; color:var(--text); text-decoration:none; border-radius:.6rem; border:1px solid transparent; }
+  nav .links a:hover { background:#1b2230; border-color:#2b3b51; }
+  nav .links a .num { background:var(--chip); color:var(--muted); font-size:.8rem; padding:.05rem .4rem; border-radius:.4rem; border:1px solid var(--border); }
+  main { padding:2rem; max-width: 980px; width:100%; }
+  main h1 { color:var(--accent); border-bottom:1px solid var(--border); padding-bottom:.35rem; margin-top:0; }
+  main h2, main h3 { color:var(--accent); margin-top:1.2rem; }
+  figure { background:#151a22; border:1px solid var(--border); border-left:4px solid var(--accent);
+           padding:1rem; margin:1.1rem 0; border-radius:.5rem; }
+  img { max-width:100%; height:auto; display:block; margin:auto; }
+  figcaption { color:#c7ced7; font-size:.95rem; margin-top:.45rem; }
+  ol{list-style:decimal;margin-left:1.5rem;padding-left:1rem}
+  ul{list-style:disc;margin-left:1.5rem;padding-left:1rem}
+  li{margin:.25rem 0}
+  pre { background: #1b1f2a; border: 1px solid #2a3345; border-radius: 6px; padding:1rem; overflow:auto; }
+  code.gdscript { font-family: "JetBrains Mono", "Fira Code", "Courier New", monospace; font-size: 0.95rem; color: #e9edf2; tab-size: 4; white-space: pre; }
+  .footer { color:#c7ced7; font-size:.9rem; margin:2rem 0 0; }
+  .pager { display:flex; gap:.75rem; justify-content:space-between; margin-top:2rem; }
+  .pager a { flex:1; text-align:center; background:#151a22; border:1px solid var(--border); color:#81D4FA; padding:.75rem; border-radius:.6rem; text-decoration:none; }
+  .chips { display:flex; flex-wrap:wrap; gap:.35rem; margin:.6rem 0 0; }
+  .chip { font-size:.8rem; background:#1b2230; color:#9aa4b2; padding:.1rem .5rem; border-radius:999px; border:1px solid var(--border); }
+  @media (max-width: 920px) { .layout{grid-template-columns:1fr} nav{position:static;height:auto} }
+</style></head>
+<body>
+  <div class="layout">
+    <nav>
+    <div class="title">2D Platformer</div>
+    <div class="search"><input type="search" id="navSearch" placeholder="Search tutorials…"></div>
+    <h2>Contents</h2>
+    <div class="links" id="navLinks"><a href="2DPlatformer_Introduction.html"><span class="num">01</span><span>Introduction</span></a><a href="2DPlatformer_GameDesign.html"><span class="num">02</span><span>GameDesign</span></a><a href="2DPlatformer_ProjectSetup.html"><span class="num">03</span><span>ProjectSetup</span></a><a href="2DPlatformer_Tilemap.html"><span class="num">04</span><span>Tilemap</span></a><a href="2DPlatformer_PlayerScene.html"><span class="num">05</span><span>PlayerScene</span></a><a href="2DPlatformer_InputMap.html"><span class="num">06</span><span>InputMap</span></a><a href="2DPlatformer_PlayerMovement.html"><span class="num">07</span><span>PlayerMovement</span></a><a href="2DPlatformer_FlippingthePlayerSprite.html"><span class="num">08</span><span>FlippingthePlayerSprite</span></a><a href="2DPlatformer_PlayerAnimation.html"><span class="num">09</span><span>PlayerAnimation</span></a><a href="2DPlatformer_Enemy.html"><span class="num">10</span><span>Enemy</span></a><a href="2DPlatformer_TakingDamage.html"><span class="num">11</span><span>TakingDamage</span></a><a href="2DPlatformer_Coin.html"><span class="num">12</span><span>Coin</span></a><a href="2DPlatformer_Scoring.html" style="background:#1b2230;border-color:#2b3b51;"><span class="num">13</span><span>Scoring</span></a><a href="2DPlatformer_EndFlag.html"><span class="num">14</span><span>EndFlag</span></a></div>
+    <script>
+      const q = document.getElementById('navSearch');
+      const links = Array.from(document.querySelectorAll('#navLinks a'));
+      q?.addEventListener('input', () => {
+        const t = q.value.toLowerCase();
+        links.forEach(a => a.style.display = a.innerText.toLowerCase().includes(t) ? '' : 'none');
+      });
+    </script></nav>
+    <main>
+      <h1>Scoring</h1>
+<p>In this tutorial, we will set up a scoring system for our game. Unlike health points, which reset with each level, we want our scoring system to persist across all levels. To achieve this, we will use an auto-load script, also known as a singleton. This script will exist outside of our scene hierarchy and maintain its values across different scenes.</p>
+<p>Why Use an Auto-Load Script?</p>
+<p>Using an auto-load script is crucial for maintaining persistent data across scenes. Here’s why:</p>
+<p>If we store the score in the player script, it will reset every time we load a new scene.</p>
+<p>An auto-load script exists outside the scene hierarchy, ensuring that the score remains consistent across all levels.</p>
+<p>Creating an Auto-Load Script</p>
+<p>To create an auto-load script, go to Project -&gt; Project Settings.</p>
+<figure><img src="images/image-108.png" alt="Scoring — Image 108"><figcaption>Scoring — Image 108</figcaption></figure>
+<p>From here, navigate to the Globals tab. In the Node Name field, enter PlayerStats. This name will be used to access the script in our code. Click Add to add the script.</p>
+<figure><img src="images/image-109.png" alt="Scoring — Image 109"><figcaption>Scoring — Image 109</figcaption></figure>
+<p>When prompted, choose the Scripts folder to save the new script.</p>
+<figure><img src="images/image-110.png" alt="Scoring — Image 110"><figcaption>Scoring — Image 110</figcaption></figure>
+<p>This will create a new script file named PlayerStats.gd. and add it to the Autoload list.</p>
+<figure><img src="images/image-111.png" alt="Scoring — Image 111"><figcaption>Scoring — Image 111</figcaption></figure>
+<p>Defining the Score Variable</p>
+<p>Open the newly created PlayerStats.gd script and define a score variable:</p>
+<pre><code inert class='gdscript'>extends Node</code></pre>
+<pre><code inert class='gdscript'>var score : int = 0</code></pre>
+<p>Accessing the Score Variable</p>
+<p>To access and modify the score variable from another script, such as the player script, follow these steps:</p>
+<p>Open the player script (player.gd).</p>
+<p>Locate the increase_score function and modify it to update the score variable in the PlayerStats script:</p>
+<pre><code inert class='gdscript'>func increase_score(amount : int):</code></pre>
+<p>PlayerStats.score += amount</p>
+<p>print(PlayerStats.score)</p>
+<p>Testing the Scoring System</p>
+<p>Let’s test our scoring system to ensure it works as expected. First, play the game and collect coins. Observe the output to see the score incrementing.</p>
+<figure><img src="images/image-112.png" alt="Scoring — Image 112"><figcaption>Scoring — Image 112</figcaption></figure>
+<p>Restart the scene by letting the player character die (e.g., by hitting an enemy three times). Collect more coins and verify that the score continues to increment from the previous value, indicating that the score persists across scenes.</p>
+<figure><img src="images/image-113.png" alt="Scoring — Image 113"><figcaption>Scoring — Image 113</figcaption></figure>
+<p>By following these steps, you have successfully created a persistent scoring system using an auto-load script. This ensures that the player’s score is maintained across different levels, enhancing the gameplay experience.</p>
+<p>In future tutorials, we will explore how to reset the score when the game restarts and implement additional features to enhance our scoring system.</p>
+      <div class="chips"></div>
+      <div class="pager"><a href="2DPlatformer_Coin.html">← Coin</a><a href="2DPlatformer_EndFlag.html">EndFlag →</a></div>
+      <p class="footer">Code indentation preserved where detected. Images load from /images/.</p>
+    </main>
+  </div>
+</body></html>

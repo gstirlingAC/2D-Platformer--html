@@ -1,0 +1,133 @@
+<!doctype html>
+<html lang="en"><head><meta charset="utf-8"><title>2D Platformer – Coin</title>
+<style>
+  :root { --bg:#0f1217; --panel:#151a22; --muted:#9aa4b2; --text:#e9edf2; --accent:#4FC3F7; --border:#243040; --link:#81D4FA; --chip:#1b2230; }
+  *{box-sizing:border-box}
+  html,body{height:100%}
+  body { margin:0; background:var(--bg); color:var(--text);
+         font-family: "Segoe UI", system-ui, -apple-system, Roboto, Arial, sans-serif; line-height:1.6; }
+  .layout { display:grid; grid-template-columns: 300px 1fr; min-height:100vh; }
+  nav { background:var(--panel); border-right:1px solid var(--border); padding:1rem 1rem 2rem; position:sticky; top:0; height:100vh; overflow:auto; }
+  nav .title { font-weight:800; color:var(--accent); padding:.5rem .4rem .2rem; letter-spacing:.4px; }
+  nav .search { position:sticky; top:0; background:var(--panel); padding:.4rem 0 .8rem; }
+  nav .search input { width:100%; padding:.6rem .7rem; border-radius:10px; border:1px solid var(--border); background:#0f141d; color:#e9edf2; outline:none; }
+  nav h2 { color:var(--accent); margin:.8rem .4rem .4rem; font-size:1rem; font-weight:700; letter-spacing:.4px; }
+  nav .links a { display:flex; gap:.5rem; align-items:center; padding:.5rem .6rem; margin:.2rem 0; color:var(--text); text-decoration:none; border-radius:.6rem; border:1px solid transparent; }
+  nav .links a:hover { background:#1b2230; border-color:#2b3b51; }
+  nav .links a .num { background:var(--chip); color:var(--muted); font-size:.8rem; padding:.05rem .4rem; border-radius:.4rem; border:1px solid var(--border); }
+  main { padding:2rem; max-width: 980px; width:100%; }
+  main h1 { color:var(--accent); border-bottom:1px solid var(--border); padding-bottom:.35rem; margin-top:0; }
+  main h2, main h3 { color:var(--accent); margin-top:1.2rem; }
+  figure { background:#151a22; border:1px solid var(--border); border-left:4px solid var(--accent);
+           padding:1rem; margin:1.1rem 0; border-radius:.5rem; }
+  img { max-width:100%; height:auto; display:block; margin:auto; }
+  figcaption { color:#c7ced7; font-size:.95rem; margin-top:.45rem; }
+  ol{list-style:decimal;margin-left:1.5rem;padding-left:1rem}
+  ul{list-style:disc;margin-left:1.5rem;padding-left:1rem}
+  li{margin:.25rem 0}
+  pre { background: #1b1f2a; border: 1px solid #2a3345; border-radius: 6px; padding:1rem; overflow:auto; }
+  code.gdscript { font-family: "JetBrains Mono", "Fira Code", "Courier New", monospace; font-size: 0.95rem; color: #e9edf2; tab-size: 4; white-space: pre; }
+  .footer { color:#c7ced7; font-size:.9rem; margin:2rem 0 0; }
+  .pager { display:flex; gap:.75rem; justify-content:space-between; margin-top:2rem; }
+  .pager a { flex:1; text-align:center; background:#151a22; border:1px solid var(--border); color:#81D4FA; padding:.75rem; border-radius:.6rem; text-decoration:none; }
+  .chips { display:flex; flex-wrap:wrap; gap:.35rem; margin:.6rem 0 0; }
+  .chip { font-size:.8rem; background:#1b2230; color:#9aa4b2; padding:.1rem .5rem; border-radius:999px; border:1px solid var(--border); }
+  @media (max-width: 920px) { .layout{grid-template-columns:1fr} nav{position:static;height:auto} }
+</style></head>
+<body>
+  <div class="layout">
+    <nav>
+    <div class="title">2D Platformer</div>
+    <div class="search"><input type="search" id="navSearch" placeholder="Search tutorials…"></div>
+    <h2>Contents</h2>
+    <div class="links" id="navLinks"><a href="2DPlatformer_Introduction.html"><span class="num">01</span><span>Introduction</span></a><a href="2DPlatformer_GameDesign.html"><span class="num">02</span><span>GameDesign</span></a><a href="2DPlatformer_ProjectSetup.html"><span class="num">03</span><span>ProjectSetup</span></a><a href="2DPlatformer_Tilemap.html"><span class="num">04</span><span>Tilemap</span></a><a href="2DPlatformer_PlayerScene.html"><span class="num">05</span><span>PlayerScene</span></a><a href="2DPlatformer_InputMap.html"><span class="num">06</span><span>InputMap</span></a><a href="2DPlatformer_PlayerMovement.html"><span class="num">07</span><span>PlayerMovement</span></a><a href="2DPlatformer_FlippingthePlayerSprite.html"><span class="num">08</span><span>FlippingthePlayerSprite</span></a><a href="2DPlatformer_PlayerAnimation.html"><span class="num">09</span><span>PlayerAnimation</span></a><a href="2DPlatformer_Enemy.html"><span class="num">10</span><span>Enemy</span></a><a href="2DPlatformer_TakingDamage.html"><span class="num">11</span><span>TakingDamage</span></a><a href="2DPlatformer_Coin.html" style="background:#1b2230;border-color:#2b3b51;"><span class="num">12</span><span>Coin</span></a><a href="2DPlatformer_Scoring.html"><span class="num">13</span><span>Scoring</span></a><a href="2DPlatformer_EndFlag.html"><span class="num">14</span><span>EndFlag</span></a></div>
+    <script>
+      const q = document.getElementById('navSearch');
+      const links = Array.from(document.querySelectorAll('#navLinks a'));
+      q?.addEventListener('input', () => {
+        const t = q.value.toLowerCase();
+        links.forEach(a => a.style.display = a.innerText.toLowerCase().includes(t) ? '' : 'none');
+      });
+    </script></nav>
+    <main>
+      <h1>Coin</h1>
+<p>In this tutorial, we will focus on creating and animating a coin object for our game. The coin will serve as a collectible item that increases the player’s score when collected. We’ll start by setting up the coin scene, adding a sprite, and configuring its properties. Then, we’ll write a script to make the coin bob up and down and rotate, enhancing its visual appeal. We will make it so that when the player collides with the coin, their score increases. Although we will not fully implement the scoring system in this tutorial, we will lay the groundwork for it.</p>
+<p>Setting Up the Coin Scene</p>
+<p>Let’s begin by creating a new scene for the coin. Create a new Area2D node and name it Coin.</p>
+<figure><img src="images/image-94.png" alt="Coin — Image 94"><figcaption>Coin — Image 94</figcaption></figure>
+<figure><img src="images/image-95.png" alt="Coin — Image 95"><figcaption>Coin — Image 95</figcaption></figure>
+<p>Add a Sprite node as a child of Coin and assign it the coin texture from your assets. Make sure to rename the Sprite node to Sprite for clarity.</p>
+<figure><img src="images/image-96.png" alt="Coin — Image 96"><figcaption>Coin — Image 96</figcaption></figure>
+<p>Set the position of the Sprite node to (0, 0).</p>
+<figure><img src="images/image-97.png" alt="Coin — Image 97"><figcaption>Coin — Image 97</figcaption></figure>
+<p>Next, we’ll add a collision shape to the coin so that the player can interact with it. Add a CollisionShape2D node as a child of Coin.</p>
+<figure><img src="images/image-98.png" alt="Coin — Image 98"><figcaption>Coin — Image 98</figcaption></figure>
+<p>Create a circular collision shape and fit it to the coin’s size.</p>
+<figure><img src="images/image-99.png" alt="Coin — Image 99"><figcaption>Coin — Image 99</figcaption></figure>
+<p>Animating the Coin</p>
+<p>To make the coin visually appealing, we’ll add two animations: a bobbing motion and a rotation effect. Let’s start by creating a new script for the coin. Create a new script on the Coin node and name it coin.gd.</p>
+<figure><img src="images/image-100.png" alt="Coin — Image 100"><figcaption>Coin — Image 100</figcaption></figure>
+<p>Now, open the script and set up the initial variables:</p>
+<pre><code inert class='gdscript'>extends Area2D
+var rotate_speed : float = 3.0
+var bob_height : float = 5.0
+var bob_speed : float = 5.0</code></pre>
+<pre><code inert class='gdscript'>@onready var start_pos : Vector2 = global_position</code></pre>
+<pre><code inert class='gdscript'>@onready var sprite : Sprite2D = $Sprite</code></pre>
+<p>Next, we’ll implement the _physics_process function to handle the coin’s movement and rotation:</p>
+<pre><code inert class='gdscript'>func _physics_process(delta):
+var time = Time.get_unix_time_from_system()</code></pre>
+<pre><code inert class='gdscript'># rotate</code></pre>
+<p>sprite.scale.x = sin(time * rotate_speed)</p>
+<pre><code inert class='gdscript'># bob up and down
+var y_pos = ((1 + sin(time * bob_speed)) / 2) * bob_height</code></pre>
+<p>global_position.y = start_pos.y - y_pos</p>
+<p>Let’s break down the code:</p>
+<p>rotate_speed, bob_height, and bob_speed are variables that control the speed and height of the coin’s rotation and bobbing motion.</p>
+<p>start_pos stores the initial position of the coin.</p>
+<p>sprite is a reference to the Sprite node.</p>
+<p>In the _physics_process function, we use the current time to create a sine wave effect for both the rotation and bobbing motion.</p>
+<p>The coin’s x-scale is modified using the sine wave to create a rotation illusion over time.</p>
+<p>The coin’s y-position is modified using the sine wave to create a bobbing motion. Note that here we add additional values to the calculation to affect how far and fast the coin bobs.</p>
+<p>With this setup, the coin will rotate and bob up and down, making it more visually appealing and engaging for the player.</p>
+<figure><img src="images/image-101.png" alt="Coin — Image 101"><figcaption>Coin — Image 101</figcaption></figure>
+<p>Setting Up the Player Script</p>
+<p>We need to create a function in our player script that will handle the score increase. This function will be called increase_score and will take a parameter to specify the amount by which the score should increase.</p>
+<p>Open the player.gd script and add the following function:</p>
+<pre><code inert class='gdscript'>func increase_score(amount: int):</code></pre>
+<p>print(&quot;increase score&quot;)</p>
+<p>Note that we are not yet implementing the full scoring logic. For now, we will just print a message to the output. The actual scoring logic will be covered in the next tutorial.</p>
+<p>Handling Coin Collision</p>
+<p>Next, we need to handle the collision between the player and the coin. We will use the body_entered signal to detect when the player collides with the coin. Select the coin node in the scene tree, go to the Node tab, and find the body_entered signal.</p>
+<figure><img src="images/image-102.png" alt="Coin — Image 102"><figcaption>Coin — Image 102</figcaption></figure>
+<p>Double-click on the body_entered signal to connect it. Select the coin node again and click “Connect”.</p>
+<figure><img src="images/image-103.png" alt="Coin — Image 103"><figcaption>Coin — Image 103</figcaption></figure>
+<p>In the coin.gd script, add the following code inside the _on_body_entered function that was generated:</p>
+<pre><code inert class='gdscript'>func _on_body_entered(body):
+if not body.is_in_group(&quot;Player&quot;):
+return</code></pre>
+<p>body.increase_score(1)</p>
+<p>queue_free()</p>
+<p>This code checks if the body that entered the coin’s area is the player. If it is, it calls the increase_score function on the player and then removes the coin from the scene using queue_free().</p>
+<p>Testing the Implementation</p>
+<p>Let’s test our implementation to ensure it works as expected:</p>
+<p>Press the play button to run the scene.</p>
+<p>Move the player to collect the coin.</p>
+<p>Check the output to see if the message “increase score” is printed.</p>
+<p>If everything is set up correctly, you should see the coin disappear when the player collects it, and the message “increase score” should be printed in the output.</p>
+<figure><img src="images/image-104.png" alt="Coin — Image 104"><figcaption>Coin — Image 104</figcaption></figure>
+<p>Saving the Coin as a Scene</p>
+<p>Finally, we will save the coin as a scene so that we can easily duplicate and place it throughout our level. Select the coin node in the scene tree and drag it into the “Scenes” folder in the FileSystem tab.</p>
+<figure><img src="images/image-105.png" alt="Coin — Image 105"><figcaption>Coin — Image 105</figcaption></figure>
+<p>Save the scene as coin.tscn.</p>
+<figure><img src="images/image-106.png" alt="Coin — Image 106"><figcaption>Coin — Image 106</figcaption></figure>
+<p>Now you can duplicate the coin and place it throughout your level as needed.</p>
+<figure><img src="images/image-107.png" alt="Coin — Image 107"><figcaption>Coin — Image 107</figcaption></figure>
+<p>Conclusion</p>
+<p>In this tutorial, we laid the groundwork for increasing the player’s score when they collect a coin. We created a function in the player script to handle the score increase and set up the coin to call this function when the player collides with it. In the next tutorial, we will fully implement the scoring system and learn about autoload scripts.</p>
+      <div class="chips"></div>
+      <div class="pager"><a href="2DPlatformer_TakingDamage.html">← TakingDamage</a><a href="2DPlatformer_Scoring.html">Scoring →</a></div>
+      <p class="footer">Code indentation preserved where detected. Images load from /images/.</p>
+    </main>
+  </div>
+</body></html>

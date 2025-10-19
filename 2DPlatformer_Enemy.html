@@ -1,0 +1,172 @@
+<!doctype html>
+<html lang="en"><head><meta charset="utf-8"><title>2D Platformer – Enemy</title>
+<style>
+  :root { --bg:#0f1217; --panel:#151a22; --muted:#9aa4b2; --text:#e9edf2; --accent:#4FC3F7; --border:#243040; --link:#81D4FA; --chip:#1b2230; }
+  *{box-sizing:border-box}
+  html,body{height:100%}
+  body { margin:0; background:var(--bg); color:var(--text);
+         font-family: "Segoe UI", system-ui, -apple-system, Roboto, Arial, sans-serif; line-height:1.6; }
+  .layout { display:grid; grid-template-columns: 300px 1fr; min-height:100vh; }
+  nav { background:var(--panel); border-right:1px solid var(--border); padding:1rem 1rem 2rem; position:sticky; top:0; height:100vh; overflow:auto; }
+  nav .title { font-weight:800; color:var(--accent); padding:.5rem .4rem .2rem; letter-spacing:.4px; }
+  nav .search { position:sticky; top:0; background:var(--panel); padding:.4rem 0 .8rem; }
+  nav .search input { width:100%; padding:.6rem .7rem; border-radius:10px; border:1px solid var(--border); background:#0f141d; color:#e9edf2; outline:none; }
+  nav h2 { color:var(--accent); margin:.8rem .4rem .4rem; font-size:1rem; font-weight:700; letter-spacing:.4px; }
+  nav .links a { display:flex; gap:.5rem; align-items:center; padding:.5rem .6rem; margin:.2rem 0; color:var(--text); text-decoration:none; border-radius:.6rem; border:1px solid transparent; }
+  nav .links a:hover { background:#1b2230; border-color:#2b3b51; }
+  nav .links a .num { background:var(--chip); color:var(--muted); font-size:.8rem; padding:.05rem .4rem; border-radius:.4rem; border:1px solid var(--border); }
+  main { padding:2rem; max-width: 980px; width:100%; }
+  main h1 { color:var(--accent); border-bottom:1px solid var(--border); padding-bottom:.35rem; margin-top:0; }
+  main h2, main h3 { color:var(--accent); margin-top:1.2rem; }
+  figure { background:#151a22; border:1px solid var(--border); border-left:4px solid var(--accent);
+           padding:1rem; margin:1.1rem 0; border-radius:.5rem; }
+  img { max-width:100%; height:auto; display:block; margin:auto; }
+  figcaption { color:#c7ced7; font-size:.95rem; margin-top:.45rem; }
+  ol{list-style:decimal;margin-left:1.5rem;padding-left:1rem}
+  ul{list-style:disc;margin-left:1.5rem;padding-left:1rem}
+  li{margin:.25rem 0}
+  pre { background: #1b1f2a; border: 1px solid #2a3345; border-radius: 6px; padding:1rem; overflow:auto; }
+  code.gdscript { font-family: "JetBrains Mono", "Fira Code", "Courier New", monospace; font-size: 0.95rem; color: #e9edf2; tab-size: 4; white-space: pre; }
+  .footer { color:#c7ced7; font-size:.9rem; margin:2rem 0 0; }
+  .pager { display:flex; gap:.75rem; justify-content:space-between; margin-top:2rem; }
+  .pager a { flex:1; text-align:center; background:#151a22; border:1px solid var(--border); color:#81D4FA; padding:.75rem; border-radius:.6rem; text-decoration:none; }
+  .chips { display:flex; flex-wrap:wrap; gap:.35rem; margin:.6rem 0 0; }
+  .chip { font-size:.8rem; background:#1b2230; color:#9aa4b2; padding:.1rem .5rem; border-radius:999px; border:1px solid var(--border); }
+  @media (max-width: 920px) { .layout{grid-template-columns:1fr} nav{position:static;height:auto} }
+</style></head>
+<body>
+  <div class="layout">
+    <nav>
+    <div class="title">2D Platformer</div>
+    <div class="search"><input type="search" id="navSearch" placeholder="Search tutorials…"></div>
+    <h2>Contents</h2>
+    <div class="links" id="navLinks"><a href="2DPlatformer_Introduction.html"><span class="num">01</span><span>Introduction</span></a><a href="2DPlatformer_GameDesign.html"><span class="num">02</span><span>GameDesign</span></a><a href="2DPlatformer_ProjectSetup.html"><span class="num">03</span><span>ProjectSetup</span></a><a href="2DPlatformer_Tilemap.html"><span class="num">04</span><span>Tilemap</span></a><a href="2DPlatformer_PlayerScene.html"><span class="num">05</span><span>PlayerScene</span></a><a href="2DPlatformer_InputMap.html"><span class="num">06</span><span>InputMap</span></a><a href="2DPlatformer_PlayerMovement.html"><span class="num">07</span><span>PlayerMovement</span></a><a href="2DPlatformer_FlippingthePlayerSprite.html"><span class="num">08</span><span>FlippingthePlayerSprite</span></a><a href="2DPlatformer_PlayerAnimation.html"><span class="num">09</span><span>PlayerAnimation</span></a><a href="2DPlatformer_Enemy.html" style="background:#1b2230;border-color:#2b3b51;"><span class="num">10</span><span>Enemy</span></a><a href="2DPlatformer_TakingDamage.html"><span class="num">11</span><span>TakingDamage</span></a><a href="2DPlatformer_Coin.html"><span class="num">12</span><span>Coin</span></a><a href="2DPlatformer_Scoring.html"><span class="num">13</span><span>Scoring</span></a><a href="2DPlatformer_EndFlag.html"><span class="num">14</span><span>EndFlag</span></a></div>
+    <script>
+      const q = document.getElementById('navSearch');
+      const links = Array.from(document.querySelectorAll('#navLinks a'));
+      q?.addEventListener('input', () => {
+        const t = q.value.toLowerCase();
+        links.forEach(a => a.style.display = a.innerText.toLowerCase().includes(t) ? '' : 'none');
+      });
+    </script></nav>
+    <main>
+      <h1>Enemy</h1>
+<p>In this tutorial, we will create our enemy character. The enemy will move from one point to another in a back-and-forth motion. The player’s objective will be to avoid these enemies. If the player collides with an enemy, they will take damage. We will first dive into the steps to create our enemy’s root node and set up its movement. We will then implement the functionality for the enemy to detect the player. Specifically, the enemy will detect when the player’s collider overlaps or enters the enemy’s collider. When this happens, we want certain actions to occur, such as the player taking damage. To achieve this, we will use signals in Godot and write some script to handle the collision detection</p>
+<p>Creating the Enemy’s Root Node</p>
+<p>The enemy’s root node will be of type Area2D. An Area2D node has a collider and can detect collisions, but it does not physically collide with other objects. This allows the player to pass through the enemy while still detecting the collision and dealing damage.</p>
+<p>First, let’s create the new Area2D node itself.</p>
+<figure><img src="images/image-58.png" alt="Enemy — Image 58"><figcaption>Enemy — Image 58</figcaption></figure>
+<p>Rename this new node to Enemy.</p>
+<figure><img src="images/image-59.png" alt="Enemy — Image 59"><figcaption>Enemy — Image 59</figcaption></figure>
+<p>Next, we’ll add our character sprite. Go to the Objects folder, navigate to the Characters folder, and find the bat sprite.</p>
+<figure><img src="images/image-60.png" alt="Enemy — Image 60"><figcaption>Enemy — Image 60</figcaption></figure>
+<p>Drag the bat sprite into the Enemy node and rename it to Sprite.</p>
+<figure><img src="images/image-61.png" alt="Enemy — Image 61"><figcaption>Enemy — Image 61</figcaption></figure>
+<p>To prevent any weird positioning, with the sprite selected, set its position to (0, 0) in the Inspector.</p>
+<figure><img src="images/image-62.png" alt="Enemy — Image 62"><figcaption>Enemy — Image 62</figcaption></figure>
+<p>In order for our node to work, we need to add a collision shape to it. Right-click on the Enemy node and add a child node of type CollisionShape2D.</p>
+<figure><img src="images/image-63.png" alt="Enemy — Image 63"><figcaption>Enemy — Image 63</figcaption></figure>
+<p>Set the collision shape to be a circle.</p>
+<figure><img src="images/image-64.png" alt="Enemy — Image 64"><figcaption>Enemy — Image 64</figcaption></figure>
+<p>Next, adjust the size to give the player some leeway in dodging.</p>
+<figure><img src="images/image-65.png" alt="Enemy — Image 65"><figcaption>Enemy — Image 65</figcaption></figure>
+<p>Finally, as we want this enemy to be animated, we’ll add an animation player. Right-click on the Enemy node and add a child node of type AnimationPlayer.</p>
+<figure><img src="images/image-66.png" alt="Enemy — Image 66"><figcaption>Enemy — Image 66</figcaption></figure>
+<p>Now the foundations of our Enemy scene are set up!</p>
+<figure><img src="images/image-67.png" alt="Enemy — Image 67"><figcaption>Enemy — Image 67</figcaption></figure>
+<p>Creating the Enemy Script</p>
+<p>Now that we have set up the enemy’s node structure, let’s create a script to control its movement. We will define variables to manage the enemy’s movement direction, speed, and positions. To begin, ,create a new script on the Area2D node and name it enemy.gd.</p>
+<figure><img src="images/image-68.png" alt="Enemy — Image 68"><figcaption>Enemy — Image 68</figcaption></figure>
+<p>Next, define the variables described above:</p>
+<pre><code inert class='gdscript'>extends Area2D</code></pre>
+<pre><code inert class='gdscript'>@export var move_direction : Vector2
+@export var move_speed : float = 20</code></pre>
+<pre><code inert class='gdscript'>@onready var start_pos : Vector2 = global_position
+@onready var target_pos : Vector2 = global_position + move_direction</code></pre>
+<p>Detecting Target Position</p>
+<p>To make the enemy move back and forth between two points, we need to detect when the enemy has reached its target position and then change the target position accordingly:</p>
+<pre><code inert class='gdscript'>func _physics_process(delta):</code></pre>
+<p>global_position = global_position.move_toward(target_pos, move_speed * delta)</p>
+<pre><code inert class='gdscript'>if global_position == target_pos:
+if target_pos == start_pos:</code></pre>
+<p>target_pos = start_pos + move_direction</p>
+<pre><code inert class='gdscript'>else:</code></pre>
+<p>target_pos = start_pos</p>
+<p>In the _physics_process function, which is called every frame by Godot, the enemy’s global_position is updated to move towards the target_pos at a speed of move_speed multiplied by delta. delta is a built-in Godot variable that represents the time elapsed since the last frame, which helps to make the movement smooth and frame-rate independent.</p>
+<p>The code then checks if the enemy has reached the target_pos. If it has, it checks if the target_pos is equal to the start_pos. If it is, the enemy’s target_pos is updated to be the start_pos plus the move_direction, effectively moving the enemy in the specified direction. If the target_pos is not equal to the start_pos, the enemy’s target_pos is reset to the start_pos, causing the enemy to move back to its starting position.</p>
+<p>Testing the Enemy Movement</p>
+<p>Let’s test the enemy movement to ensure it works as expected. Select the enemy node in the 2D mode and move the enemy to a starting position.</p>
+<figure><img src="images/image-69.png" alt="Enemy — Image 69"><figcaption>Enemy — Image 69</figcaption></figure>
+<p>In the Inspector, set the move_direction to (0, -50) to make the enemy move up and down.</p>
+<figure><img src="images/image-70.png" alt="Enemy — Image 70"><figcaption>Enemy — Image 70</figcaption></figure>
+<p>Press play to see the enemy move!</p>
+<figure><img src="images/image-71.png" alt="Enemy — Image 71"><figcaption>Enemy — Image 71</figcaption></figure>
+<p>Setting Up the Enemy Node</p>
+<p>First, let’s connect a signal from our enemy to our script. Select the enemy node, which is an Area2D. With the enemy selected, go to the Node panel and click on the “Signals” tab. Look for the body_entered signal. This signal is triggered when a body enters the enemy’s collider.</p>
+<figure><img src="images/image-72.png" alt="Enemy — Image 72"><figcaption>Enemy — Image 72</figcaption></figure>
+<p>Double-click on the body_entered signal and connect it to the enemy node.</p>
+<figure><img src="images/image-73.webp" alt="Enemy — Image 73"><figcaption>Enemy — Image 73</figcaption></figure>
+<p>This will automatically add a new method to our script that connects to this built-in Godot signal.</p>
+<p>Writing the Collision Detection Script</p>
+<p>Now, let’s write the script to handle the collision detection. In the enemy script, add the _on_body_entered functionality to handle the collision detection:</p>
+<pre><code inert class='gdscript'>func _on_body_entered(body):
+if not body.is_in_group(&quot;Player&quot;):
+return</code></pre>
+<p>print(&quot;Deal damage to player&quot;)</p>
+<p>In this script:</p>
+<p>The _on_body_entered function is called when a body enters the enemy’s collider.</p>
+<p>We check if the body that entered is in the “Player” group using body.is_in_group(&quot;Player&quot;).</p>
+<p>If the body is not the player, we return and do nothing.</p>
+<p>If the body is the player, we print “Deal damage to player” to the output. This is a placeholder for where we will eventually deal damage to the player.</p>
+<p>Assigning the Player to a Group</p>
+<p>To ensure that the enemy can identify the player, we need to assign the player to a group. Select the player node, go to the Node panel, and click on the “Groups” tab. Click the plus icon to create a new group.</p>
+<figure><img src="images/image-74.png" alt="Enemy — Image 74"><figcaption>Enemy — Image 74</figcaption></figure>
+<p>Name the group “Player” and click OK.</p>
+<figure><img src="images/image-75.png" alt="Enemy — Image 75"><figcaption>Enemy — Image 75</figcaption></figure>
+<p>Now, the player node is assigned to the “Player” group, and our enemy script can check for this group to identify the player.</p>
+<p>Testing the Collision Detection</p>
+<p>Let’s test our collision detection:</p>
+<p>Press the play button to run the scene.</p>
+<p>Move the player to collide with the enemy.</p>
+<p>Check the output to see if “Deal damage to player” is printed each time the player collides with the enemy.</p>
+<p>If you see the message in the output, the collision detection is working correctly.</p>
+<figure><img src="images/image-76.png" alt="Enemy — Image 76"><figcaption>Enemy — Image 76</figcaption></figure>
+<p>Animating the Enemy</p>
+<p>Now that our enemy can detect the player, let’s add some animation to make the enemy more dynamic. We will create a simple flying animation for the enemy. Select the enemy node and then select the AnimationPlayer node.</p>
+<figure><img src="images/image-77.webp" alt="Enemy — Image 77"><figcaption>Enemy — Image 77</figcaption></figure>
+<p>Go to the Animation panel, click on the Animation button, and select “New” to create a new animation.</p>
+<figure><img src="images/image-78.webp" alt="Enemy — Image 78"><figcaption>Enemy — Image 78</figcaption></figure>
+<p>Name the animation “fly” and hit OK to create the animation.</p>
+<figure><img src="images/image-79.png" alt="Enemy — Image 79"><figcaption>Enemy — Image 79</figcaption></figure>
+<p>Next, like with the player, we want to set up a track for the Sprite’s texture. You can do this by selecting the bat sprite and hitting the key icon next to the Texture property field.</p>
+<figure><img src="images/image-80.png" alt="Enemy — Image 80"><figcaption>Enemy — Image 80</figcaption></figure>
+<p>In the pop-up that appears, hit Create – and remember to leave “Create RESET Track(s)” checked.</p>
+<figure><img src="images/image-81.png" alt="Enemy — Image 81"><figcaption>Enemy — Image 81</figcaption></figure>
+<p>By default, animations are set to 1 second. We don’t need that long of an animation, so set the duration to 0.3.</p>
+<figure><img src="images/image-82.png" alt="Enemy — Image 82"><figcaption>Enemy — Image 82</figcaption></figure>
+<p>Now we can create the animation itself. Our keyframe at 0 seconds is already set, as we want the sprite with wings up to begin the animation. Move the timeline to about 0.1 seconds and create a new keyframe. You can do so by right-clicking on the track and selecting “Insert Key”…</p>
+<figure><img src="images/image-83.png" alt="Enemy — Image 83"><figcaption>Enemy — Image 83</figcaption></figure>
+<p>With the keyframe selected, swap out the character texture so it’s the bat sprite with its wings horizontal in the Inspector.</p>
+<figure><img src="images/image-84.png" alt="Enemy — Image 84"><figcaption>Enemy — Image 84</figcaption></figure>
+<p>Repeat these steps, adding a new keyframe at around 0.2 seconds and changing the texture to the bat sprite with its wings down.</p>
+<figure><img src="images/image-85.png" alt="Enemy — Image 85"><figcaption>Enemy — Image 85</figcaption></figure>
+<p>Last, we need to turn on looping for this animation by using the button near the upper right of the timeline.</p>
+<figure><img src="images/image-86.png" alt="Enemy — Image 86"><figcaption>Enemy — Image 86</figcaption></figure>
+<p>Now you can play the animation and see it in action. Feel free to adjust the duration and timing to your preference. For example, we decided the animation was a little too fast, so we changed the duration to 0.4 and moved the keyframes accordingly.</p>
+<figure><img src="images/image-87.png" alt="Enemy — Image 87"><figcaption>Enemy — Image 87</figcaption></figure>
+<p>Playing the Animation</p>
+<p>To ensure the animation plays when the enemy is in the scene, we need to add some code to our script to play the animation. In the enemy script, add the _ready function to play the animation:</p>
+<pre><code inert class='gdscript'>func _ready():</code></pre>
+<p>$AnimationPlayer.play(&quot;fly&quot;)</p>
+<p>In this script, the _ready function is called when the enemy node is added to the scene. It plays the “fly” animation using the AnimationPlayer. </p>
+<p>Now, within the game, you should see the enemy automatically animate as it moves.</p>
+<figure><img src="images/image-88.png" alt="Enemy — Image 88"><figcaption>Enemy — Image 88</figcaption></figure>
+<p>Conclusion</p>
+<p>In this tutorial, we implemented the functionality for the enemy to detect the player and added a simple flying animation to the enemy. In the next tutorial, we will implement the ability for the player to take damage and reset the level when the player’s health reaches zero.</p>
+<figure><img src="images/image-89.png" alt="Enemy — Image 89"><figcaption>Enemy — Image 89</figcaption></figure>
+      <div class="chips"></div>
+      <div class="pager"><a href="2DPlatformer_PlayerAnimation.html">← PlayerAnimation</a><a href="2DPlatformer_TakingDamage.html">TakingDamage →</a></div>
+      <p class="footer">Code indentation preserved where detected. Images load from /images/.</p>
+    </main>
+  </div>
+</body></html>

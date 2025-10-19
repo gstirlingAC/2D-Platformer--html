@@ -1,0 +1,111 @@
+<!doctype html>
+<html lang="en"><head><meta charset="utf-8"><title>2D Platformer – EndFlag</title>
+<style>
+  :root { --bg:#0f1217; --panel:#151a22; --muted:#9aa4b2; --text:#e9edf2; --accent:#4FC3F7; --border:#243040; --link:#81D4FA; --chip:#1b2230; }
+  *{box-sizing:border-box}
+  html,body{height:100%}
+  body { margin:0; background:var(--bg); color:var(--text);
+         font-family: "Segoe UI", system-ui, -apple-system, Roboto, Arial, sans-serif; line-height:1.6; }
+  .layout { display:grid; grid-template-columns: 300px 1fr; min-height:100vh; }
+  nav { background:var(--panel); border-right:1px solid var(--border); padding:1rem 1rem 2rem; position:sticky; top:0; height:100vh; overflow:auto; }
+  nav .title { font-weight:800; color:var(--accent); padding:.5rem .4rem .2rem; letter-spacing:.4px; }
+  nav .search { position:sticky; top:0; background:var(--panel); padding:.4rem 0 .8rem; }
+  nav .search input { width:100%; padding:.6rem .7rem; border-radius:10px; border:1px solid var(--border); background:#0f141d; color:#e9edf2; outline:none; }
+  nav h2 { color:var(--accent); margin:.8rem .4rem .4rem; font-size:1rem; font-weight:700; letter-spacing:.4px; }
+  nav .links a { display:flex; gap:.5rem; align-items:center; padding:.5rem .6rem; margin:.2rem 0; color:var(--text); text-decoration:none; border-radius:.6rem; border:1px solid transparent; }
+  nav .links a:hover { background:#1b2230; border-color:#2b3b51; }
+  nav .links a .num { background:var(--chip); color:var(--muted); font-size:.8rem; padding:.05rem .4rem; border-radius:.4rem; border:1px solid var(--border); }
+  main { padding:2rem; max-width: 980px; width:100%; }
+  main h1 { color:var(--accent); border-bottom:1px solid var(--border); padding-bottom:.35rem; margin-top:0; }
+  main h2, main h3 { color:var(--accent); margin-top:1.2rem; }
+  figure { background:#151a22; border:1px solid var(--border); border-left:4px solid var(--accent);
+           padding:1rem; margin:1.1rem 0; border-radius:.5rem; }
+  img { max-width:100%; height:auto; display:block; margin:auto; }
+  figcaption { color:#c7ced7; font-size:.95rem; margin-top:.45rem; }
+  ol{list-style:decimal;margin-left:1.5rem;padding-left:1rem}
+  ul{list-style:disc;margin-left:1.5rem;padding-left:1rem}
+  li{margin:.25rem 0}
+  pre { background: #1b1f2a; border: 1px solid #2a3345; border-radius: 6px; padding:1rem; overflow:auto; }
+  code.gdscript { font-family: "JetBrains Mono", "Fira Code", "Courier New", monospace; font-size: 0.95rem; color: #e9edf2; tab-size: 4; white-space: pre; }
+  .footer { color:#c7ced7; font-size:.9rem; margin:2rem 0 0; }
+  .pager { display:flex; gap:.75rem; justify-content:space-between; margin-top:2rem; }
+  .pager a { flex:1; text-align:center; background:#151a22; border:1px solid var(--border); color:#81D4FA; padding:.75rem; border-radius:.6rem; text-decoration:none; }
+  .chips { display:flex; flex-wrap:wrap; gap:.35rem; margin:.6rem 0 0; }
+  .chip { font-size:.8rem; background:#1b2230; color:#9aa4b2; padding:.1rem .5rem; border-radius:999px; border:1px solid var(--border); }
+  @media (max-width: 920px) { .layout{grid-template-columns:1fr} nav{position:static;height:auto} }
+</style></head>
+<body>
+  <div class="layout">
+    <nav>
+    <div class="title">2D Platformer</div>
+    <div class="search"><input type="search" id="navSearch" placeholder="Search tutorials…"></div>
+    <h2>Contents</h2>
+    <div class="links" id="navLinks"><a href="2DPlatformer_Introduction.html"><span class="num">01</span><span>Introduction</span></a><a href="2DPlatformer_GameDesign.html"><span class="num">02</span><span>GameDesign</span></a><a href="2DPlatformer_ProjectSetup.html"><span class="num">03</span><span>ProjectSetup</span></a><a href="2DPlatformer_Tilemap.html"><span class="num">04</span><span>Tilemap</span></a><a href="2DPlatformer_PlayerScene.html"><span class="num">05</span><span>PlayerScene</span></a><a href="2DPlatformer_InputMap.html"><span class="num">06</span><span>InputMap</span></a><a href="2DPlatformer_PlayerMovement.html"><span class="num">07</span><span>PlayerMovement</span></a><a href="2DPlatformer_FlippingthePlayerSprite.html"><span class="num">08</span><span>FlippingthePlayerSprite</span></a><a href="2DPlatformer_PlayerAnimation.html"><span class="num">09</span><span>PlayerAnimation</span></a><a href="2DPlatformer_Enemy.html"><span class="num">10</span><span>Enemy</span></a><a href="2DPlatformer_TakingDamage.html"><span class="num">11</span><span>TakingDamage</span></a><a href="2DPlatformer_Coin.html"><span class="num">12</span><span>Coin</span></a><a href="2DPlatformer_Scoring.html"><span class="num">13</span><span>Scoring</span></a><a href="2DPlatformer_EndFlag.html" style="background:#1b2230;border-color:#2b3b51;"><span class="num">14</span><span>EndFlag</span></a></div>
+    <script>
+      const q = document.getElementById('navSearch');
+      const links = Array.from(document.querySelectorAll('#navLinks a'));
+      q?.addEventListener('input', () => {
+        const t = q.value.toLowerCase();
+        links.forEach(a => a.style.display = a.innerText.toLowerCase().includes(t) ? '' : 'none');
+      });
+    </script></nav>
+    <main>
+      <h1>End Flag</h1>
+<p>In this lesson, we will set up the end flag for our game. The end flag will serve as the goal that the player aims to reach at the end of each level. To accomplish this, we will organize our scene hierarchy, create the end flag, and write a script to handle the scene transition when the player reaches the end flag.</p>
+<p>Organizing the Scene Hierarchy</p>
+<p>First, let’s clean up our scene hierarchy to make it more manageable. Currently, our scene contains multiple enemies and coins, which can quickly become disorganized.</p>
+<figure><img src="images/image-114.png" alt="End Flag — Image 114"><figcaption>End Flag — Image 114</figcaption></figure>
+<p>We will create containers to store these nodes. Right-click on the main node and select Add Child Node. Search for an Empty Node and add it to the scene.</p>
+<figure><img src="images/image-115.png" alt="End Flag — Image 115"><figcaption>End Flag — Image 115</figcaption></figure>
+<p>Rename it to Coins. Then, select all the coin nodes and drag them into the Coins node.</p>
+<figure><img src="images/image-116.png" alt="End Flag — Image 116"><figcaption>End Flag — Image 116</figcaption></figure>
+<p>Repeat the process for the enemies:</p>
+<p>Create another Empty Node and rename it to Enemies.</p>
+<p>Select all the enemy nodes and drag them into the Enemies node.</p>
+<figure><img src="images/image-117.png" alt="End Flag — Image 117"><figcaption>End Flag — Image 117</figcaption></figure>
+<p>Now our scene is more organized with dropdowns that allow us to access the coins and enemies as needed.</p>
+<figure><img src="images/image-118.png" alt="End Flag — Image 118"><figcaption>End Flag — Image 118</figcaption></figure>
+<p>Creating the End Flag</p>
+<p>Now that our scene hierarchy is organized, we can create the end flag. The end flag will be an Area2D node with a sprite and a collision shape. First, delete any coin node that is located where you want to place the end flag. Next, as we’ve done with out objects in this game, create a new Area2D node and rename it to EndFlag.</p>
+<figure><img src="images/image-119.png" alt="End Flag — Image 119"><figcaption>End Flag — Image 119</figcaption></figure>
+<figure><img src="images/image-120.png" alt="End Flag — Image 120"><figcaption>End Flag — Image 120</figcaption></figure>
+<p>Open the Sprites folder, go to the Objects subfolder, and drag the flag image into the scene.</p>
+<figure><img src="images/image-121.png" alt="End Flag — Image 121"><figcaption>End Flag — Image 121</figcaption></figure>
+<p>Rename the Sprite node to Sprite, and make it a child of the End Flag node.</p>
+<figure><img src="images/image-122.png" alt="End Flag — Image 122"><figcaption>End Flag — Image 122</figcaption></figure>
+<p>Per usual, set the position of the Sprite node to (0, 0).</p>
+<figure><img src="images/image-123.png" alt="End Flag — Image 123"><figcaption>End Flag — Image 123</figcaption></figure>
+<p>Add a CollisionShape2D node as a child of EndFlag.</p>
+<figure><img src="images/image-124.png" alt="End Flag — Image 124"><figcaption>End Flag — Image 124</figcaption></figure>
+<p>Set its collision shape to circle and resize it to fit the flag appropriately.</p>
+<figure><img src="images/image-125.png" alt="End Flag — Image 125"><figcaption>End Flag — Image 125</figcaption></figure>
+<p>Our flag object is set up and ready to go for logic.</p>
+<figure><img src="images/image-126.png" alt="End Flag — Image 126"><figcaption>End Flag — Image 126</figcaption></figure>
+<p>Scripting the End Flag</p>
+<p>Next, we will create a script for the end flag that will handle the scene transition when the player reaches it. Create a new script attached to the EndFlag node named end_flag.gd.</p>
+<figure><img src="images/image-127.png" alt="End Flag — Image 127"><figcaption>End Flag — Image 127</figcaption></figure>
+<p>As we need to detect overlaps, we need to set up the same signal we’ve used for enemies and coins. Select the EndFlag node, go to the Node tab, and find the body_entered signal.</p>
+<figure><img src="images/image-128.png" alt="End Flag — Image 128"><figcaption>End Flag — Image 128</figcaption></figure>
+<p>Double-click it, select the EndFlag object, and click Connect. This will add the signal to the script.</p>
+<figure><img src="images/image-129.png" alt="End Flag — Image 129"><figcaption>End Flag — Image 129</figcaption></figure>
+<p>Now, let’s open the script and add the following code:</p>
+<pre><code inert class='gdscript'>extends Area2D</code></pre>
+<pre><code inert class='gdscript'>@export var scene_to_load : PackedScene</code></pre>
+<pre><code inert class='gdscript'>func _on_body_entered(body):
+if not body.is_in_group(&quot;Player&quot;):
+return</code></pre>
+<p>get_tree().change_scene_to_packed(scene_to_load)</p>
+<p>We first add an exported variable scene_to_load of type PackedScene, which allows us to specify the next level’s scene in the Godot editor. This makes it super easy to add new levels to the game.</p>
+<p>In the _on_body_entered function, we check if the body that entered is in the group “Player”. If it’s not, the function returns without doing anything. If the body is the player, the script uses the get_tree().change_scene_to_packed function to load the next level’s scene, which is stored in the scene_to_load variable. This effectively transfers the player to the next level.</p>
+<p>Testing the End Flag</p>
+<p>Finally, let’s test the end flag to ensure it works as expected. Select the EndFlag node. In the Inspector, set the scene_to_load variable to the scene you want to load when the player reaches the end flag. As we don’t have a 2nd level yet, any scene will do for these testing purposes.</p>
+<p>Note: Godot prevents loading the same scene that is currently loaded to avoid infinite loops. To test the scene transition, use a different scene temporarily. We will make a second level later in the course.</p>
+<figure><img src="images/image-130.png" alt="End Flag — Image 130"><figcaption>End Flag — Image 130</figcaption></figure>
+<p>Press the play button to test the game by running into the end flag to see if the scene transitions correctly.</p>
+<p>Congratulations! You have successfully set up the end flag for your game. In the next lesson, we will continue to enhance our project by adding UI elements for health and score display.</p>
+      <div class="chips"></div>
+      <div class="pager"><a href="2DPlatformer_Scoring.html">← Scoring</a><span></span></div>
+      <p class="footer">Code indentation preserved where detected. Images load from /images/.</p>
+    </main>
+  </div>
+</body></html>

@@ -1,196 +1,171 @@
 <!doctype html>
 <html lang="en">
-<head><meta charset="utf-8"><title>2D Platformer – Player Movement</title>
-<style>
-  :root {
-    --bg:#0f1217; --panel:#151a22; --muted:#9aa4b2; --text:#e9edf2; --accent:#4FC3F7; --border:#243040;
-    --link:#81D4FA; --chip:#1b2230;
-  }
-  *{box-sizing:border-box}
-  html,body{height:100%}
-  body { margin:0; background:var(--bg); color:var(--text);
-         font-family: "Segoe UI", system-ui, -apple-system, Roboto, Arial, sans-serif; line-height:1.6; }
-  .layout { display:grid; grid-template-columns: 300px 1fr; min-height:100vh; }
-  nav { background:var(--panel); border-right:1px solid var(--border); padding:1rem 1rem 2rem; position:sticky; top:0; height:100vh; overflow:auto; }
-  nav .title { font-weight:800; color:var(--accent); padding:.5rem .4rem .2rem; letter-spacing:.4px; }
-  nav .search { position:sticky; top:0; background:var(--panel); padding:.4rem 0 .8rem; }
-  nav .search input { width:100%; padding:.6rem .7rem; border-radius:10px; border:1px solid var(--border); background:#0f141d; color:var(--text); outline:none; }
-  nav h2 { color:var(--accent); margin:.8rem .4rem .4rem; font-size:1rem; font-weight:700; letter-spacing:.4px; }
-  nav .links a { display:flex; gap:.5rem; align-items:center; padding:.5rem .6rem; margin:.2rem 0; color:var(--text); text-decoration:none; border-radius:.6rem; border:1px solid transparent; }
-  nav .links a:hover { background:#1b2230; border-color:#2b3b51; }
-  nav .links a .num { background:var(--chip); color:var(--muted); font-size:.8rem; padding:.05rem .4rem; border-radius:.4rem; border:1px solid var(--border); }
-  main { padding:2rem; max-width: 980px; width:100%; }
-  main h1 { color:var(--accent); border-bottom:1px solid var(--border); padding-bottom:.35rem; margin-top:0; }
-  main h2, main h3 { color:var(--accent); margin-top:1.2rem; }
-  figure { background:#151a22; border:1px solid var(--border); border-left:4px solid var(--accent);
-           padding:1rem; margin:1.1rem 0; border-radius:.5rem; }
-  img { max-width:100%; height:auto; display:block; margin:auto; }
-  figcaption { color:#c7ced7; font-size:.95rem; margin-top:.45rem; }
-  /* Lists */
-  ol{list-style:decimal;margin-left:1.5rem;padding-left:1rem}
-  ul{list-style:disc;margin-left:1.5rem;padding-left:1rem}
-  li{margin:.25rem 0}
-  /* Code theme w/o colours */
-  pre { background: #1b1f2a; border: 1px solid #2a3345; border-radius: 6px; padding:1rem; }
-  code.gdscript { font-family: "JetBrains Mono", "Fira Code", "Courier New", monospace; font-size: 0.95rem; color: #e6edf3; tab-size: 4; }
-  .footer { color:#c7ced7; font-size:.9rem; margin:2rem 0 0; }
-  .pager { display:flex; gap:.75rem; justify-content:space-between; margin-top:2rem; }
-  .pager a { flex:1; text-align:center; background:#151a22; border:1px solid var(--border); color:var(--link); padding:.75rem; border-radius:.6rem; text-decoration:none; }
-  .pager a:hover { background:#1b2230; border-color:#2b3b51; }
-  .chips { display:flex; flex-wrap:wrap; gap:.35rem; margin:.6rem 0 0; }
-  .chip { font-size:.8rem; background:#1b2230; color:#9aa4b2; padding:.1rem .5rem; border-radius:999px; border:1px solid var(--border); }
-  @media (max-width: 920px) { .layout{grid-template-columns:1fr} nav{position:static;height:auto} }
-</style></head>
+<head>
+  <meta charset="utf-8" />
+  <title>2D Platformer – Player Movement</title>
+  <meta name="viewport" content="width=device-width,initial-scale=1" />
+  <style>
+    :root { --bg:#0f1217; --panel:#151a22; --muted:#9aa4b2; --text:#e9edf2; --accent:#4FC3F7; --border:#243040; --link:#81D4FA; --chip:#1b2230; }
+    *{box-sizing:border-box}
+    html,body{height:100%}
+    body { margin:0; background:var(--bg); color:var(--text);
+           font-family: "Segoe UI", system-ui, -apple-system, Roboto, Arial, sans-serif; line-height:1.6; }
+    .layout { display:grid; grid-template-columns: 300px 1fr; min-height:100vh; }
+    nav { background:var(--panel); border-right:1px solid var(--border); padding:1rem 1rem 2rem; position:sticky; top:0; height:100vh; overflow:auto; }
+    nav .title { font-weight:800; color:var(--accent); padding:.5rem .4rem .2rem; letter-spacing:.4px; }
+    nav .search { position:sticky; top:0; background:var(--panel); padding:.4rem 0 .8rem; }
+    nav .search input { width:100%; padding:.6rem .7rem; border-radius:10px; border:1px solid var(--border); background:#0f141d; color:#e9edf2; outline:none; }
+    nav h2 { color:var(--accent); margin:.8rem .4rem .4rem; font-size:1rem; font-weight:700; letter-spacing:.4px; }
+    nav .links a { display:flex; gap:.5rem; align-items:center; padding:.5rem .6rem; margin:.2rem 0; color:var(--text); text-decoration:none; border-radius:.6rem; border:1px solid transparent; }
+    nav .links a:hover { background:#1b2230; border-color:#2b3b51; }
+    nav .links a .num { background:var(--chip); color:var(--muted); font-size:.8rem; padding:.05rem .4rem; border-radius:.4rem; border:1px solid var(--border); }
+    main { padding:2rem; max-width: 980px; width:100%; }
+    main h1 { color:var(--accent); border-bottom:1px solid var(--border); padding-bottom:.35rem; margin-top:0; }
+    main h2, main h3 { color:var(--accent); margin-top:1.2rem; }
+    figure { background:#151a22; border:1px solid var(--border); border-left:4px solid var(--accent);
+             padding:1rem; margin:1.1rem 0; border-radius:.5rem; }
+    img { max-width:100%; height:auto; display:block; margin:auto; }
+    figcaption { color:#c7ced7; font-size:.95rem; margin-top:.45rem; }
+    ol{list-style:decimal;margin-left:1.5rem;padding-left:1rem}
+    ul{list-style:disc;margin-left:1.5rem;padding-left:1rem}
+    li{margin:.25rem 0}
+    pre { background: #1b1f2a; border: 1px solid #2a3345; border-radius: 6px; padding:1rem; overflow:auto; }
+    code.gdscript { font-family: "JetBrains Mono", "Fira Code", "Courier New", monospace; font-size: 0.95rem; color: #e9edf2; tab-size: 4; white-space: pre; }
+    .footer { color:#c7ced7; font-size:.9rem; margin:2rem 0 0; }
+    .pager { display:flex; gap:.75rem; justify-content:space-between; margin-top:2rem; }
+    .pager a { flex:1; text-align:center; background:#151a22; border:1px solid var(--border); color:#81D4FA; padding:.75rem; border-radius:.6rem; text-decoration:none; }
+    .chips { display:flex; flex-wrap:wrap; gap:.35rem; margin:.6rem 0 0; }
+    .chip { font-size:.8rem; background:#1b2230; color:#9aa4b2; padding:.1rem .5rem; border-radius:999px; border:1px solid var(--border); }
+    @media (max-width: 920px) { .layout{grid-template-columns:1fr} nav{position:static;height:auto} }
+  </style>
+</head>
 <body>
   <div class="layout">
     <nav>
-    <div class="title">2D Platformer</div>
-    <div class="search"><input type="search" id="navSearch" placeholder="Search tutorials…"></div>
-    <h2>Contents</h2>
-    <div class="links" id="navLinks"><a href="2DPlatformer_Introduction.html"><span class="num">01</span><span>Introduction</span></a><a href="2DPlatformer_GameDesign.html"><span class="num">02</span><span>Game Design</span></a><a href="2DPlatformer_ProjectSetup.html"><span class="num">03</span><span>Project Setup</span></a><a href="2DPlatformer_Tilemap.html"><span class="num">04</span><span>Tilemap</span></a><a href="2DPlatformer_PlayerScene.html"><span class="num">05</span><span>Player Scene</span></a><a href="2DPlatformer_InputMap.html"><span class="num">06</span><span>Input Map</span></a><a href="2DPlatformer_PlayerMovement.html" style="background:#1b2230;border-color:#2b3b51;"><span class="num">07</span><span>Player Movement</span></a><a href="2DPlatformer_FlippingthePlayerSprite.html"><span class="num">08</span><span>Flipping the Player Sprite</span></a><a href="2DPlatformer_PlayerAnimation.html"><span class="num">09</span><span>Player Animation</span></a></div>
-    <script>
-      const q = document.getElementById('navSearch');
-      const links = Array.from(document.querySelectorAll('#navLinks a'));
-      q?.addEventListener('input', () => {
-        const t = q.value.toLowerCase();
-        links.forEach(a => a.style.display = a.innerText.toLowerCase().includes(t) ? '' : 'none');
-      });
-    </script>
+      <div class="title">2D Platformer</div>
+      <div class="search"><input type="search" id="navSearch" placeholder="Search tutorials…"></div>
+      <h2>Contents</h2>
+      <div class="links" id="navLinks">
+        <a href="2DPlatformer_Introduction.html"><span class="num">01</span><span>Introduction</span></a>
+        <a href="2DPlatformer_GameDesign.html"><span class="num">02</span><span>Game Design</span></a>
+        <a href="2DPlatformer_ProjectSetup.html"><span class="num">03</span><span>Project Setup</span></a>
+        <a href="2DPlatformer_Tilemap.html"><span class="num">04</span><span>Tilemap</span></a>
+        <a href="2DPlatformer_PlayerScene.html"><span class="num">05</span><span>Player Scene</span></a>
+        <a href="2DPlatformer_InputMap.html"><span class="num">06</span><span>Input Map</span></a>
+        <a href="2DPlatformer_PlayerMovement.html" style="background:#1b2230;border-color:#2b3b51;"><span class="num">07</span><span>Player Movement</span></a>
+        <a href="2DPlatformer_FlippingthePlayerSprite.html"><span class="num">08</span><span>Flipping the Player Sprite</span></a>
+        <a href="2DPlatformer_PlayerAnimation.html"><span class="num">09</span><span>Player Animation</span></a>
+        <a href="2DPlatformer_Enemy.html"><span class="num">10</span><span>Enemy</span></a>
+        <a href="2DPlatformer_TakingDamage.html"><span class="num">11</span><span>Taking Damage</span></a>
+        <a href="2DPlatformer_Coin.html"><span class="num">12</span><span>Coin</span></a>
+        <a href="2DPlatformer_Scoring.html"><span class="num">13</span><span>Scoring</span></a>
+        <a href="2DPlatformer_EndFlag.html"><span class="num">14</span><span>End Flag</span></a>
+      </div>
+      <script>
+        const q = document.getElementById('navSearch');
+        const links = Array.from(document.querySelectorAll('#navLinks a'));
+        q?.addEventListener('input', () => {
+          const t = q.value.toLowerCase();
+          links.forEach(a => a.style.display = a.innerText.toLowerCase().includes(t) ? '' : 'none');
+        });
+      </script>
     </nav>
     <main>
       <h1>Player Movement</h1>
-<p>In this lesson, we will focus on setting up the core functionality of our player script, which includes moving and jumping. By the end of this lesson, you will have a player character that can move left and right, jump and fall due to gravity.</p>
-<h2>Setting Up the Player Script</h2>
-<p>To begin, we need to create a new script for our player. Open your player scene and select the CharacterBody2D node (named Player).</p>
-<figure><img src="images/image-39.png" alt="Player Movement — Image 39"><figcaption>Player Movement — Image 39</figcaption></figure>
-<p>Click on the “Attach Script” icon at the bottom of the Inspector, and select “New Script” from the dropdown.</p>
-<figure><img src="images/image-40.png" alt="Player Movement — Image 40"><figcaption>Player Movement — Image 40</figcaption></figure>
-<p>Save the script as player.gd in the Scripts folder.</p>
-<figure><img src="images/image-41.png" alt="Player Movement — Image 41"><figcaption>Player Movement — Image 41</figcaption></figure>
-<h2>Creating Variables</h2>
-<p>Our player script will need several variables to control movement and physics. We will create variables for move speed, acceleration, braking, gravity, and jump force. Additionally, we will create a variable to store the player’s input.</p>
-<p>Here is the initial setup of our player.gd script:</p>
-<pre><code inert class='gdscript'>extends CharacterBody2D
-@export var move_speed : float = 100
-@export var acceleration : float = 50
-@export var braking : float = 20
-@export var gravity : float = 500
-@export var jump_force : float = 200
-var move_input : float
+
+      <h2>Understanding Jumping Mechanics</h2>
+      <p>This section introduces gravity, jump impulses, coyote time (optional), and early-jump cut-off (optional). We’ll keep the script minimal and clear.</p>
+
+      <pre><code inert class="gdscript">extends CharacterBody2D
+
+@export var move_speed : float = 180.0
+@export var jump_speed : float = 380.0
+@export var gravity    : float = 900.0
+
+# Optional polish:
+@export var coyote_time      : float = 0.08  # seconds after leaving ground where jump still allowed
+@export var jump_cut_factor  : float = 0.45  # reduces upward velocity when jump released early
+
+var _coyote_timer : float = 0.0
+
+func _physics_process(delta: float) -> void:
+	# Apply gravity if not grounded
+	if not is_on_floor():
+		velocity.y += gravity * delta
+	else:
+		# Reset coyote timer on ground
+		_coyote_timer = coyote_time
+
+	# Horizontal movement
+	var input_dir := Input.get_axis("move_left","move_right")
+	velocity.x = move_speed * input_dir
+
+	# Track coyote timer while airborne
+	if not is_on_floor():
+		_coyote_timer = max(_coyote_timer - delta, 0.0)
+
+	# Jump (allowed on floor or within coyote window)
+	if Input.is_action_just_pressed("jump") and (is_on_floor() or _coyote_timer &gt; 0.0):
+		velocity.y = -jump_speed
+		_coyote_timer = 0.0
+
+	# Early jump release (jump cut)
+	if Input.is_action_just_released("jump") and velocity.y &lt; 0.0:
+		velocity.y *= jump_cut_factor
+
+	move_and_slide()
 </code></pre>
-<ul><li><code inert class="gdscript">move_speed</code><code inert class="gdscript">:</code> The maximum speed at which the player can move.</li><li><code inert class="gdscript">acceleration:</code> The rate at which the player accelerates to the move speed.</li><li><code inert class="gdscript">braking:</code> The rate at which the player slows down when no movement keys are pressed.</li><li><code inert class="gdscript">gravity:</code> The force of gravity applied to the player.</li><li><code inert class="gdscript">jump_force</code><code inert class="gdscript">:</code> The impulse velocity added when the player jumps.</li><li><code inert class="gdscript">move_input</code><code inert class="gdscript">:</code> A variable to store the player’s input for movement.</li></ul>
-<h2>Implementing Movement</h2>
-<p>To implement movement, we will use the <code inert class="gdscript">_</code><code inert class="gdscript">physics_process</code> function, which is called at a consistent rate per second, independent of the frame rate. This ensures that our physics calculations are consistent and deterministic.</p>
-<p>Here is the code to set up basic movement:</p>
-<pre><code inert class='gdscript'>func _physics_process(delta):
-&#9;# Get the move input
-&#9;move_input = Input.get_axis(&quot;move_left&quot;, &quot;move_right&quot;)
 
-&#9;# Movement
-&#9;velocity.x = move_input * move_speed
+      <h2>Horizontal Input</h2>
+      <p>Use the left/right (or A/D) actions you added in <em>Input Map</em>. Replace the names below if you used different ones.</p>
 
-&#9;move_and_slide()
-</code></pre>
-<p>In this code:</p>
-<ul><li><code inert class="gdscript">Input.get_axis</code><code inert class="gdscript">(&quot;</code><code inert class="gdscript">move_left</code><code inert class="gdscript">&quot;, &quot;</code><code inert class="gdscript">move_right</code><code inert class="gdscript">&quot;):</code> This function returns a value between <code inert class="gdscript">-1</code> and <code inert class="gdscript">1</code> based on the player’s input. If the player presses the left movement key, it returns <code inert class="gdscript">-1</code>. If the player presses the right movement key, it returns <code inert class="gdscript">1</code>. If no keys are pressed, it returns <code inert class="gdscript">0</code>.</li><li><code inert class="gdscript">velocity.x</code><code inert class="gdscript"> = </code><code inert class="gdscript">move_input</code><code inert class="gdscript"> * </code><code inert class="gdscript">move_speed</code><code inert class="gdscript">:</code> This line sets the player’s horizontal velocity based on the input and the move speed.</li><li><code inert class="gdscript">move_and_slide</code><code inert class="gdscript">():</code> This function applies the velocity to the player’s position and handles collision detection.</li></ul>
-<h2>Adding Gravity</h2>
-<p>If you test the game, you can make your character move left and right, but they can seemingly float in mid-air.</p>
-<figure><img src="images/image-42.png" alt="Player Movement — Image 42"><figcaption>Player Movement — Image 42</figcaption></figure>
-<p>To make the player fall due to gravity, we need to modify the <code inert class="gdscript">velocity.y</code> property. We will add gravity to the player’s vertical velocity only when the player is not on the floor.</p>
-<p>Here is the updated <code inert class="gdscript">_</code><code inert class="gdscript">physics_process</code> function with gravity:</p>
-<pre><code inert class='gdscript'>func _physics_process(delta):
-&#9;# Gravity
-&#9;if not is_on_floor():
-&#9;&#9;velocity.y += gravity * delta
+      <pre><code inert class="gdscript">var input_dir := Input.get_axis("move_left", "move_right")
+velocity.x = move_speed * input_dir</code></pre>
 
-&#9;# Get the move input
-&#9;move_input = Input.get_axis(&quot;move_left&quot;, &quot;move_right&quot;)
+      <h2>Place Your Player Script</h2>
+      <ol>
+        <li>Select the <strong>Player</strong> node (CharacterBody2D).</li>
+        <li>Create a new script and paste the code above.</li>
+        <li>Set the exported values (move_speed, jump_speed, gravity) to taste.</li>
+      </ol>
 
-&#9;# Movement
-&#9;velocity.x = move_input * move_speed
+      <h2>Test and Iterate</h2>
+      <ul>
+        <li>Adjust <code inert class="gdscript">move_speed</code> and <code inert class="gdscript">jump_speed</code> until it feels responsive.</li>
+        <li>Try enabling coyote time and jump cut to improve feel.</li>
+      </ul>
 
-&#9;move_and_slide()
-</code></pre>
-<p>In this code:</p>
-<ul><li>if not <code inert class="gdscript">is_on_floor</code><code inert class="gdscript">():</code> This condition checks if the player is not on the floor.</li><li><code inert class="gdscript">velocity.y</code><code inert class="gdscript"> += gravity * delta:</code> This line adds gravity to the player’s vertical velocity, making the player fall.</li></ul>
-<p>Now the character will fall properly with gravity.</p>
-<figure><img src="images/image-43.png" alt="Player Movement — Image 43"><figcaption>Player Movement — Image 43</figcaption></figure>
-<h2>Understanding Jumping Mechanics</h2>
-<p>To implement jumping, we need to consider a few key points:</p>
-<ul><li>Jumping should only occur if the jump key is pressed.</li><li>The character should only jump if they are on the ground.</li><li>The velocity should be modified before calling the <code inert class="gdscript">move_and_slide</code> function.</li></ul>
-<h2>Implementing Jumping</h2>
-<p>We will add the jumping logic in the <code inert class="gdscript">_</code><code inert class="gdscript">physics_process</code> function. As a refresher, this function is called at a fixed rate per second, making it ideal for physics-related updates.</p>
-<h3>Step-by-Step Guide</h3>
-<ol><li>Add a comment to indicate where the jumping logic will be implemented. This helps in organizing the code and understanding its structure.</li></ol>
-<pre><code inert class='gdscript'># Jumping
-</code></pre>
-<ol><li>Check if the jump key is pressed and if the character is on the ground. In Godot, the jump key can be the up arrow, W, or the space bar. We use the <code inert class="gdscript">is_on_floor</code> function to check if the character is on the ground.</li></ol>
-<pre><code inert class='gdscript'>if Input.is_action_pressed(&quot;jump&quot;) and is_on_floor():
-</code></pre>
-<ol><li>Modify the velocity to make the character jump. In Godot’s 2D mode, the Y-axis increases downwards. Therefore, to make the character jump upwards, we set the Y velocity to a negative value.</li></ol>
-<pre><code inert class='gdscript'>&#9;velocity.y = -jump_force
-</code></pre>
-<ol><li>Ensure that the <code inert class="gdscript">move_and_slide</code> function is called after modifying the velocity. This function applies the velocity to the character and handles collision detection.</li></ol>
-<pre><code inert class='gdscript'>&#9;move_and_slide()
-</code></pre>
-<h2>Complete Jumping Code</h2>
-<p>Here is the complete code snippet for implementing jumping:</p>
-<pre><code inert class='gdscript'>func _physics_process(delta):
-&#9;# gravity
-&#9;if not is_on_floor():
-&#9;&#9;velocity.y += gravity * delta
+      <!-- Images 39–44 in order -->
+      <figure>
+        <img src="images/image-39.png" alt="Player Movement — Image 39">
+        <figcaption>Player Movement — Image 39</figcaption>
+      </figure>
+      <figure>
+        <img src="images/image-40.png" alt="Player Movement — Image 40">
+        <figcaption>Player Movement — Image 40</figcaption>
+      </figure>
+      <figure>
+        <img src="images/image-41.png" alt="Player Movement — Image 41">
+        <figcaption>Player Movement — Image 41</figcaption>
+      </figure>
+      <figure>
+        <img src="images/image-42.png" alt="Player Movement — Image 42">
+        <figcaption>Player Movement — Image 42</figcaption>
+      </figure>
+      <figure>
+        <img src="images/image-43.png" alt="Player Movement — Image 43">
+        <figcaption>Player Movement — Image 43</figcaption>
+      </figure>
+      <figure>
+        <img src="images/image-44.png" alt="Player Movement — Image 44">
+        <figcaption>Player Movement — Image 44</figcaption>
+      </figure>
 
-&#9;# get the move input
-&#9;move_input = Input.get_axis(&quot;move_left&quot;, &quot;move_right&quot;)
-
-&#9;# movement
-&#9;velocity.x = move_input * move_speed
-
-&#9;# jumping
-&#9;if Input.is_action_pressed(&quot;jump&quot;) and is_on_floor():
-&#9;&#9;velocity.y = -jump_force
-
-&#9;move_and_slide()
-</code></pre>
-<p>Your character should now be able to jump as well as move left and right.</p>
-<figure><img src="images/image-44.png" alt="Player Movement — Image 44"><figcaption>Player Movement — Image 44</figcaption></figure>
-<h2>Smoothing the Movement</h2>
-<p>After implementing jumping, we need to smooth out the character’s movement to make it feel more natural. We will use linear interpolation (lerp) to achieve this. In Godot, the lerp function is used to smoothly transition a value from one point to another over time, allowing for a more natural and fluid animation. By specifying a start value, end value, and a weight (or amount of progress), the lerp function calculates a new value that is a percentage of the way between the start and end values, creating a smooth and continuous movement.</p>
-<p>Remove the direct assignment of <code inert class="gdscript">velocity.x</code> and replace it with linear interpolation for acceleration and braking.</p>
-<pre><code inert class='gdscript'>if move_input != 0:
-&#9;velocity.x = lerp(velocity.x, move_input * move_speed, acceleration * delta)
-else:
-&#9;velocity.x = lerp(velocity.x, 0.0, braking * delta)
-</code></pre>
-<h2>Complete Movement Code with Smoothing</h2>
-<p>Here is the complete code snippet for the character’s movement with smoothing:</p>
-<pre><code inert class='gdscript'>func _physics_process(delta):
-&#9;# gravity
-&#9;if not is_on_floor():
-&#9;&#9;velocity.y += gravity * delta
-
-&#9;# get the move input
-&#9;move_input = Input.get_axis(&quot;move_left&quot;, &quot;move_right&quot;)
-
-&#9;# movement
-&#9;if move_input != 0:
-&#9;&#9;velocity.x = lerp(velocity.x, move_input * move_speed, acceleration * delta)
-&#9;else:
-&#9;&#9;velocity.x = lerp(velocity.x, 0.0, braking * delta)
-
-&#9;# jumping
-&#9;if Input.is_action_pressed(&quot;jump&quot;) and is_on_floor():
-&#9;&#9;velocity.y = -jump_force
-
-&#9;move_and_slide()</code></pre>
-<h2>Summary</h2>
-<p>In this lesson, we created a player script that handles basic movement and gravity. We set up variables for movement and physics, implemented movement using the _physics_process function, and added gravity to make the player fall. We also implemented jumping for our character and smoothed out the movement to make it feel more natural. We used the <code inert class="gdscript">_</code><code inert class="gdscript">physics_process</code> function to handle physics-related updates and ensured that the move_and_slide function was called after modifying the velocity.</p>
-<p>In the next lesson, we will start working on the character’s visuals, including animations and sprite flipping to face the direction of movement.</p>
-<p>
-</p>
-      <div class="chips"><span class="chip">Setting Up the Player Script</span><span class="chip">Creating Variables</span><span class="chip">Implementing Movement</span><span class="chip">Adding Gravity</span><span class="chip">Understanding Jumping Mechanics</span><span class="chip">Implementing Jumping</span></div>
-      <div class="pager"><a href="2DPlatformer_InputMap.html">← Input Map</a><a href="2DPlatformer_FlippingthePlayerSprite.html">Flipping the Player Sprite →</a></div>
-     
+      <div class="pager">
+        <a href="2DPlatformer_InputMap.html">← Input Map</a>
+        <a href="2DPlatformer_FlippingthePlayerSprite.html">Flipping the Player Sprite →</a>
+      </div>
+      <p class="footer">Tip: Keep exported values visible in the Inspector for fast tuning.</p>
     </main>
   </div>
 </body>

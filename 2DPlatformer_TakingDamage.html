@@ -1,0 +1,109 @@
+<!doctype html>
+<html lang="en"><head><meta charset="utf-8"><title>2D Platformer – TakingDamage</title>
+<style>
+  :root { --bg:#0f1217; --panel:#151a22; --muted:#9aa4b2; --text:#e9edf2; --accent:#4FC3F7; --border:#243040; --link:#81D4FA; --chip:#1b2230; }
+  *{box-sizing:border-box}
+  html,body{height:100%}
+  body { margin:0; background:var(--bg); color:var(--text);
+         font-family: "Segoe UI", system-ui, -apple-system, Roboto, Arial, sans-serif; line-height:1.6; }
+  .layout { display:grid; grid-template-columns: 300px 1fr; min-height:100vh; }
+  nav { background:var(--panel); border-right:1px solid var(--border); padding:1rem 1rem 2rem; position:sticky; top:0; height:100vh; overflow:auto; }
+  nav .title { font-weight:800; color:var(--accent); padding:.5rem .4rem .2rem; letter-spacing:.4px; }
+  nav .search { position:sticky; top:0; background:var(--panel); padding:.4rem 0 .8rem; }
+  nav .search input { width:100%; padding:.6rem .7rem; border-radius:10px; border:1px solid var(--border); background:#0f141d; color:#e9edf2; outline:none; }
+  nav h2 { color:var(--accent); margin:.8rem .4rem .4rem; font-size:1rem; font-weight:700; letter-spacing:.4px; }
+  nav .links a { display:flex; gap:.5rem; align-items:center; padding:.5rem .6rem; margin:.2rem 0; color:var(--text); text-decoration:none; border-radius:.6rem; border:1px solid transparent; }
+  nav .links a:hover { background:#1b2230; border-color:#2b3b51; }
+  nav .links a .num { background:var(--chip); color:var(--muted); font-size:.8rem; padding:.05rem .4rem; border-radius:.4rem; border:1px solid var(--border); }
+  main { padding:2rem; max-width: 980px; width:100%; }
+  main h1 { color:var(--accent); border-bottom:1px solid var(--border); padding-bottom:.35rem; margin-top:0; }
+  main h2, main h3 { color:var(--accent); margin-top:1.2rem; }
+  figure { background:#151a22; border:1px solid var(--border); border-left:4px solid var(--accent);
+           padding:1rem; margin:1.1rem 0; border-radius:.5rem; }
+  img { max-width:100%; height:auto; display:block; margin:auto; }
+  figcaption { color:#c7ced7; font-size:.95rem; margin-top:.45rem; }
+  ol{list-style:decimal;margin-left:1.5rem;padding-left:1rem}
+  ul{list-style:disc;margin-left:1.5rem;padding-left:1rem}
+  li{margin:.25rem 0}
+  pre { background: #1b1f2a; border: 1px solid #2a3345; border-radius: 6px; padding:1rem; overflow:auto; }
+  code.gdscript { font-family: "JetBrains Mono", "Fira Code", "Courier New", monospace; font-size: 0.95rem; color: #e9edf2; tab-size: 4; white-space: pre; }
+  .footer { color:#c7ced7; font-size:.9rem; margin:2rem 0 0; }
+  .pager { display:flex; gap:.75rem; justify-content:space-between; margin-top:2rem; }
+  .pager a { flex:1; text-align:center; background:#151a22; border:1px solid var(--border); color:#81D4FA; padding:.75rem; border-radius:.6rem; text-decoration:none; }
+  .chips { display:flex; flex-wrap:wrap; gap:.35rem; margin:.6rem 0 0; }
+  .chip { font-size:.8rem; background:#1b2230; color:#9aa4b2; padding:.1rem .5rem; border-radius:999px; border:1px solid var(--border); }
+  @media (max-width: 920px) { .layout{grid-template-columns:1fr} nav{position:static;height:auto} }
+</style></head>
+<body>
+  <div class="layout">
+    <nav>
+    <div class="title">2D Platformer</div>
+    <div class="search"><input type="search" id="navSearch" placeholder="Search tutorials…"></div>
+    <h2>Contents</h2>
+    <div class="links" id="navLinks"><a href="2DPlatformer_Introduction.html"><span class="num">01</span><span>Introduction</span></a><a href="2DPlatformer_GameDesign.html"><span class="num">02</span><span>GameDesign</span></a><a href="2DPlatformer_ProjectSetup.html"><span class="num">03</span><span>ProjectSetup</span></a><a href="2DPlatformer_Tilemap.html"><span class="num">04</span><span>Tilemap</span></a><a href="2DPlatformer_PlayerScene.html"><span class="num">05</span><span>PlayerScene</span></a><a href="2DPlatformer_InputMap.html"><span class="num">06</span><span>InputMap</span></a><a href="2DPlatformer_PlayerMovement.html"><span class="num">07</span><span>PlayerMovement</span></a><a href="2DPlatformer_FlippingthePlayerSprite.html"><span class="num">08</span><span>FlippingthePlayerSprite</span></a><a href="2DPlatformer_PlayerAnimation.html"><span class="num">09</span><span>PlayerAnimation</span></a><a href="2DPlatformer_Enemy.html"><span class="num">10</span><span>Enemy</span></a><a href="2DPlatformer_TakingDamage.html" style="background:#1b2230;border-color:#2b3b51;"><span class="num">11</span><span>TakingDamage</span></a><a href="2DPlatformer_Coin.html"><span class="num">12</span><span>Coin</span></a><a href="2DPlatformer_Scoring.html"><span class="num">13</span><span>Scoring</span></a><a href="2DPlatformer_EndFlag.html"><span class="num">14</span><span>EndFlag</span></a></div>
+    <script>
+      const q = document.getElementById('navSearch');
+      const links = Array.from(document.querySelectorAll('#navLinks a'));
+      q?.addEventListener('input', () => {
+        const t = q.value.toLowerCase();
+        links.forEach(a => a.style.display = a.innerText.toLowerCase().includes(t) ? '' : 'none');
+      });
+    </script></nav>
+    <main>
+      <h1>Taking Damage</h1>
+<p>In this tutorial, we will add the ability for our player to take damage. Once the player’s health reaches zero, the scene will reset. Let’s dive into the steps required to achieve this functionality.</p>
+<p>Setting Up Player Health</p>
+<p>First, we need to create a variable to track the player’s health. Open the player.gd script and add the following line at the top:</p>
+<pre><code inert class='gdscript'>@export var health : int = 3</code></pre>
+<p>This variable, health, is of type int and is initialized to 3. This means the player can take three hits before being defeated.</p>
+<p>Creating the Take Damage Function</p>
+<p>Next, we will create a function called take_damage that will be called when the player takes damage. This function will reduce the player’s health by a specified amount and check if the health has reached zero.</p>
+<pre><code inert class='gdscript'>func take_damage(amount : int):</code></pre>
+<p>health -= amount</p>
+<pre><code inert class='gdscript'>if health &lt;= 0:</code></pre>
+<p>game_over()</p>
+<p>In this function:</p>
+<p>amount is the amount of damage taken.</p>
+<p>The player’s health is reduced by the amount of damage.</p>
+<p>If the health is less than or equal to zero, the game_over function is called.</p>
+<p>Implementing the Game Over Function</p>
+<p>The game_over function will reload the current scene. Add the following code to your script:</p>
+<pre><code inert class='gdscript'>func game_over():</code></pre>
+<p>get_tree().change_scene_to_file(&quot;res://Scenes/level_1.tscn&quot;)</p>
+<p>This function uses get_tree().change_scene_to_file to reload the current scene, effectively resetting the game.</p>
+<p>Updating the Enemy Script</p>
+<p>Now, we need to update the enemy script to call the take_damage function when the player collides with an enemy. Open the enemy.gd script and modify the _on_body_entered function as follows:</p>
+<pre><code inert class='gdscript'>func _on_body_entered(body):
+if not body.is_in_group(&quot;Player&quot;):
+return</code></pre>
+<p>body.take_damage(1)</p>
+<p>This code checks if the body that entered the enemy’s collision area is the player. If it is, it calls the take_damage function on the player, dealing one damage.</p>
+<p>Testing the Implementation</p>
+<p>While we won’t be able to see the full effect of the decrease in player health yet (as we lack a UI still), we can test it by seeing if we can get the scene to reset.</p>
+<p>Press play to test the game.</p>
+<p>Collide with the enemy to decrease the player’s health.</p>
+<p>Once the health reaches zero, the scene should reset.</p>
+<p>Fixing the Physics Callback Error</p>
+<p>You might encounter an error stating that removing a collision node during a physics callback is not allowed.</p>
+<figure><img src="images/image-90.png" alt="Taking Damage — Image 90"><figcaption>Taking Damage — Image 90</figcaption></figure>
+<p>This happens because the game_over function is called within the physics process loop. To fix this, we use the call_deferred function to delay the call to game_over until the end of the frame.</p>
+<p>Update the take_damage function as follows:</p>
+<pre><code inert class='gdscript'>func take_damage(amount : int):</code></pre>
+<p>health -= amount</p>
+<pre><code inert class='gdscript'>if health &lt;= 0:</code></pre>
+<p>call_deferred(&quot;game_over&quot;)</p>
+<p>The call_deferred function ensures that game_over is called after the current frame has ended, avoiding the physics callback error.</p>
+<p>Saving and Duplicating Enemies</p>
+<p>Finally, let’s save our enemy as a scene and duplicate it around the level. Open the Scenes folder and drag the enemy into the folder and save it as enemy.tscn.</p>
+<figure><img src="images/image-91.png" alt="Taking Damage — Image 91"><figcaption>Taking Damage — Image 91</figcaption></figure>
+<p>Now that we can reuse our enemy, duplicate the enemy around the level to create multiple enemies.</p>
+<figure><img src="images/image-92.png" alt="Taking Damage — Image 92"><figcaption>Taking Damage — Image 92</figcaption></figure>
+<p>Be sure to adjust the properties of the duplicated enemies as needed (e.g., move speed, position). There is no right or wrong answer here, so feel free to get creative in how the enemies behave!</p>
+<figure><img src="images/image-93.png" alt="Taking Damage — Image 93"><figcaption>Taking Damage — Image 93</figcaption></figure>
+<p>By following these steps, you have successfully implemented the functionality for the player to take damage and reset the scene when their health reaches zero. This enhances the gameplay experience and adds a layer of challenge to your game.</p>
+      <div class="chips"></div>
+      <div class="pager"><a href="2DPlatformer_Enemy.html">← Enemy</a><a href="2DPlatformer_Coin.html">Coin →</a></div>
+      <p class="footer">Code indentation preserved where detected. Images load from /images/.</p>
+    </main>
+  </div>
+</body></html>

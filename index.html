@@ -2,10 +2,7 @@
 <meta charset="utf-8"><title>2D Platformer Tutorials – Home</title>
 <style>
   
-  :root {
-    --bg:#0f1217; --panel:#151a22; --muted:#9aa4b2; --text:#e9edf2; --accent:#4FC3F7; --border:#243040;
-    --link:#81D4FA; --chip:#1b2230;
-  }
+  :root { --bg:#0f1217; --panel:#151a22; --muted:#9aa4b2; --text:#e9edf2; --accent:#4FC3F7; --border:#243040; --link:#81D4FA; --chip:#1b2230; }
   *{box-sizing:border-box}
   html,body{height:100%}
   body { margin:0; background:var(--bg); color:var(--text);
@@ -14,7 +11,7 @@
   nav { background:var(--panel); border-right:1px solid var(--border); padding:1rem 1rem 2rem; position:sticky; top:0; height:100vh; overflow:auto; }
   nav .title { font-weight:800; color:var(--accent); padding:.5rem .4rem .2rem; letter-spacing:.4px; }
   nav .search { position:sticky; top:0; background:var(--panel); padding:.4rem 0 .8rem; }
-  nav .search input { width:100%; padding:.6rem .7rem; border-radius:10px; border:1px solid var(--border); background:#0f141d; color:var(--text); outline:none; }
+  nav .search input { width:100%; padding:.6rem .7rem; border-radius:10px; border:1px solid var(--border); background:#0f141d; color:#e9edf2; outline:none; }
   nav h2 { color:var(--accent); margin:.8rem .4rem .4rem; font-size:1rem; font-weight:700; letter-spacing:.4px; }
   nav .links a { display:flex; gap:.5rem; align-items:center; padding:.5rem .6rem; margin:.2rem 0; color:var(--text); text-decoration:none; border-radius:.6rem; border:1px solid transparent; }
   nav .links a:hover { background:#1b2230; border-color:#2b3b51; }
@@ -26,16 +23,14 @@
            padding:1rem; margin:1.1rem 0; border-radius:.5rem; }
   img { max-width:100%; height:auto; display:block; margin:auto; }
   figcaption { color:#c7ced7; font-size:.95rem; margin-top:.45rem; }
-  /* Lists */
   ol{list-style:decimal;margin-left:1.5rem;padding-left:1rem}
   ul{list-style:disc;margin-left:1.5rem;padding-left:1rem}
   li{margin:.25rem 0}
-  /* Code theme w/o colours */
   pre { background: #1b1f2a; border: 1px solid #2a3345; border-radius: 6px; padding:1rem; }
-  code.gdscript { font-family: "JetBrains Mono", "Fira Code", "Courier New", monospace; font-size: 0.95rem; color: #e6edf3; tab-size: 4; }
+  code.gdscript { font-family: "JetBrains Mono", "Fira Code", "Courier New", monospace; font-size: 0.95rem; color: #e9edf2; tab-size: 4; white-space: pre; }
   .footer { color:#c7ced7; font-size:.9rem; margin:2rem 0 0; }
   .pager { display:flex; gap:.75rem; justify-content:space-between; margin-top:2rem; }
-  .pager a { flex:1; text-align:center; background:#151a22; border:1px solid var(--border); color:var(--link); padding:.75rem; border-radius:.6rem; text-decoration:none; }
+  .pager a { flex:1; text-align:center; background:#151a22; border:1px solid var(--border); color:#81D4FA; padding:.75rem; border-radius:.6rem; text-decoration:none; }
   .pager a:hover { background:#1b2230; border-color:#2b3b51; }
   .chips { display:flex; flex-wrap:wrap; gap:.35rem; margin:.6rem 0 0; }
   .chip { font-size:.8rem; background:#1b2230; color:#9aa4b2; padding:.1rem .5rem; border-radius:999px; border:1px solid var(--border); }
@@ -52,7 +47,7 @@
   <h1>2D Platformer Tutorials</h1>
   <p class="lead">Use the cards below or the sidebar inside any page.</p>
   <div class="grid">
-    <a class="card" href="2DPlatformer_Introduction.html"><span class="num">01</span><span>Introduction</span></a><a class="card" href="2DPlatformer_GameDesign.html"><span class="num">02</span><span>Game Design</span></a><a class="card" href="2DPlatformer_ProjectSetup.html"><span class="num">03</span><span>Project Setup</span></a><a class="card" href="2DPlatformer_Tilemap.html"><span class="num">04</span><span>Tilemap</span></a><a class="card" href="2DPlatformer_PlayerScene.html"><span class="num">05</span><span>Player Scene</span></a><a class="card" href="2DPlatformer_InputMap.html"><span class="num">06</span><span>Input Map</span></a><a class="card" href="2DPlatformer_PlayerMovement.html"><span class="num">07</span><span>Player Movement</span></a><a class="card" href="2DPlatformer_FlippingthePlayerSprite.html"><span class="num">08</span><span>Flipping the Player Sprite</span></a><a class="card" href="2DPlatformer_PlayerAnimation.html"><span class="num">09</span><span>Player Animation</span></a>
+    <a class="card" href="2DPlatformer_Introduction.html"><span class="num">01</span><span>Introduction</span></a><a class="card" href="2DPlatformer_GameDesign.html"><span class="num">02</span><span>Game Design</span></a><a class="card" href="2DPlatformer_ProjectSetup.html"><span class="num">03</span><span>Project Setup</span></a><a class="card" href="2DPlatformer_Tilemap.html"><span class="num">04</span><span>Tilemap</span></a><a class="card" href="2DPlatformer_PlayerScene.html"><span class="num">05</span><span>Player Scene</span></a><a class="card" href="2DPlatformer_InputMap.html"><span class="num">06</span><span>Input Map</span></a><a class="card" href="2DPlatformer_PlayerMovement.html"><span class="num">07</span><span>Player Movement</span></a><a class="card" href="2DPlatformer_FlippingthePlayerSprite.html"><span class="num">08</span><span>Flippingthe Player Sprite</span></a><a class="card" href="2DPlatformer_PlayerAnimation.html"><span class="num">09</span><span>Player Animation</span></a><a class="card" href="2DPlatformer_Enemy.html"><span class="num">10</span><span>Enemy</span></a><a class="card" href="2DPlatformer_TakingDamage.html"><span class="num">11</span><span>Taking Damage</span></a><a class="card" href="2DPlatformer_Coin.html"><span class="num">12</span><span>Coin</span></a><a class="card" href="2DPlatformer_Scoring.html"><span class="num">13</span><span>Scoring</span></a><a class="card" href="2DPlatformer_EndFlag.html"><span class="num">14</span><span>End Flag</span></a>
   </div>
 </div>
 </body></html>
